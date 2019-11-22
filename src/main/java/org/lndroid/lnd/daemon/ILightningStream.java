@@ -1,8 +1,8 @@
 package org.lndroid.lnd.daemon;
 
-public interface ILightningStream<RequestType> {
+public interface ILightningStream<RequestType, ResponseType> {
     // set the reply callback
-    void setRecvCallback(ILightningCallback cb);
+    void setRecvCallback(ILightningCallback<ResponseType> cb);
     // send request
     void send(RequestType r) throws LightningException;
     // call after all requests were sent,

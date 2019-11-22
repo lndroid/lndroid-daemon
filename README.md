@@ -3,7 +3,7 @@ Lndroid.Daemon library
 
 Lndroid.Daemon is a wrapper around [Lightning Network Daemon (lnd)](https://github.com/lightningnetwork/lnd). It makes using **lnd** in native android apps easier.
 
-Lnd API requires a lot or work:
+Lnd mobile API requires a lot or work:
 1. All API calls are asynchronous, with result callbacks called from another thread. Which means that for the callback code you provide to interact with your UI thread, your code must be thread-safe. 
 2. All API calls accept byte[] and return byte[], which are serialized protobuf objects. Your code must do the job of encoding and decoding them.
 3. Interacting with the API from a UI thread requires care, as the lnd daemon is a single global object per process. If a callback is created in a UI thread and holds referenes to UI objects, then the daemon might hold those references for long time, even after UI objects have been closed by user and subject to GC. 
@@ -74,20 +74,17 @@ public class MainActivity extends AppCompatActivity {
 
         // simple API call, callback will be called once,
         // or never if this Activity is closed by user
-        client_.initWallet(req, new ILightningCallback() {
+        client_.initWallet(req, new ILightningCallback<Data.InitWalletResponse>() {
             @Override
-            public void onCall(int code, Object object) {
-                // if code == 0, then object is of Data.*Response type,
-                // else code is error code and object is a String error message
+            public void onResponse(Data.InitWalletResponse rep) {
+                // accessing UI components is OK, as this is executed
+                // in UI thread
+                text_.setText("init wallet ok");
+            }
 
-                if (code == 0) {
-                    Data.InitWalletResponse rep = (Data.InitWalletResponse)object;
-                    // accessing UI components is OK, as this is executed
-                    // in UI thread
-                    text_.setText("init wallet ok");
-                } else {
-                    text_.setText("init wallet error " + code +" error "+object);
-                }
+            @Override
+            public void onError(int code, String message) {
+                text_.setText("init wallet error " + code +" error "+message);
             }
         });
     }
@@ -98,13 +95,15 @@ public class MainActivity extends AppCompatActivity {
         // uni-directional streaming call,
         // callback will be called every time a new transaction is received,
         // until an error is returned
-        client_.subscribeTransctions(req, new ILightningCallback() {
+        client_.subscribeTransactionsStream(req, new ILightningCallback<Data.Transaction>() {
             @Override
-            public void onCall(int code, Object object) {
-	    	if (code == 0)
-                    Log.i(TAG, "new transaction result "+code+" o "+object);
-                else
-                    Log.e(TAG, "error, resubscribe! "+code+" o "+object);
+            public void onResponse(Data.Transaction rep) {
+                Log.i(TAG, "sub transactions result "+rep);
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                Log.e(TAG, "sub transactions error, resubscribe! "+i+" str "+s);
             }
         });
     }
@@ -133,16 +132,18 @@ public class MainActivity extends AppCompatActivity {
         Data.GetInfoRequest req = new Data.GetInfoRequest();
         // MT-way: callback is executed in another thread,
         // make sure you understand what you're doing
-        LightningDaemon.getInfoMT(req, new ILightningCallback() {
+        LightningDaemon.getInfoMT(req, new ILightningCallbackMT() {
+	    
             @Override
-            public void onCall(int code, Object object) {
+            public void onResponse(Object o) {
                 // we're not in UI thread now!
-                if (code == 0) {
-                    Data.GetInfoResponse rep = (Data.GetInfoResponse)object;
-                    Log.i(TAG, "info.pubkey "+rep.identityPubkey);
-                } else {
-                    Log.i(TAG, "info error "+code+" message"+object);
-                }
+                Data.GetInfoResponse rep = (Data.GetInfoResponse)object;
+                Log.i(TAG, "info.pubkey "+rep.identityPubkey);
+            }
+	    
+            @Override
+            public void onError(int code, String message) {
+                Log.e(TAG, "info error "+code+" message "+message);
             }
         });
     }
@@ -155,16 +156,20 @@ public class MainActivity extends AppCompatActivity {
 
         // create bi-directional stream to pipeline
         // payment requests and replies
-        ILightningStream<Data.SendRequest> stream = client_.sendPaymentsStream(new ILightningCallback() {
-            @Override
-            public void onCall(int code, Object object) {
-                if (code != 0 && "EOF".equals(object))
-                    Log.i(TAG, "send payment done " + code + " o " + object);
-                else if (code != 0)
-                    Log.i(TAG, "send payment error " + code + " o " + object);
-                else
-                    Log.i(TAG, "send payment result " + code + " o " + object);
-            }
+        ILightningStream<Data.SendRequest, Data.SendResponse> stream =
+                client_.sendPaymentsStream(new ILightningCallback<Data.SendResponse>() {
+                    @Override
+                    public void onResponse(Data.SendResponse rep) {
+                        Log.i(TAG, "send payment result " + rep);
+                    }
+
+                    @Override
+                    public void onError(int code, String s) {
+                        if (code != 0 && "EOF".equals(s))
+                            Log.i(TAG, "send payment done " + code + " err " + s);
+                        else if (code != 0)
+                            Log.i(TAG, "send payment error " + code + " err " + s);
+                    }
         });
 
         try {
@@ -181,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-# Depencencies
+# Dependencies
 
 To compile lndroid-daemon library with Android Studio:
 1. Lnd [compiled for android](https://github.com/lightningnetwork/lnd/tree/master/mobile), .AAR placed at Lndmobile dir.

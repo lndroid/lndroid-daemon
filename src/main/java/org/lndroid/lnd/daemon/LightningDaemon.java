@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -16,7 +15,6 @@ import org.lndroid.lnd.data.Data;
 import org.lndroid.lnd.data.Codec;
 
 import lndmobile.Lndmobile;
-import lndmobile.SendStream;
 
 public final class LightningDaemon {
 
@@ -868,7 +866,7 @@ public final class LightningDaemon {
 
     // ======================
     // SendPayment
-    private static class SendStream<RequestType> implements ISendStream<RequestType> {
+    private static class SendStream<RequestType> implements ILightningSendStream<RequestType> {
 
         private lndmobile.SendStream stream_;
 
@@ -915,7 +913,7 @@ public final class LightningDaemon {
     }
 
     private static <RequestType, ResponseType extends com.google.protobuf.Message>
-    ISendStream<RequestType> callStreamMT(
+    ILightningSendStream<RequestType> callStreamMT(
             final String label,
             final com.google.protobuf.Parser<ResponseType> parser,
             final ILightningCallbackMT mtcb,
@@ -933,7 +931,7 @@ public final class LightningDaemon {
         }
         return null;
     }
-    public static ISendStream<Data.SendRequest> sendPaymentMT(final ILightningCallbackMT mtcb) {
+    public static ILightningSendStream<Data.SendRequest> sendPaymentMT(final ILightningCallbackMT mtcb) {
 
         return callStreamMT("sendPayment", lnrpc.Rpc.SendResponse.parser(), new ILightningCallbackMT() {
             @Override

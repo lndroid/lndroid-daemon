@@ -20,12 +20,13 @@ public class LightningClient implements ILightningClient {
 
         private static final String TAG = "LightningDispatcher";
 
-        public static class RequestReplyStream<RequestType> implements ILightningStream<RequestType> {
+        public static class RequestReplyStream<RequestType, ResponseType>
+                implements ILightningStream<RequestType, ResponseType> {
 
             private Dispatcher parent_;
             private int id_;
-            private ILightningCallback callback_;
-            private ISendStream<RequestType> sendStream_;
+            private ILightningCallback<ResponseType> callback_;
+            private ILightningSendStream<RequestType> sendStream_;
             private int requestCount_;
             private int replyCount_;
             private boolean stream_;
@@ -42,21 +43,22 @@ public class LightningClient implements ILightningClient {
                 return id_;
             }
 
-            void setSendStream(ISendStream<RequestType> ss) {
+            void setSendStream(ILightningSendStream<RequestType> ss) {
                 sendStream_ = ss;
             }
 
-            void setRecvCallback(ILightningCallback cb, boolean stream) {
+            void setRecvCallback(ILightningCallback<ResponseType> cb, boolean stream) {
                 callback_ = cb;
                 stream_ = stream;
             }
 
             // set the reply callback
             @Override
-            public void setRecvCallback(ILightningCallback cb) {
+            public void setRecvCallback(ILightningCallback<ResponseType> cb) {
                 setRecvCallback(cb, true);
             }
 
+            @SuppressWarnings("unchecked")
             public void recvCallback(int code, Object obj) {
                 // update state so that callback could use it
                 if (code != 0)
@@ -65,7 +67,10 @@ public class LightningClient implements ILightningClient {
                     replyCount_++;
 
                 // callback
-                callback_.onCall(code, obj);
+                if (code != 0)
+                    callback_.onError(code, (String)obj);
+                else
+                    callback_.onResponse((ResponseType)obj);
 
                 // stop if done and not stopped yet
                 if (done_ && activeCount() == 0 && isValid() ) {
@@ -73,7 +78,7 @@ public class LightningClient implements ILightningClient {
                         cancel();
                     } catch (LightningException e) {
                         error_ = true;
-                        callback_.onCall(e.errorCode(), e.errorMessage());
+                        callback_.onError(e.errorCode(), e.errorMessage());
                     }
                 }
             }
@@ -168,18 +173,18 @@ public class LightningClient implements ILightningClient {
             }
         }
 
-        <RequestType> RequestReplyStream<RequestType> createStream() {
+        <RequestType, ResponseType> RequestReplyStream<RequestType, ResponseType> createStream() {
             return new RequestReplyStream<>(this, nextId_++);
         }
 
-        int createCallback(ILightningCallback callback) {
-            RequestReplyStream s = createStream();
+        <ResponseType> int createCallback(ILightningCallback<ResponseType> callback) {
+            RequestReplyStream<Object, ResponseType> s = createStream();
             s.setRecvCallback(callback, false);
             return s.id();
         }
 
-        int createRecvStream(ILightningCallback callback) {
-            RequestReplyStream s = createStream();
+        <ResponseType> int createRecvStream(ILightningCallback<ResponseType> callback) {
+            RequestReplyStream<Object, ResponseType> s = createStream();
             s.setRecvCallback(callback, true);
             return s.id();
         }
@@ -242,110 +247,126 @@ public class LightningClient implements ILightningClient {
     }
 
     @Override
-    public void unlockWallet(Data.UnlockWalletRequest r, ILightningCallback cb) {
+    public void unlockWallet(Data.UnlockWalletRequest r,
+                             ILightningCallback<Data.UnlockWalletResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.unlockWalletMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void initWallet(Data.InitWalletRequest r, ILightningCallback cb) {
+    public void initWallet(Data.InitWalletRequest r,
+                           ILightningCallback<Data.InitWalletResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.initWalletMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void genSeed(Data.GenSeedRequest r, ILightningCallback cb) {
+    public void genSeed(Data.GenSeedRequest r,
+                        ILightningCallback<Data.GenSeedResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.genSeedMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void newAddress(Data.NewAddressRequest r, ILightningCallback cb) {
+    public void newAddress(Data.NewAddressRequest r,
+                           ILightningCallback<Data.NewAddressResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.newAddressMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void getInfo(Data.GetInfoRequest r, ILightningCallback cb) {
+    public void getInfo(Data.GetInfoRequest r,
+                        ILightningCallback<Data.GetInfoResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.getInfoMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void walletBalance(Data.WalletBalanceRequest r, ILightningCallback cb) {
+    public void walletBalance(Data.WalletBalanceRequest r,
+                              ILightningCallback<Data.WalletBalanceResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.walletBalanceMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void connectPeer(Data.ConnectPeerRequest r, ILightningCallback cb) {
+    public void connectPeer(Data.ConnectPeerRequest r,
+                            ILightningCallback<Data.ConnectPeerResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.connectPeerMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void listChannels(Data.ListChannelsRequest r, ILightningCallback cb) {
+    public void listChannels(Data.ListChannelsRequest r,
+                             ILightningCallback<Data.ListChannelsResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.listChannelsMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void addInvoice(Data.Invoice r, ILightningCallback cb) {
+    public void addInvoice(Data.Invoice r,
+                           ILightningCallback<Data.AddInvoiceResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.addInvoiceMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void subscribeTransactions(Data.GetTransactionsRequest r, ILightningCallback cb) {
+    public void subscribeTransactionsStream(Data.GetTransactionsRequest r,
+                                            ILightningCallback<Data.Transaction> cb) {
         final int what = dispatcher_.createRecvStream(cb);
         LightningDaemon.subscribeTransactionsMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void getTransactions(Data.GetTransactionsRequest r, ILightningCallback cb) {
+    public void getTransactions(Data.GetTransactionsRequest r,
+                                ILightningCallback<Data.TransactionDetails> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.getTransactionsMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void openChannel(Data.OpenChannelRequest r, ILightningCallback cb) {
+    public void openChannelStream(Data.OpenChannelRequest r,
+                                  ILightningCallback<Data.OpenStatusUpdate> cb) {
         final int what = dispatcher_.createRecvStream(cb);
         LightningDaemon.openChannelMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void openChannelSync(Data.OpenChannelRequest r, ILightningCallback cb) {
+    public void openChannel(Data.OpenChannelRequest r,
+                            ILightningCallback<Data.ChannelPoint> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.openChannelSyncMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void closeChannel(Data.CloseChannelRequest r, ILightningCallback cb) {
+    public void closeChannelStream(Data.CloseChannelRequest r,
+                                   ILightningCallback<Data.CloseStatusUpdate> cb) {
         final int what = dispatcher_.createRecvStream(cb);
         LightningDaemon.closeChannelMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void estimateFee(Data.EstimateFeeRequest r, ILightningCallback cb) {
+    public void estimateFee(Data.EstimateFeeRequest r,
+                            ILightningCallback<Data.EstimateFeeResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.estimateFeeMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public void sendCoins(Data.SendCoinsRequest r, ILightningCallback cb) {
+    public void sendCoins(Data.SendCoinsRequest r,
+                          ILightningCallback<Data.SendCoinsResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.sendCoinsMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override
-    public ILightningStream<Data.SendRequest> sendPaymentsStream() {
+    public ILightningStream<Data.SendRequest, Data.SendResponse> sendPaymentsStream() {
         // allocate bi-stream,
         // register it,
         // call MT w/ MTCallback(what)
         // set send stream
         // return bi-stream
-        Dispatcher.RequestReplyStream<Data.SendRequest> stream = dispatcher_.createStream();
-        ISendStream<Data.SendRequest> ss = LightningDaemon.sendPaymentMT(
+        Dispatcher.RequestReplyStream<Data.SendRequest, Data.SendResponse> stream = dispatcher_.createStream();
+        ILightningSendStream<Data.SendRequest> ss = LightningDaemon.sendPaymentMT(
                 new MTCallback(dispatcher_, stream.id()));
         stream.setSendStream(ss);
         return stream;
@@ -353,14 +374,16 @@ public class LightningClient implements ILightningClient {
 
     // overloaded variant for simple cases where cb can be defined before stream is created
     @Override
-    public ILightningStream<Data.SendRequest> sendPaymentsStream(ILightningCallback cb) {
-        ILightningStream<Data.SendRequest> stream = sendPaymentsStream();
+    public ILightningStream<Data.SendRequest, Data.SendResponse> sendPaymentsStream(
+            ILightningCallback<Data.SendResponse> cb) {
+        ILightningStream<Data.SendRequest, Data.SendResponse> stream = sendPaymentsStream();
         stream.setRecvCallback(cb);
         return stream;
     }
 
     @Override
-    public void sendPayment(Data.SendRequest r, ILightningCallback cb) {
+    public void sendPayment(Data.SendRequest r,
+                            ILightningCallback<Data.SendResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.sendPaymentMT(r, new MTCallback(dispatcher_, what));
     }
