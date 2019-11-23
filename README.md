@@ -165,9 +165,9 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(int code, String s) {
-                        if (code != 0 && "EOF".equals(s))
+                        if ("EOF".equals(s))
                             Log.i(TAG, "send payment done " + code + " err " + s);
-                        else if (code != 0)
+                        else
                             Log.i(TAG, "send payment error " + code + " err " + s);
                     }
         });
