@@ -72,8 +72,10 @@ public class LightningClient implements ILightningClient {
                 else
                     callback_.onResponse((ResponseType)obj);
 
-                // stop if done and not stopped yet
-                if (done_ && activeCount() == 0 && isValid() ) {
+                // stop if done and not stopped yet,
+		        // activeCount might be less than zero if we're
+		        // in 'reverse-stream' (like ChannelAcceptor)
+                if (done_ && activeCount() <= 0 && isValid() ) {
                     try {
                         cancel();
                     } catch (LightningException e) {
@@ -102,7 +104,7 @@ public class LightningClient implements ILightningClient {
                 // mark as done
                 done_ = true;
                 // no in-flight requests? stop immediately
-                if (activeCount() == 0)
+                if (activeCount() <= 0)
                     cancel();
             }
 
@@ -114,15 +116,20 @@ public class LightningClient implements ILightningClient {
                 try {
                     sendStream_.stop();
                 } catch (LightningException e) {
+		            // make sure parent drops this stream
+    		        // even if 'stop' fails and final error reply
+		            // is not delivered
                     parent_.streams_.remove(id_);
                     throw e;
                 } finally {
+                    // clear stream reference, as it's no longer
+		            // usable
                     sendStream_ = null;
                 }
             }
 
             // if error reply was received or stop was called (including
-            // after last receive when stopWhenDone was called),
+            // after last receive when 'done' was called),
             // this will return 'false'
             @Override
             public boolean isValid () {
@@ -173,7 +180,8 @@ public class LightningClient implements ILightningClient {
             }
         }
 
-        <RequestType, ResponseType> RequestReplyStream<RequestType, ResponseType> createStream() {
+        <RequestType, ResponseType> RequestReplyStream<RequestType, ResponseType>
+        createStream() {
             return new RequestReplyStream<>(this, nextId_++);
         }
 
@@ -225,18 +233,18 @@ public class LightningClient implements ILightningClient {
 
         @Override
         public void onError(int code, String message) {
-	    // Obtain a strong reference to Handler, to
-	    // avoid GC atomically clearing the weak one
-	    // in between a check and access
-	    Handler handler = handler_.get();
+            // Obtain a strong reference to Handler, to
+            // avoid GC atomically clearing the weak one
+            // in between a check and access
+            Handler handler = handler_.get();
             if (handler != null)
                 handler.sendMessage(handler.obtainMessage(what_, code, 0, message));
         }
 
         @Override
         public void onResponse(Object o) {
-	    // see notes above
-	    Handler handler = handler_.get();
+            // see notes above
+            Handler handler = handler_.get();
             if (handler != null)
                 handler.sendMessage(handler.obtainMessage(what_, o));
         }
