@@ -225,14 +225,20 @@ public class LightningClient implements ILightningClient {
 
         @Override
         public void onError(int code, String message) {
-            if (handler_.get() != null)
-                handler_.get().sendMessage(handler_.get().obtainMessage(what_, code, 0, message));
+	    // Obtain a strong reference to Handler, to
+	    // avoid GC atomically clearing the weak one
+	    // in between a check and access
+	    Handler handler = handler_.get();
+            if (handler != null)
+                handler.sendMessage(handler.obtainMessage(what_, code, 0, message));
         }
 
         @Override
         public void onResponse(Object o) {
-            if (handler_.get() != null)
-                handler_.get().sendMessage(handler_.get().obtainMessage(what_, o));
+	    // see notes above
+	    Handler handler = handler_.get();
+            if (handler != null)
+                handler.sendMessage(handler.obtainMessage(what_, o));
         }
     }
 
