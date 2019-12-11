@@ -14,6 +14,7 @@ public interface ILightningClient {
     void newAddress(Data.NewAddressRequest r, ILightningCallback<Data.NewAddressResponse> cb);
     void getInfo(Data.GetInfoRequest r, ILightningCallback<Data.GetInfoResponse> cb);
     void walletBalance(Data.WalletBalanceRequest r, ILightningCallback<Data.WalletBalanceResponse> cb);
+    void channelBalance(Data.ChannelBalanceRequest r, ILightningCallback<Data.ChannelBalanceResponse> cb);
 
     void connectPeer(Data.ConnectPeerRequest r, ILightningCallback<Data.ConnectPeerResponse> cb);
 

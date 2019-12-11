@@ -846,4 +846,13 @@ public final class Data
         public long cltvExpiry;
         public List<RouteHint> routeHints;
     }
+
+    // ====================
+    // ChannelBalance
+    public static final class ChannelBalanceRequest {
+    }
+    public static final class ChannelBalanceResponse {
+        public long balance;
+        public long pendingOpenBalance;
+    }
 }

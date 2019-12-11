@@ -118,6 +118,14 @@ public final class Codec {
         return lnrpc.Rpc.WalletBalanceRequest.newBuilder().build();
     }
 
+    public static lnrpc.Rpc.WalletBalanceResponse encode (Data.WalletBalanceResponse r) {
+        lnrpc.Rpc.WalletBalanceResponse.Builder b = lnrpc.Rpc.WalletBalanceResponse.newBuilder();
+        b.setTotalBalance(r.totalBalance);
+        b.setConfirmedBalance(r.confirmedBalance);
+        b.setUnconfirmedBalance(r.unconfirmedBalance);
+        return b.build();
+    }
+
     public static Data.WalletBalanceResponse decode (lnrpc.Rpc.WalletBalanceResponse resp) {
         assert resp != null;
 
@@ -126,6 +134,27 @@ public final class Codec {
         r.totalBalance = resp.getTotalBalance();
         r.confirmedBalance = resp.getConfirmedBalance();
         r.unconfirmedBalance = resp.getUnconfirmedBalance();
+
+        return r;
+    }
+
+    public static lnrpc.Rpc.ChannelBalanceRequest encode (Data.ChannelBalanceRequest r) {
+        return lnrpc.Rpc.ChannelBalanceRequest.newBuilder().build();
+    }
+
+    public static lnrpc.Rpc.ChannelBalanceResponse encode (Data.ChannelBalanceResponse r) {
+        lnrpc.Rpc.ChannelBalanceResponse.Builder b = lnrpc.Rpc.ChannelBalanceResponse.newBuilder();
+        b.setBalance(r.balance);
+        b.setPendingOpenBalance(r.pendingOpenBalance);
+        return b.build();
+    }
+
+    public static Data.ChannelBalanceResponse decode (lnrpc.Rpc.ChannelBalanceResponse resp) {
+        assert resp != null;
+
+        Data.ChannelBalanceResponse r = new Data.ChannelBalanceResponse();
+        r.balance = resp.getBalance();
+        r.pendingOpenBalance = resp.getPendingOpenBalance();
 
         return r;
     }

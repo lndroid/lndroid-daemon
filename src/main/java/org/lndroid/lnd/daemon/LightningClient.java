@@ -13,9 +13,9 @@ public class LightningClient implements ILightningClient {
 
     private static final String TAG = "LightningClient";
 
-    // dispatcher is owned by caller thread and
-    // thus will not leak the inner-class-callbacks
-    // that it stores to Daemon thread
+    // dispatcher is owned by caller thread
+    // and does not leak the UI's inner-class-callbacks
+    // to the Daemon thread
     static class Dispatcher extends Handler {
 
         private static final String TAG = "LightningDispatcher";
@@ -300,6 +300,13 @@ public class LightningClient implements ILightningClient {
                               ILightningCallback<Data.WalletBalanceResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.walletBalanceMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void channelBalance(Data.ChannelBalanceRequest r,
+                               ILightningCallback<Data.ChannelBalanceResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.channelBalanceMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override

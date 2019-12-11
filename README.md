@@ -28,8 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
     .....
 
-    // create a client object, responsible for dispatching
-    // callbacks through this UI thread's Looper
+    // Create a client object, responsible for dispatching
+    // callbacks through this UI thread's Looper.
+    // Note that in your real app, you should place the
+    // client inside a ViewModel (not Activity), otherwise the callbacks
+    // will not survive the configuration changes (like rotation)
     private ILightningClient client_ = LightningDaemon.createClient();
 
     private void startDaemon(){

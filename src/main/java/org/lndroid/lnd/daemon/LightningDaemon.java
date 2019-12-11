@@ -29,7 +29,8 @@ public final class LightningDaemon {
     private static final String TAG = "LightningDaemon";
 
     private static AtomicBoolean starting_ = new AtomicBoolean(false);
-//    private static boolean started_ = false;
+    private static AtomicBoolean started_ = new AtomicBoolean(false);
+    private static AtomicBoolean unlocked_ = new AtomicBoolean(false);
 
     static class FutureCallback<Response>  extends FutureTask<Response> implements ILightningCallbackMT {
 
@@ -61,6 +62,8 @@ public final class LightningDaemon {
     }
 
     private static void writeConf(String dir) throws LightningException {
+        new File(dir).mkdirs();
+
         File file = new File(dir+"/lnd.conf");
         FileWriter fr = null;
 
@@ -142,6 +145,15 @@ public final class LightningDaemon {
         }
 
         Log.i(TAG, "started: " + new String(cb.reply));
+        started_.set(true);
+    }
+
+    public static boolean isStarted() {
+        return started_.get();
+    }
+
+    public static boolean isUnlocked() {
+        return unlocked_.get();
     }
 
     // noop at the moment
@@ -270,6 +282,7 @@ public final class LightningDaemon {
 
             @Override
             public void onResponse(Object o) {
+                unlocked_.set(true);
                 mtcb.onResponse(Codec.decode((lnrpc.Rpc.UnlockWalletResponse)o));
             }
 
@@ -356,6 +369,7 @@ public final class LightningDaemon {
 
             @Override
             public void onResponse(Object o) {
+                unlocked_.set(true);
                 mtcb.onResponse(Codec.decode((lnrpc.Rpc.InitWalletResponse)o));
             }
 
@@ -508,6 +522,48 @@ public final class LightningDaemon {
             @Override
             public Future<Data.WalletBalanceResponse> onCall(Data.WalletBalanceRequest r) {
                 return walletBalanceFuture(r);
+            }
+        });
+    }
+
+    // ======================
+    // ChannelBalance
+    public static void channelBalanceMT(Data.ChannelBalanceRequest r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.ChannelBalanceRequest req = Codec.encode(r);
+
+        callMT("channelBalance", req, lnrpc.Rpc.ChannelBalanceResponse.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.ChannelBalanceResponse)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.channelBalance(data, cb);
+            }
+        });
+    }
+
+    public static Future<Data.ChannelBalanceResponse> channelBalanceFuture(Data.ChannelBalanceRequest r) {
+        return callFuture(r, new FutureCallImpl<Data.ChannelBalanceRequest, Data.ChannelBalanceResponse> () {
+            @Override
+            public void onCall(Data.ChannelBalanceRequest r, FutureCallback<Data.ChannelBalanceResponse> cb) {
+                channelBalanceMT(r, cb);
+            }
+        });
+    }
+
+    public static Data.ChannelBalanceResponse channelBalanceSync(Data.ChannelBalanceRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<Data.ChannelBalanceRequest, Data.ChannelBalanceResponse> () {
+            @Override
+            public Future<Data.ChannelBalanceResponse> onCall(Data.ChannelBalanceRequest r) {
+                return channelBalanceFuture(r);
             }
         });
     }
