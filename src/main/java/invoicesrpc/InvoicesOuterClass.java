@@ -910,12 +910,25 @@ public final class InvoicesOuterClass {
 
     /**
      * <pre>
-     *&#47; The value of this invoice in satoshis
+     **
+     *The value of this invoice in satoshis
+     *The fields value and value_msat are mutually exclusive.
      * </pre>
      *
      * <code>int64 value = 3[json_name = "value"];</code>
      */
     long getValue();
+
+    /**
+     * <pre>
+     **
+     *The value of this invoice in millisatoshis
+     *The fields value and value_msat are mutually exclusive.
+     * </pre>
+     *
+     * <code>int64 value_msat = 10[json_name = "value_msat"];</code>
+     */
+    long getValueMsat();
 
     /**
      * <pre>
@@ -1044,6 +1057,7 @@ public final class InvoicesOuterClass {
       memo_ = "";
       hash_ = com.google.protobuf.ByteString.EMPTY;
       value_ = 0L;
+      valueMsat_ = 0L;
       descriptionHash_ = com.google.protobuf.ByteString.EMPTY;
       expiry_ = 0L;
       fallbackAddr_ = "";
@@ -1118,9 +1132,9 @@ public final class InvoicesOuterClass {
               break;
             }
             case 66: {
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
                 routeHints_ = new java.util.ArrayList<lnrpc.Rpc.RouteHint>();
-                mutable_bitField0_ |= 0x00000080;
+                mutable_bitField0_ |= 0x00000100;
               }
               routeHints_.add(
                   input.readMessage(lnrpc.Rpc.RouteHint.parser(), extensionRegistry));
@@ -1131,6 +1145,11 @@ public final class InvoicesOuterClass {
               private_ = input.readBool();
               break;
             }
+            case 80: {
+
+              valueMsat_ = input.readInt64();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1139,7 +1158,7 @@ public final class InvoicesOuterClass {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
           routeHints_ = java.util.Collections.unmodifiableList(routeHints_);
         }
         this.unknownFields = unknownFields.build();
@@ -1226,13 +1245,30 @@ public final class InvoicesOuterClass {
     private long value_;
     /**
      * <pre>
-     *&#47; The value of this invoice in satoshis
+     **
+     *The value of this invoice in satoshis
+     *The fields value and value_msat are mutually exclusive.
      * </pre>
      *
      * <code>int64 value = 3[json_name = "value"];</code>
      */
     public long getValue() {
       return value_;
+    }
+
+    public static final int VALUE_MSAT_FIELD_NUMBER = 10;
+    private long valueMsat_;
+    /**
+     * <pre>
+     **
+     *The value of this invoice in millisatoshis
+     *The fields value and value_msat are mutually exclusive.
+     * </pre>
+     *
+     * <code>int64 value_msat = 10[json_name = "value_msat"];</code>
+     */
+    public long getValueMsat() {
+      return valueMsat_;
     }
 
     public static final int DESCRIPTION_HASH_FIELD_NUMBER = 4;
@@ -1436,6 +1472,9 @@ public final class InvoicesOuterClass {
       if (private_ != false) {
         output.writeBool(9, private_);
       }
+      if (valueMsat_ != 0L) {
+        output.writeInt64(10, valueMsat_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -1478,6 +1517,10 @@ public final class InvoicesOuterClass {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(9, private_);
       }
+      if (valueMsat_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(10, valueMsat_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -1500,6 +1543,8 @@ public final class InvoicesOuterClass {
           .equals(other.getHash());
       result = result && (getValue()
           == other.getValue());
+      result = result && (getValueMsat()
+          == other.getValueMsat());
       result = result && getDescriptionHash()
           .equals(other.getDescriptionHash());
       result = result && (getExpiry()
@@ -1530,6 +1575,9 @@ public final class InvoicesOuterClass {
       hash = (37 * hash) + VALUE_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getValue());
+      hash = (37 * hash) + VALUE_MSAT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getValueMsat());
       hash = (37 * hash) + DESCRIPTION_HASH_FIELD_NUMBER;
       hash = (53 * hash) + getDescriptionHash().hashCode();
       hash = (37 * hash) + EXPIRY_FIELD_NUMBER;
@@ -1683,6 +1731,8 @@ public final class InvoicesOuterClass {
 
         value_ = 0L;
 
+        valueMsat_ = 0L;
+
         descriptionHash_ = com.google.protobuf.ByteString.EMPTY;
 
         expiry_ = 0L;
@@ -1693,7 +1743,7 @@ public final class InvoicesOuterClass {
 
         if (routeHintsBuilder_ == null) {
           routeHints_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000080);
+          bitField0_ = (bitField0_ & ~0x00000100);
         } else {
           routeHintsBuilder_.clear();
         }
@@ -1726,14 +1776,15 @@ public final class InvoicesOuterClass {
         result.memo_ = memo_;
         result.hash_ = hash_;
         result.value_ = value_;
+        result.valueMsat_ = valueMsat_;
         result.descriptionHash_ = descriptionHash_;
         result.expiry_ = expiry_;
         result.fallbackAddr_ = fallbackAddr_;
         result.cltvExpiry_ = cltvExpiry_;
         if (routeHintsBuilder_ == null) {
-          if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          if (((bitField0_ & 0x00000100) == 0x00000100)) {
             routeHints_ = java.util.Collections.unmodifiableList(routeHints_);
-            bitField0_ = (bitField0_ & ~0x00000080);
+            bitField0_ = (bitField0_ & ~0x00000100);
           }
           result.routeHints_ = routeHints_;
         } else {
@@ -1792,6 +1843,9 @@ public final class InvoicesOuterClass {
         if (other.getValue() != 0L) {
           setValue(other.getValue());
         }
+        if (other.getValueMsat() != 0L) {
+          setValueMsat(other.getValueMsat());
+        }
         if (other.getDescriptionHash() != com.google.protobuf.ByteString.EMPTY) {
           setDescriptionHash(other.getDescriptionHash());
         }
@@ -1809,7 +1863,7 @@ public final class InvoicesOuterClass {
           if (!other.routeHints_.isEmpty()) {
             if (routeHints_.isEmpty()) {
               routeHints_ = other.routeHints_;
-              bitField0_ = (bitField0_ & ~0x00000080);
+              bitField0_ = (bitField0_ & ~0x00000100);
             } else {
               ensureRouteHintsIsMutable();
               routeHints_.addAll(other.routeHints_);
@@ -1822,7 +1876,7 @@ public final class InvoicesOuterClass {
               routeHintsBuilder_.dispose();
               routeHintsBuilder_ = null;
               routeHints_ = other.routeHints_;
-              bitField0_ = (bitField0_ & ~0x00000080);
+              bitField0_ = (bitField0_ & ~0x00000100);
               routeHintsBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getRouteHintsFieldBuilder() : null;
@@ -2015,7 +2069,9 @@ public final class InvoicesOuterClass {
       private long value_ ;
       /**
        * <pre>
-       *&#47; The value of this invoice in satoshis
+       **
+       *The value of this invoice in satoshis
+       *The fields value and value_msat are mutually exclusive.
        * </pre>
        *
        * <code>int64 value = 3[json_name = "value"];</code>
@@ -2025,7 +2081,9 @@ public final class InvoicesOuterClass {
       }
       /**
        * <pre>
-       *&#47; The value of this invoice in satoshis
+       **
+       *The value of this invoice in satoshis
+       *The fields value and value_msat are mutually exclusive.
        * </pre>
        *
        * <code>int64 value = 3[json_name = "value"];</code>
@@ -2038,7 +2096,9 @@ public final class InvoicesOuterClass {
       }
       /**
        * <pre>
-       *&#47; The value of this invoice in satoshis
+       **
+       *The value of this invoice in satoshis
+       *The fields value and value_msat are mutually exclusive.
        * </pre>
        *
        * <code>int64 value = 3[json_name = "value"];</code>
@@ -2046,6 +2106,50 @@ public final class InvoicesOuterClass {
       public Builder clearValue() {
         
         value_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long valueMsat_ ;
+      /**
+       * <pre>
+       **
+       *The value of this invoice in millisatoshis
+       *The fields value and value_msat are mutually exclusive.
+       * </pre>
+       *
+       * <code>int64 value_msat = 10[json_name = "value_msat"];</code>
+       */
+      public long getValueMsat() {
+        return valueMsat_;
+      }
+      /**
+       * <pre>
+       **
+       *The value of this invoice in millisatoshis
+       *The fields value and value_msat are mutually exclusive.
+       * </pre>
+       *
+       * <code>int64 value_msat = 10[json_name = "value_msat"];</code>
+       */
+      public Builder setValueMsat(long value) {
+        
+        valueMsat_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The value of this invoice in millisatoshis
+       *The fields value and value_msat are mutually exclusive.
+       * </pre>
+       *
+       * <code>int64 value_msat = 10[json_name = "value_msat"];</code>
+       */
+      public Builder clearValueMsat() {
+        
+        valueMsat_ = 0L;
         onChanged();
         return this;
       }
@@ -2268,9 +2372,9 @@ public final class InvoicesOuterClass {
       private java.util.List<lnrpc.Rpc.RouteHint> routeHints_ =
         java.util.Collections.emptyList();
       private void ensureRouteHintsIsMutable() {
-        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
           routeHints_ = new java.util.ArrayList<lnrpc.Rpc.RouteHint>(routeHints_);
-          bitField0_ |= 0x00000080;
+          bitField0_ |= 0x00000100;
          }
       }
 
@@ -2486,7 +2590,7 @@ public final class InvoicesOuterClass {
       public Builder clearRouteHints() {
         if (routeHintsBuilder_ == null) {
           routeHints_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000080);
+          bitField0_ = (bitField0_ & ~0x00000100);
           onChanged();
         } else {
           routeHintsBuilder_.clear();
@@ -2605,7 +2709,7 @@ public final class InvoicesOuterClass {
           routeHintsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               lnrpc.Rpc.RouteHint, lnrpc.Rpc.RouteHint.Builder, lnrpc.Rpc.RouteHintOrBuilder>(
                   routeHints_,
-                  ((bitField0_ & 0x00000080) == 0x00000080),
+                  ((bitField0_ & 0x00000100) == 0x00000100),
                   getParentForChildren(),
                   isClean());
           routeHints_ = null;
@@ -4657,30 +4761,30 @@ public final class InvoicesOuterClass {
       "\n\032invoicesrpc/invoices.proto\022\013invoicesrp" +
       "c\032\034google/api/annotations.proto\032\trpc.pro" +
       "to\"(\n\020CancelInvoiceMsg\022\024\n\014payment_hash\030\001" +
-      " \001(\014\"\023\n\021CancelInvoiceResp\"\257\002\n\025AddHoldInv" +
+      " \001(\014\"\023\n\021CancelInvoiceResp\"\317\002\n\025AddHoldInv" +
       "oiceRequest\022\022\n\004memo\030\001 \001(\tR\004memo\022\022\n\004hash\030" +
-      "\002 \001(\014R\004hash\022\024\n\005value\030\003 \001(\003R\005value\022*\n\020des" +
-      "cription_hash\030\004 \001(\014R\020description_hash\022\026\n" +
-      "\006expiry\030\005 \001(\003R\006expiry\022$\n\rfallback_addr\030\006" +
-      " \001(\tR\rfallback_addr\022 \n\013cltv_expiry\030\007 \001(\004" +
-      "R\013cltv_expiry\0222\n\013route_hints\030\010 \003(\0132\020.lnr",
-      "pc.RouteHintR\013route_hints\022\030\n\007private\030\t \001" +
-      "(\010R\007private\">\n\022AddHoldInvoiceResp\022(\n\017pay" +
-      "ment_request\030\001 \001(\tR\017payment_request\"$\n\020S" +
-      "ettleInvoiceMsg\022\020\n\010preimage\030\001 \001(\014\"\023\n\021Set" +
-      "tleInvoiceResp\"=\n\035SubscribeSingleInvoice" +
-      "Request\022\026\n\006r_hash\030\002 \001(\014R\006r_hashJ\004\010\001\020\0022\331\002" +
-      "\n\010Invoices\022V\n\026SubscribeSingleInvoice\022*.i" +
-      "nvoicesrpc.SubscribeSingleInvoiceRequest" +
-      "\032\016.lnrpc.Invoice0\001\022N\n\rCancelInvoice\022\035.in" +
-      "voicesrpc.CancelInvoiceMsg\032\036.invoicesrpc",
-      ".CancelInvoiceResp\022U\n\016AddHoldInvoice\022\".i" +
-      "nvoicesrpc.AddHoldInvoiceRequest\032\037.invoi" +
-      "cesrpc.AddHoldInvoiceResp\022N\n\rSettleInvoi" +
-      "ce\022\035.invoicesrpc.SettleInvoiceMsg\032\036.invo" +
-      "icesrpc.SettleInvoiceRespB3Z1github.com/" +
-      "lightningnetwork/lnd/lnrpc/invoicesrpcb\006" +
-      "proto3"
+      "\002 \001(\014R\004hash\022\024\n\005value\030\003 \001(\003R\005value\022\036\n\nval" +
+      "ue_msat\030\n \001(\003R\nvalue_msat\022*\n\020description" +
+      "_hash\030\004 \001(\014R\020description_hash\022\026\n\006expiry\030" +
+      "\005 \001(\003R\006expiry\022$\n\rfallback_addr\030\006 \001(\tR\rfa" +
+      "llback_addr\022 \n\013cltv_expiry\030\007 \001(\004R\013cltv_e",
+      "xpiry\0222\n\013route_hints\030\010 \003(\0132\020.lnrpc.Route" +
+      "HintR\013route_hints\022\030\n\007private\030\t \001(\010R\007priv" +
+      "ate\">\n\022AddHoldInvoiceResp\022(\n\017payment_req" +
+      "uest\030\001 \001(\tR\017payment_request\"$\n\020SettleInv" +
+      "oiceMsg\022\020\n\010preimage\030\001 \001(\014\"\023\n\021SettleInvoi" +
+      "ceResp\"=\n\035SubscribeSingleInvoiceRequest\022" +
+      "\026\n\006r_hash\030\002 \001(\014R\006r_hashJ\004\010\001\020\0022\331\002\n\010Invoic" +
+      "es\022V\n\026SubscribeSingleInvoice\022*.invoicesr" +
+      "pc.SubscribeSingleInvoiceRequest\032\016.lnrpc" +
+      ".Invoice0\001\022N\n\rCancelInvoice\022\035.invoicesrp",
+      "c.CancelInvoiceMsg\032\036.invoicesrpc.CancelI" +
+      "nvoiceResp\022U\n\016AddHoldInvoice\022\".invoicesr" +
+      "pc.AddHoldInvoiceRequest\032\037.invoicesrpc.A" +
+      "ddHoldInvoiceResp\022N\n\rSettleInvoice\022\035.inv" +
+      "oicesrpc.SettleInvoiceMsg\032\036.invoicesrpc." +
+      "SettleInvoiceRespB3Z1github.com/lightnin" +
+      "gnetwork/lnd/lnrpc/invoicesrpcb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4713,7 +4817,7 @@ public final class InvoicesOuterClass {
     internal_static_invoicesrpc_AddHoldInvoiceRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_invoicesrpc_AddHoldInvoiceRequest_descriptor,
-        new java.lang.String[] { "Memo", "Hash", "Value", "DescriptionHash", "Expiry", "FallbackAddr", "CltvExpiry", "RouteHints", "Private", });
+        new java.lang.String[] { "Memo", "Hash", "Value", "ValueMsat", "DescriptionHash", "Expiry", "FallbackAddr", "CltvExpiry", "RouteHints", "Private", });
     internal_static_invoicesrpc_AddHoldInvoiceResp_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_invoicesrpc_AddHoldInvoiceResp_fieldAccessorTable = new

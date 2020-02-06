@@ -253,6 +253,7 @@ public class LightningClient implements ILightningClient {
     private Dispatcher dispatcher_ = new Dispatcher();
 
     LightningClient() {
+        Log.i(TAG, "created on thread "+Thread.currentThread().getId());
     }
 
     @Override
@@ -407,6 +408,91 @@ public class LightningClient implements ILightningClient {
                             ILightningCallback<Data.SendResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.sendPaymentMT(r, new MTCallback(dispatcher_, what));
+    }
+
+/*    @Override
+    public void registerBlockEpochNtfnStream(Data.BlockEpoch r,
+                                             ILightningCallback<Data.BlockEpoch> cb) {
+        final int what = dispatcher_.createRecvStream(cb);
+        LightningDaemon.registerBlockEpochNtfnMT(r, new MTCallback(dispatcher_, what));
+    }
+
+ */
+
+    @Override
+    public void subscribeInvoicesStream(Data.InvoiceSubscription r, ILightningCallback<Data.Invoice> cb) {
+        final int what = dispatcher_.createRecvStream(cb);
+        LightningDaemon.subscribeInvoicesMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void decodePayReq(Data.PayReqString r,
+                             ILightningCallback<Data.PayReq> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.decodePayReqMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void listPayments(Data.ListPaymentsRequest r,
+                             ILightningCallback<Data.ListPaymentsResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.listPaymentsMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void deleteAllPayments(Data.DeleteAllPaymentsRequest r,
+                                  ILightningCallback<Data.DeleteAllPaymentsResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.deleteAllPaymentsMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void subscribeChannelEventsStream(Data.ChannelEventSubscription r, ILightningCallback<Data.ChannelEventUpdate> cb) {
+        final int what = dispatcher_.createRecvStream(cb);
+        LightningDaemon.subscribeChannelEventsMT(r, new MTCallback(dispatcher_, what));
+    }
+
+
+    @Override
+    public ILightningCallbackMT createDaemonCallback(ILightningCallback<Object> cb) {
+        final int what = dispatcher_.createRecvStream(cb);
+        return new MTCallback(dispatcher_, what);
+    }
+
+    @Override
+    public void getNodeInfo(Data.NodeInfoRequest r,
+                                  ILightningCallback<Data.NodeInfo> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.getNodeInfoMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void queryRoutes(Data.QueryRoutesRequest r, ILightningCallback<Data.QueryRoutesResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.queryRoutesMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public ILightningStream<Data.SendToRouteRequest, Data.SendResponse> sendToRouteStream() {
+        Dispatcher.RequestReplyStream<Data.SendToRouteRequest, Data.SendResponse> stream = dispatcher_.createStream();
+        ILightningSendStream<Data.SendToRouteRequest> ss = LightningDaemon.sendToRouteMT(
+                new MTCallback(dispatcher_, stream.id()));
+        stream.setSendStream(ss);
+        return stream;
+    }
+
+    @Override
+    public ILightningStream<Data.SendToRouteRequest, Data.SendResponse> sendToRouteStream(
+            ILightningCallback<Data.SendResponse> cb) {
+        ILightningStream<Data.SendToRouteRequest, Data.SendResponse> stream = sendToRouteStream();
+        stream.setRecvCallback(cb);
+        return stream;
+    }
+
+    @Override
+    public void sendToRoute(Data.SendToRouteRequest r, ILightningCallback<Data.SendResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.sendToRouteMT(r, new MTCallback(dispatcher_, what));
     }
 
 }

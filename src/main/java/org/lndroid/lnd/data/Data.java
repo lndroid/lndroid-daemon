@@ -7,23 +7,23 @@ public final class Data
 {
     // unlockWallet
     public static final class UnlockWalletRequest {
-        public String walletPassword;
+        public byte[] walletPassword;
     }
     public static final class UnlockWalletResponse {
     }
 
     // initWallet
     public static final class InitWalletRequest {
-        public String walletPassword;
+        public byte[] walletPassword;
         public List<String> cipherSeedMnemonic;
-        public String aezeedPassphrase;
+        public byte[] aezeedPassphrase;
     }
     public static final class InitWalletResponse {
     }
 
     // genSeed
     public static final class GenSeedRequest {
-        public String aezeedPassphrase;
+        public byte[] aezeedPassphrase;
         public byte[] seedEntropy;
     }
     public static final class GenSeedResponse {
@@ -330,6 +330,8 @@ public final class Data
 
         /// Current state the htlc is in.
         public int state;
+
+        public Map<Long,byte[]> tlv;
     }
     public static final class Invoice {
         /**
@@ -431,8 +433,12 @@ public final class Data
          */
         public int state;
 
+        public boolean isKeysend;
+
         /// List of HTLCs paying to this invoice [EXPERIMENTAL].
         public List<InvoiceHTLC> htlcs;
+
+        public List<Integer> features;
     }
     public static final class AddInvoiceResponse {
         public byte[] rHash;
@@ -493,11 +499,11 @@ public final class Data
     //===========================
     // OpenChannel
     public static final class OpenChannelRequest {
+        // FIXME remove when lnd bug fixed
+        public String nodePubkeyString;
+
         /// The pubkey of the node to open a channel with
         public byte[] nodePubkey;
-
-        /// The hex encoded pubkey of the node to open a channel with
-        public String nodePubkeyString;
 
         /// The number of satoshis the wallet should commit to the channel
         public long localFundingAmount;
@@ -625,7 +631,7 @@ public final class Data
     // SendPayment
     public static final class FeeLimit {
         /// The fee limit expressed as a fixed amount of satoshis.
-        public long fixed;
+        public long fixedMsat;
 
         /// The fee limit expressed as a percentage of the payment amount.
         public long percent;
@@ -634,17 +640,11 @@ public final class Data
         /// The identity pubkey of the payment recipient
         public byte[] dest;
 
-        /// The hex-encoded identity pubkey of the payment recipient
-        public String destString;
-
         /// Number of satoshis to send.
-        public long amt;
+        public long amtMsat;
 
         /// The hash to use within the payment's HTLC
         public byte[] paymentHash;
-
-        /// The hex-encoded hash to use within the payment's HTLC
-        public String paymentHashString;
 
         /**
          A bare-bones invoice for a payment within the Lightning Network.  With the
@@ -660,12 +660,25 @@ public final class Data
         public int finalCltvDelta;
 
         /**
+         An upper limit on the amount of time we should spend when attempting to
+         fulfill the payment. This is expressed in seconds. If we cannot make a
+         successful payment within this time frame, an error will be returned.
+         This field must be non-zero.
+         */
+        public int timeoutSeconds;
+
+        /**
          The maximum number of satoshis that will be paid as a fee of the payment.
          This value can be represented either as a percentage of the amount being
          sent, or as a fixed amount of the maximum fee the user is willing the pay to
          send the payment.
          */
         public FeeLimit feeLimit;
+
+        /**
+         The pubkey of the last hop of the route. If empty, any hop may be used.
+         */
+        public byte[] lastHopPubkey;
 
         /**
          The channel id of the channel that must be taken to the first hop. If zero,
@@ -681,11 +694,26 @@ public final class Data
         public int cltvLimit;
 
         /**
-         An optional field that can be used to pass an arbitrary set of TLV records
+         Route hints that can each be individually used to assist in reaching the
+         invoice's destination.
+         */
+        public List<RouteHint> routeHints;
+
+        /**
+         An optional field that can be used to pass an arbitrary set of TLV  records
          to a peer which understands the new records. This can be used to pass
          application specific data during the payment attempt.
          */
         public Map<Long, byte[]> destTlv;
+
+        /**
+         Features assumed to be supported by the final node. All transitive feature
+         depdencies must also be set properly. For a given feature bit pair, either
+         optional or remote may be set, but not both. If this field is nil or empty,
+         the router will try to load destination features from the graph as a
+         fallback.
+         */
+        public List<Integer> features;
     }
     public static final class Hop {
         /**
@@ -718,6 +746,9 @@ public final class Data
          * regular single-shot payment is or was attempted.
          */
         public MPPRecord mppRecord;
+
+        // custom records
+        public Map<Long, byte[]> tlv;
     }
     public static final class MPPRecord {
         /**
@@ -771,12 +802,6 @@ public final class Data
     // ====================
     // LookupInvoice
     public static final class PaymentHash {
-        /**
-         * The hex-encoded payment hash of the invoice to be looked up. The passed
-         * payment hash must be exactly 32 bytes, otherwise an error is returned.
-         */
-        public String rHashStr;
-
         /// The payment hash of the invoice to be looked up.
         public byte[] rHash;
     }
@@ -799,11 +824,8 @@ public final class Data
         /// The payment hash
         public String paymentHash;
 
-        /// The date of this payment
-        public long creationDate;
-
-        /// The path this payment took
-        public List<String> path;
+        /// The time of this payment in ms
+        public long creationTime;
 
         /// The payment preimage
         public String paymentPreimage;
@@ -844,7 +866,9 @@ public final class Data
         public String descriptionHash;
         public String fallbackAddr;
         public long cltvExpiry;
+        public byte[] paymentAddr;
         public List<RouteHint> routeHints;
+        public List<Integer> features;
     }
 
     // ====================
@@ -855,4 +879,270 @@ public final class Data
         public long balance;
         public long pendingOpenBalance;
     }
+
+    // =====================
+    public static final class BlockEpoch {
+        // The hash of the block.
+        public byte[] hash;
+
+        // The height of the block.
+        public int height;
+    }
+
+    public static final class DeleteAllPaymentsRequest{
+    }
+    public static final class DeleteAllPaymentsResponse{
+    }
+
+    public static final class InvoiceSubscription{
+        public long addIndex;
+        public long settleIndex;
+    }
+
+    public static final int CHANNEL_CLOSE_COOPERATIVE_CLOSE = 0;
+    public static final int CHANNEL_CLOSE_LOCAL_FORCE_CLOSE = 1;
+    public static final int CHANNEL_CLOSE_REMOTE_FORCE_CLOSE = 2;
+    public static final int CHANNEL_CLOSE_BREACH_CLOSE = 3;
+    public static final int CHANNEL_CLOSE_FUNDING_CANCELED = 4;
+    public static final int CHANNEL_CLOSE_ABANDONED = 5;
+    public static final class ChannelCloseSummary {
+        /// The outpoint (txid:index) of the funding transaction.
+        public String channelPoint;
+
+        ///  The unique channel ID for the channel.
+        public long chanId;
+
+        /// The hash of the genesis block that this channel resides within.
+        public String chainHash;
+
+        /// The txid of the transaction which ultimately closed this channel.
+        public String closingTxHash;
+
+        /// Public key of the remote peer that we formerly had a channel with.
+        public String remotePubkey;
+
+        /// Total capacity of the channel.
+        public long capacity;
+
+        /// Height at which the funding transaction was spent.
+        public int closeHeight;
+
+        /// Settled balance at the time of channel closure
+        public long settledBalance;
+
+        /// The sum of all the time-locked outputs at the time of channel closure
+        public long timeLockedBalance;
+
+        /// Details on how the channel was closed.
+        public int closeType;
+    }
+
+    public static final class ChannelEventSubscription{
+    }
+    public static final int CHANNEL_EVENT_OPEN_CHANNEL = 0;
+    public static final int CHANNEL_EVENT_CLOSED_CHANNEL = 1;
+    public static final int CHANNEL_EVENT_ACTIVE_CHANNEL = 2;
+    public static final int CHANNEL_EVENT_INACTIVE_CHANNEL = 3;
+    public static final class ChannelEventUpdate {
+        public Channel openChannel;
+        public ChannelCloseSummary closedChannel;
+        public ChannelPoint activeChannel;
+        public ChannelPoint inactiveChannel;
+        public int type;
+    }
+
+    public static final class LightningNode {
+        public int lastUpdate;
+        public String pubKey;
+        public String alias;
+        // FIXME add
+        // repeated NodeAddress addresses =4[json_name ="addresses"];
+        public String color;
+        public List<Integer> features;
+    }
+
+    public static final class NodeInfoRequest {
+        /// The 33-byte hex-encoded compressed public of the target node
+        public String pubKey;
+
+        /// If true, will include all known channels associated with the node.
+        public boolean includeChannels;
+    }
+
+    public static final class RoutingPolicy {
+        public int timeLockDelta;
+        public long minHtlc;
+        public long feeBaseMsat;
+        public long feeRateMilliMsat;
+        public boolean disabled;
+        public long maxHtlcMsat;
+        public int lastUpdate;
+    }
+
+    /**
+     A fully authenticated channel along with all its unique attributes.
+     Once an authenticated channel announcement has been processed on the network,
+     then an instance of ChannelEdgeInfo encapsulating the channels attributes is
+     stored. The other portions relevant to routing policy of a channel are stored
+     within a ChannelEdgePolicy for each direction of the channel.
+     */
+    public static final class ChannelEdge {
+
+        /**
+         * The unique channel ID for the channel. The first 3 bytes are the block
+         * height, the next 3 the index within the block, and the last 2 bytes are the
+         * output index for the channel.
+         */
+        public long channelId;
+        public String chanPoint;
+
+        public String node1Pubkey;
+        public String node2Pubkey;
+
+        public long capacity;
+
+        public RoutingPolicy node1Policy;
+        public RoutingPolicy node2Policy;
+    }
+
+    public static final class NodeInfo {
+
+        /**
+         * An individual vertex/node within the channel graph. A node is
+         * connected to other nodes by one or more channel edges emanating from it. As
+         * the graph is directed, a node will also have an incoming edge attached to
+         * it for each outgoing edge.
+         */
+        public LightningNode node;
+
+        /// The total number of channels for the node.
+        public int numChannels;
+
+        public long totalCapacity;
+
+        /// A list of all public channels for the node.
+        public List<ChannelEdge> channels;
+    }
+
+    public static final class QueryRoutesRequest {
+
+        /// The 33-byte hex-encoded public key for the payment destination
+        public String pubKey;
+
+        /**
+         * The amount to send expressed in millisatoshis.
+         * <p>
+         * The fields amt and amt_msat are mutually exclusive.
+         */
+        public long amtMsat;
+
+        /**
+         * An optional CLTV delta from the current height that should be used for the
+         * timelock of the final hop. Note that unlike SendPayment, QueryRoutes does
+         * not add any additional block padding on top of final_ctlv_delta. This
+         * padding of a few blocks needs to be added manually or otherwise failures may
+         * happen when a block comes in while the payment is in flight.
+         */
+        public int finalCltvDelta;
+
+        /**
+         * The maximum number of satoshis that will be paid as a fee of the payment.
+         * This value can be represented either as a percentage of the amount being
+         * sent, or as a fixed amount of the maximum fee the user is willing the pay to
+         * send the payment.
+         */
+        public FeeLimit feeLimit;
+
+        /**
+         * A list of nodes to ignore during path finding. When using REST, these fields
+         * must be encoded as base64.
+         */
+        public List<byte[]> ignoredNodes;
+
+        /**
+         * The source node where the request route should originated from. If empty,
+         * self is assumed.
+         */
+        public String sourcePubKey;
+
+        /**
+         * If set to true, edge probabilities from mission control will be used to get
+         * the optimal route.
+         */
+        public boolean useMissionControl;
+
+        /**
+         * A list of directed node pairs that will be ignored during path finding.
+         */
+        // FIXME add later repeated NodePair ignored_pairs =10;
+
+        /**
+         * An optional maximum total time lock for the route. If the source is empty or
+         * ourselves, this should not exceed lnd's `--max-cltv-expiry` setting. If
+         * zero, then the value of `--max-cltv-expiry` is used as the limit.
+         */
+        public int cltvLimit;
+
+        /**
+         * An optional field that can be used to pass an arbitrary set of TLV records
+         * to a peer which understands the new records. This can be used to pass
+         * application specific data during the payment attempt. If the destination
+         * does not support the specified recrods, and error will be returned.
+         * Record types are required to be in the custom range >= 65536. When using
+         * REST, the values must be encoded as base64.
+         */
+        public Map<Long, byte[]> destCustomRecords;
+
+        /**
+         * The channel id of the channel that must be taken to the first hop. If zero,
+         * any channel may be used.
+         */
+        public long outgoingChanId;
+
+        /**
+         * The pubkey of the last hop of the route. If empty, any hop may be used.
+         */
+        public byte[] lastHopPubkey;
+
+        /**
+         * Optional route hints to reach the destination through private channels.
+         */
+        public List<RouteHint> routeHints;
+
+        /**
+         * Features assumed to be supported by the final node. All transitive feature
+         * depdencies must also be set properly. For a given feature bit pair, either
+         * optional or remote may be set, but not both. If this field is nil or empty,
+         * the router will try to load destination features from the graph as a
+         * fallback.
+         */
+        public List<Integer> destFeatures;
+    }
+
+    public static final class QueryRoutesResponse {
+        /**
+         * The route that results from the path finding operation. This is still a
+         * repeated field to retain backwards compatibility.
+         */
+        public List<Route> routes;
+
+        /**
+         * The success probability of the returned route based on the current mission
+         * control state. [EXPERIMENTAL]
+         */
+        public double successProb;
+    }
+
+    public static final class SendToRouteRequest {
+        /**
+         * The payment hash to use for the HTLC. When using REST, this field must be
+         * encoded as base64.
+         */
+        public byte[] paymentHash;
+
+        /// Route that should be used to attempt to complete the payment.
+        public Route route;
+    }
+
 }
+

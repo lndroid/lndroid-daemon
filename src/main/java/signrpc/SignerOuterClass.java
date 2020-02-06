@@ -6479,6 +6479,3555 @@ public final class SignerOuterClass {
 
   }
 
+  public interface SignMessageReqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:signrpc.SignMessageReq)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     *&#47; The message to be signed.
+     * </pre>
+     *
+     * <code>bytes msg = 1;</code>
+     */
+    com.google.protobuf.ByteString getMsg();
+
+    /**
+     * <pre>
+     *&#47; The key locator that identifies which key to use for signing.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    boolean hasKeyLoc();
+    /**
+     * <pre>
+     *&#47; The key locator that identifies which key to use for signing.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    signrpc.SignerOuterClass.KeyLocator getKeyLoc();
+    /**
+     * <pre>
+     *&#47; The key locator that identifies which key to use for signing.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    signrpc.SignerOuterClass.KeyLocatorOrBuilder getKeyLocOrBuilder();
+  }
+  /**
+   * Protobuf type {@code signrpc.SignMessageReq}
+   */
+  public  static final class SignMessageReq extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:signrpc.SignMessageReq)
+      SignMessageReqOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SignMessageReq.newBuilder() to construct.
+    private SignMessageReq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SignMessageReq() {
+      msg_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SignMessageReq(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+
+              msg_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              signrpc.SignerOuterClass.KeyLocator.Builder subBuilder = null;
+              if (keyLoc_ != null) {
+                subBuilder = keyLoc_.toBuilder();
+              }
+              keyLoc_ = input.readMessage(signrpc.SignerOuterClass.KeyLocator.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(keyLoc_);
+                keyLoc_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageReq_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageReq_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              signrpc.SignerOuterClass.SignMessageReq.class, signrpc.SignerOuterClass.SignMessageReq.Builder.class);
+    }
+
+    public static final int MSG_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString msg_;
+    /**
+     * <pre>
+     *&#47; The message to be signed.
+     * </pre>
+     *
+     * <code>bytes msg = 1;</code>
+     */
+    public com.google.protobuf.ByteString getMsg() {
+      return msg_;
+    }
+
+    public static final int KEY_LOC_FIELD_NUMBER = 2;
+    private signrpc.SignerOuterClass.KeyLocator keyLoc_;
+    /**
+     * <pre>
+     *&#47; The key locator that identifies which key to use for signing.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    public boolean hasKeyLoc() {
+      return keyLoc_ != null;
+    }
+    /**
+     * <pre>
+     *&#47; The key locator that identifies which key to use for signing.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    public signrpc.SignerOuterClass.KeyLocator getKeyLoc() {
+      return keyLoc_ == null ? signrpc.SignerOuterClass.KeyLocator.getDefaultInstance() : keyLoc_;
+    }
+    /**
+     * <pre>
+     *&#47; The key locator that identifies which key to use for signing.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    public signrpc.SignerOuterClass.KeyLocatorOrBuilder getKeyLocOrBuilder() {
+      return getKeyLoc();
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!msg_.isEmpty()) {
+        output.writeBytes(1, msg_);
+      }
+      if (keyLoc_ != null) {
+        output.writeMessage(2, getKeyLoc());
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!msg_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, msg_);
+      }
+      if (keyLoc_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, getKeyLoc());
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof signrpc.SignerOuterClass.SignMessageReq)) {
+        return super.equals(obj);
+      }
+      signrpc.SignerOuterClass.SignMessageReq other = (signrpc.SignerOuterClass.SignMessageReq) obj;
+
+      boolean result = true;
+      result = result && getMsg()
+          .equals(other.getMsg());
+      result = result && (hasKeyLoc() == other.hasKeyLoc());
+      if (hasKeyLoc()) {
+        result = result && getKeyLoc()
+            .equals(other.getKeyLoc());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + MSG_FIELD_NUMBER;
+      hash = (53 * hash) + getMsg().hashCode();
+      if (hasKeyLoc()) {
+        hash = (37 * hash) + KEY_LOC_FIELD_NUMBER;
+        hash = (53 * hash) + getKeyLoc().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SignMessageReq parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(signrpc.SignerOuterClass.SignMessageReq prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code signrpc.SignMessageReq}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:signrpc.SignMessageReq)
+        signrpc.SignerOuterClass.SignMessageReqOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageReq_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageReq_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                signrpc.SignerOuterClass.SignMessageReq.class, signrpc.SignerOuterClass.SignMessageReq.Builder.class);
+      }
+
+      // Construct using signrpc.SignerOuterClass.SignMessageReq.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        msg_ = com.google.protobuf.ByteString.EMPTY;
+
+        if (keyLocBuilder_ == null) {
+          keyLoc_ = null;
+        } else {
+          keyLoc_ = null;
+          keyLocBuilder_ = null;
+        }
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageReq_descriptor;
+      }
+
+      public signrpc.SignerOuterClass.SignMessageReq getDefaultInstanceForType() {
+        return signrpc.SignerOuterClass.SignMessageReq.getDefaultInstance();
+      }
+
+      public signrpc.SignerOuterClass.SignMessageReq build() {
+        signrpc.SignerOuterClass.SignMessageReq result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public signrpc.SignerOuterClass.SignMessageReq buildPartial() {
+        signrpc.SignerOuterClass.SignMessageReq result = new signrpc.SignerOuterClass.SignMessageReq(this);
+        result.msg_ = msg_;
+        if (keyLocBuilder_ == null) {
+          result.keyLoc_ = keyLoc_;
+        } else {
+          result.keyLoc_ = keyLocBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof signrpc.SignerOuterClass.SignMessageReq) {
+          return mergeFrom((signrpc.SignerOuterClass.SignMessageReq)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(signrpc.SignerOuterClass.SignMessageReq other) {
+        if (other == signrpc.SignerOuterClass.SignMessageReq.getDefaultInstance()) return this;
+        if (other.getMsg() != com.google.protobuf.ByteString.EMPTY) {
+          setMsg(other.getMsg());
+        }
+        if (other.hasKeyLoc()) {
+          mergeKeyLoc(other.getKeyLoc());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        signrpc.SignerOuterClass.SignMessageReq parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (signrpc.SignerOuterClass.SignMessageReq) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString msg_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       *&#47; The message to be signed.
+       * </pre>
+       *
+       * <code>bytes msg = 1;</code>
+       */
+      public com.google.protobuf.ByteString getMsg() {
+        return msg_;
+      }
+      /**
+       * <pre>
+       *&#47; The message to be signed.
+       * </pre>
+       *
+       * <code>bytes msg = 1;</code>
+       */
+      public Builder setMsg(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        msg_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; The message to be signed.
+       * </pre>
+       *
+       * <code>bytes msg = 1;</code>
+       */
+      public Builder clearMsg() {
+        
+        msg_ = getDefaultInstance().getMsg();
+        onChanged();
+        return this;
+      }
+
+      private signrpc.SignerOuterClass.KeyLocator keyLoc_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          signrpc.SignerOuterClass.KeyLocator, signrpc.SignerOuterClass.KeyLocator.Builder, signrpc.SignerOuterClass.KeyLocatorOrBuilder> keyLocBuilder_;
+      /**
+       * <pre>
+       *&#47; The key locator that identifies which key to use for signing.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public boolean hasKeyLoc() {
+        return keyLocBuilder_ != null || keyLoc_ != null;
+      }
+      /**
+       * <pre>
+       *&#47; The key locator that identifies which key to use for signing.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public signrpc.SignerOuterClass.KeyLocator getKeyLoc() {
+        if (keyLocBuilder_ == null) {
+          return keyLoc_ == null ? signrpc.SignerOuterClass.KeyLocator.getDefaultInstance() : keyLoc_;
+        } else {
+          return keyLocBuilder_.getMessage();
+        }
+      }
+      /**
+       * <pre>
+       *&#47; The key locator that identifies which key to use for signing.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public Builder setKeyLoc(signrpc.SignerOuterClass.KeyLocator value) {
+        if (keyLocBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          keyLoc_ = value;
+          onChanged();
+        } else {
+          keyLocBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; The key locator that identifies which key to use for signing.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public Builder setKeyLoc(
+          signrpc.SignerOuterClass.KeyLocator.Builder builderForValue) {
+        if (keyLocBuilder_ == null) {
+          keyLoc_ = builderForValue.build();
+          onChanged();
+        } else {
+          keyLocBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; The key locator that identifies which key to use for signing.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public Builder mergeKeyLoc(signrpc.SignerOuterClass.KeyLocator value) {
+        if (keyLocBuilder_ == null) {
+          if (keyLoc_ != null) {
+            keyLoc_ =
+              signrpc.SignerOuterClass.KeyLocator.newBuilder(keyLoc_).mergeFrom(value).buildPartial();
+          } else {
+            keyLoc_ = value;
+          }
+          onChanged();
+        } else {
+          keyLocBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; The key locator that identifies which key to use for signing.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public Builder clearKeyLoc() {
+        if (keyLocBuilder_ == null) {
+          keyLoc_ = null;
+          onChanged();
+        } else {
+          keyLoc_ = null;
+          keyLocBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; The key locator that identifies which key to use for signing.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public signrpc.SignerOuterClass.KeyLocator.Builder getKeyLocBuilder() {
+        
+        onChanged();
+        return getKeyLocFieldBuilder().getBuilder();
+      }
+      /**
+       * <pre>
+       *&#47; The key locator that identifies which key to use for signing.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public signrpc.SignerOuterClass.KeyLocatorOrBuilder getKeyLocOrBuilder() {
+        if (keyLocBuilder_ != null) {
+          return keyLocBuilder_.getMessageOrBuilder();
+        } else {
+          return keyLoc_ == null ?
+              signrpc.SignerOuterClass.KeyLocator.getDefaultInstance() : keyLoc_;
+        }
+      }
+      /**
+       * <pre>
+       *&#47; The key locator that identifies which key to use for signing.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          signrpc.SignerOuterClass.KeyLocator, signrpc.SignerOuterClass.KeyLocator.Builder, signrpc.SignerOuterClass.KeyLocatorOrBuilder> 
+          getKeyLocFieldBuilder() {
+        if (keyLocBuilder_ == null) {
+          keyLocBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              signrpc.SignerOuterClass.KeyLocator, signrpc.SignerOuterClass.KeyLocator.Builder, signrpc.SignerOuterClass.KeyLocatorOrBuilder>(
+                  getKeyLoc(),
+                  getParentForChildren(),
+                  isClean());
+          keyLoc_ = null;
+        }
+        return keyLocBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:signrpc.SignMessageReq)
+    }
+
+    // @@protoc_insertion_point(class_scope:signrpc.SignMessageReq)
+    private static final signrpc.SignerOuterClass.SignMessageReq DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new signrpc.SignerOuterClass.SignMessageReq();
+    }
+
+    public static signrpc.SignerOuterClass.SignMessageReq getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SignMessageReq>
+        PARSER = new com.google.protobuf.AbstractParser<SignMessageReq>() {
+      public SignMessageReq parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new SignMessageReq(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SignMessageReq> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SignMessageReq> getParserForType() {
+      return PARSER;
+    }
+
+    public signrpc.SignerOuterClass.SignMessageReq getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface SignMessageRespOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:signrpc.SignMessageResp)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     **
+     *The signature for the given message in the fixed-size LN wire format.
+     * </pre>
+     *
+     * <code>bytes signature = 1;</code>
+     */
+    com.google.protobuf.ByteString getSignature();
+  }
+  /**
+   * Protobuf type {@code signrpc.SignMessageResp}
+   */
+  public  static final class SignMessageResp extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:signrpc.SignMessageResp)
+      SignMessageRespOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SignMessageResp.newBuilder() to construct.
+    private SignMessageResp(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SignMessageResp() {
+      signature_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SignMessageResp(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+
+              signature_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageResp_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageResp_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              signrpc.SignerOuterClass.SignMessageResp.class, signrpc.SignerOuterClass.SignMessageResp.Builder.class);
+    }
+
+    public static final int SIGNATURE_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString signature_;
+    /**
+     * <pre>
+     **
+     *The signature for the given message in the fixed-size LN wire format.
+     * </pre>
+     *
+     * <code>bytes signature = 1;</code>
+     */
+    public com.google.protobuf.ByteString getSignature() {
+      return signature_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!signature_.isEmpty()) {
+        output.writeBytes(1, signature_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!signature_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, signature_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof signrpc.SignerOuterClass.SignMessageResp)) {
+        return super.equals(obj);
+      }
+      signrpc.SignerOuterClass.SignMessageResp other = (signrpc.SignerOuterClass.SignMessageResp) obj;
+
+      boolean result = true;
+      result = result && getSignature()
+          .equals(other.getSignature());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SIGNATURE_FIELD_NUMBER;
+      hash = (53 * hash) + getSignature().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SignMessageResp parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(signrpc.SignerOuterClass.SignMessageResp prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code signrpc.SignMessageResp}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:signrpc.SignMessageResp)
+        signrpc.SignerOuterClass.SignMessageRespOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageResp_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageResp_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                signrpc.SignerOuterClass.SignMessageResp.class, signrpc.SignerOuterClass.SignMessageResp.Builder.class);
+      }
+
+      // Construct using signrpc.SignerOuterClass.SignMessageResp.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        signature_ = com.google.protobuf.ByteString.EMPTY;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SignMessageResp_descriptor;
+      }
+
+      public signrpc.SignerOuterClass.SignMessageResp getDefaultInstanceForType() {
+        return signrpc.SignerOuterClass.SignMessageResp.getDefaultInstance();
+      }
+
+      public signrpc.SignerOuterClass.SignMessageResp build() {
+        signrpc.SignerOuterClass.SignMessageResp result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public signrpc.SignerOuterClass.SignMessageResp buildPartial() {
+        signrpc.SignerOuterClass.SignMessageResp result = new signrpc.SignerOuterClass.SignMessageResp(this);
+        result.signature_ = signature_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof signrpc.SignerOuterClass.SignMessageResp) {
+          return mergeFrom((signrpc.SignerOuterClass.SignMessageResp)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(signrpc.SignerOuterClass.SignMessageResp other) {
+        if (other == signrpc.SignerOuterClass.SignMessageResp.getDefaultInstance()) return this;
+        if (other.getSignature() != com.google.protobuf.ByteString.EMPTY) {
+          setSignature(other.getSignature());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        signrpc.SignerOuterClass.SignMessageResp parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (signrpc.SignerOuterClass.SignMessageResp) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString signature_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       **
+       *The signature for the given message in the fixed-size LN wire format.
+       * </pre>
+       *
+       * <code>bytes signature = 1;</code>
+       */
+      public com.google.protobuf.ByteString getSignature() {
+        return signature_;
+      }
+      /**
+       * <pre>
+       **
+       *The signature for the given message in the fixed-size LN wire format.
+       * </pre>
+       *
+       * <code>bytes signature = 1;</code>
+       */
+      public Builder setSignature(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        signature_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The signature for the given message in the fixed-size LN wire format.
+       * </pre>
+       *
+       * <code>bytes signature = 1;</code>
+       */
+      public Builder clearSignature() {
+        
+        signature_ = getDefaultInstance().getSignature();
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:signrpc.SignMessageResp)
+    }
+
+    // @@protoc_insertion_point(class_scope:signrpc.SignMessageResp)
+    private static final signrpc.SignerOuterClass.SignMessageResp DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new signrpc.SignerOuterClass.SignMessageResp();
+    }
+
+    public static signrpc.SignerOuterClass.SignMessageResp getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SignMessageResp>
+        PARSER = new com.google.protobuf.AbstractParser<SignMessageResp>() {
+      public SignMessageResp parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new SignMessageResp(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SignMessageResp> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SignMessageResp> getParserForType() {
+      return PARSER;
+    }
+
+    public signrpc.SignerOuterClass.SignMessageResp getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface VerifyMessageReqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:signrpc.VerifyMessageReq)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     *&#47; The message over which the signature is to be verified.
+     * </pre>
+     *
+     * <code>bytes msg = 1;</code>
+     */
+    com.google.protobuf.ByteString getMsg();
+
+    /**
+     * <pre>
+     **
+     *The fixed-size LN wire encoded signature to be verified over the given
+     *message.
+     * </pre>
+     *
+     * <code>bytes signature = 2;</code>
+     */
+    com.google.protobuf.ByteString getSignature();
+
+    /**
+     * <pre>
+     *&#47; The public key the signature has to be valid for.
+     * </pre>
+     *
+     * <code>bytes pubkey = 3;</code>
+     */
+    com.google.protobuf.ByteString getPubkey();
+  }
+  /**
+   * Protobuf type {@code signrpc.VerifyMessageReq}
+   */
+  public  static final class VerifyMessageReq extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:signrpc.VerifyMessageReq)
+      VerifyMessageReqOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use VerifyMessageReq.newBuilder() to construct.
+    private VerifyMessageReq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private VerifyMessageReq() {
+      msg_ = com.google.protobuf.ByteString.EMPTY;
+      signature_ = com.google.protobuf.ByteString.EMPTY;
+      pubkey_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private VerifyMessageReq(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+
+              msg_ = input.readBytes();
+              break;
+            }
+            case 18: {
+
+              signature_ = input.readBytes();
+              break;
+            }
+            case 26: {
+
+              pubkey_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageReq_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageReq_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              signrpc.SignerOuterClass.VerifyMessageReq.class, signrpc.SignerOuterClass.VerifyMessageReq.Builder.class);
+    }
+
+    public static final int MSG_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString msg_;
+    /**
+     * <pre>
+     *&#47; The message over which the signature is to be verified.
+     * </pre>
+     *
+     * <code>bytes msg = 1;</code>
+     */
+    public com.google.protobuf.ByteString getMsg() {
+      return msg_;
+    }
+
+    public static final int SIGNATURE_FIELD_NUMBER = 2;
+    private com.google.protobuf.ByteString signature_;
+    /**
+     * <pre>
+     **
+     *The fixed-size LN wire encoded signature to be verified over the given
+     *message.
+     * </pre>
+     *
+     * <code>bytes signature = 2;</code>
+     */
+    public com.google.protobuf.ByteString getSignature() {
+      return signature_;
+    }
+
+    public static final int PUBKEY_FIELD_NUMBER = 3;
+    private com.google.protobuf.ByteString pubkey_;
+    /**
+     * <pre>
+     *&#47; The public key the signature has to be valid for.
+     * </pre>
+     *
+     * <code>bytes pubkey = 3;</code>
+     */
+    public com.google.protobuf.ByteString getPubkey() {
+      return pubkey_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!msg_.isEmpty()) {
+        output.writeBytes(1, msg_);
+      }
+      if (!signature_.isEmpty()) {
+        output.writeBytes(2, signature_);
+      }
+      if (!pubkey_.isEmpty()) {
+        output.writeBytes(3, pubkey_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!msg_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, msg_);
+      }
+      if (!signature_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, signature_);
+      }
+      if (!pubkey_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, pubkey_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof signrpc.SignerOuterClass.VerifyMessageReq)) {
+        return super.equals(obj);
+      }
+      signrpc.SignerOuterClass.VerifyMessageReq other = (signrpc.SignerOuterClass.VerifyMessageReq) obj;
+
+      boolean result = true;
+      result = result && getMsg()
+          .equals(other.getMsg());
+      result = result && getSignature()
+          .equals(other.getSignature());
+      result = result && getPubkey()
+          .equals(other.getPubkey());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + MSG_FIELD_NUMBER;
+      hash = (53 * hash) + getMsg().hashCode();
+      hash = (37 * hash) + SIGNATURE_FIELD_NUMBER;
+      hash = (53 * hash) + getSignature().hashCode();
+      hash = (37 * hash) + PUBKEY_FIELD_NUMBER;
+      hash = (53 * hash) + getPubkey().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageReq parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(signrpc.SignerOuterClass.VerifyMessageReq prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code signrpc.VerifyMessageReq}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:signrpc.VerifyMessageReq)
+        signrpc.SignerOuterClass.VerifyMessageReqOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageReq_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageReq_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                signrpc.SignerOuterClass.VerifyMessageReq.class, signrpc.SignerOuterClass.VerifyMessageReq.Builder.class);
+      }
+
+      // Construct using signrpc.SignerOuterClass.VerifyMessageReq.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        msg_ = com.google.protobuf.ByteString.EMPTY;
+
+        signature_ = com.google.protobuf.ByteString.EMPTY;
+
+        pubkey_ = com.google.protobuf.ByteString.EMPTY;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageReq_descriptor;
+      }
+
+      public signrpc.SignerOuterClass.VerifyMessageReq getDefaultInstanceForType() {
+        return signrpc.SignerOuterClass.VerifyMessageReq.getDefaultInstance();
+      }
+
+      public signrpc.SignerOuterClass.VerifyMessageReq build() {
+        signrpc.SignerOuterClass.VerifyMessageReq result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public signrpc.SignerOuterClass.VerifyMessageReq buildPartial() {
+        signrpc.SignerOuterClass.VerifyMessageReq result = new signrpc.SignerOuterClass.VerifyMessageReq(this);
+        result.msg_ = msg_;
+        result.signature_ = signature_;
+        result.pubkey_ = pubkey_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof signrpc.SignerOuterClass.VerifyMessageReq) {
+          return mergeFrom((signrpc.SignerOuterClass.VerifyMessageReq)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(signrpc.SignerOuterClass.VerifyMessageReq other) {
+        if (other == signrpc.SignerOuterClass.VerifyMessageReq.getDefaultInstance()) return this;
+        if (other.getMsg() != com.google.protobuf.ByteString.EMPTY) {
+          setMsg(other.getMsg());
+        }
+        if (other.getSignature() != com.google.protobuf.ByteString.EMPTY) {
+          setSignature(other.getSignature());
+        }
+        if (other.getPubkey() != com.google.protobuf.ByteString.EMPTY) {
+          setPubkey(other.getPubkey());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        signrpc.SignerOuterClass.VerifyMessageReq parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (signrpc.SignerOuterClass.VerifyMessageReq) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString msg_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       *&#47; The message over which the signature is to be verified.
+       * </pre>
+       *
+       * <code>bytes msg = 1;</code>
+       */
+      public com.google.protobuf.ByteString getMsg() {
+        return msg_;
+      }
+      /**
+       * <pre>
+       *&#47; The message over which the signature is to be verified.
+       * </pre>
+       *
+       * <code>bytes msg = 1;</code>
+       */
+      public Builder setMsg(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        msg_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; The message over which the signature is to be verified.
+       * </pre>
+       *
+       * <code>bytes msg = 1;</code>
+       */
+      public Builder clearMsg() {
+        
+        msg_ = getDefaultInstance().getMsg();
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString signature_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       **
+       *The fixed-size LN wire encoded signature to be verified over the given
+       *message.
+       * </pre>
+       *
+       * <code>bytes signature = 2;</code>
+       */
+      public com.google.protobuf.ByteString getSignature() {
+        return signature_;
+      }
+      /**
+       * <pre>
+       **
+       *The fixed-size LN wire encoded signature to be verified over the given
+       *message.
+       * </pre>
+       *
+       * <code>bytes signature = 2;</code>
+       */
+      public Builder setSignature(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        signature_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The fixed-size LN wire encoded signature to be verified over the given
+       *message.
+       * </pre>
+       *
+       * <code>bytes signature = 2;</code>
+       */
+      public Builder clearSignature() {
+        
+        signature_ = getDefaultInstance().getSignature();
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString pubkey_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       *&#47; The public key the signature has to be valid for.
+       * </pre>
+       *
+       * <code>bytes pubkey = 3;</code>
+       */
+      public com.google.protobuf.ByteString getPubkey() {
+        return pubkey_;
+      }
+      /**
+       * <pre>
+       *&#47; The public key the signature has to be valid for.
+       * </pre>
+       *
+       * <code>bytes pubkey = 3;</code>
+       */
+      public Builder setPubkey(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        pubkey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; The public key the signature has to be valid for.
+       * </pre>
+       *
+       * <code>bytes pubkey = 3;</code>
+       */
+      public Builder clearPubkey() {
+        
+        pubkey_ = getDefaultInstance().getPubkey();
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:signrpc.VerifyMessageReq)
+    }
+
+    // @@protoc_insertion_point(class_scope:signrpc.VerifyMessageReq)
+    private static final signrpc.SignerOuterClass.VerifyMessageReq DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new signrpc.SignerOuterClass.VerifyMessageReq();
+    }
+
+    public static signrpc.SignerOuterClass.VerifyMessageReq getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<VerifyMessageReq>
+        PARSER = new com.google.protobuf.AbstractParser<VerifyMessageReq>() {
+      public VerifyMessageReq parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new VerifyMessageReq(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<VerifyMessageReq> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<VerifyMessageReq> getParserForType() {
+      return PARSER;
+    }
+
+    public signrpc.SignerOuterClass.VerifyMessageReq getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface VerifyMessageRespOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:signrpc.VerifyMessageResp)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     *&#47; Whether the signature was valid over the given message.
+     * </pre>
+     *
+     * <code>bool valid = 1;</code>
+     */
+    boolean getValid();
+  }
+  /**
+   * Protobuf type {@code signrpc.VerifyMessageResp}
+   */
+  public  static final class VerifyMessageResp extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:signrpc.VerifyMessageResp)
+      VerifyMessageRespOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use VerifyMessageResp.newBuilder() to construct.
+    private VerifyMessageResp(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private VerifyMessageResp() {
+      valid_ = false;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private VerifyMessageResp(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+
+              valid_ = input.readBool();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageResp_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageResp_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              signrpc.SignerOuterClass.VerifyMessageResp.class, signrpc.SignerOuterClass.VerifyMessageResp.Builder.class);
+    }
+
+    public static final int VALID_FIELD_NUMBER = 1;
+    private boolean valid_;
+    /**
+     * <pre>
+     *&#47; Whether the signature was valid over the given message.
+     * </pre>
+     *
+     * <code>bool valid = 1;</code>
+     */
+    public boolean getValid() {
+      return valid_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (valid_ != false) {
+        output.writeBool(1, valid_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (valid_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, valid_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof signrpc.SignerOuterClass.VerifyMessageResp)) {
+        return super.equals(obj);
+      }
+      signrpc.SignerOuterClass.VerifyMessageResp other = (signrpc.SignerOuterClass.VerifyMessageResp) obj;
+
+      boolean result = true;
+      result = result && (getValid()
+          == other.getValid());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + VALID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getValid());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.VerifyMessageResp parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(signrpc.SignerOuterClass.VerifyMessageResp prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code signrpc.VerifyMessageResp}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:signrpc.VerifyMessageResp)
+        signrpc.SignerOuterClass.VerifyMessageRespOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageResp_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageResp_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                signrpc.SignerOuterClass.VerifyMessageResp.class, signrpc.SignerOuterClass.VerifyMessageResp.Builder.class);
+      }
+
+      // Construct using signrpc.SignerOuterClass.VerifyMessageResp.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        valid_ = false;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_VerifyMessageResp_descriptor;
+      }
+
+      public signrpc.SignerOuterClass.VerifyMessageResp getDefaultInstanceForType() {
+        return signrpc.SignerOuterClass.VerifyMessageResp.getDefaultInstance();
+      }
+
+      public signrpc.SignerOuterClass.VerifyMessageResp build() {
+        signrpc.SignerOuterClass.VerifyMessageResp result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public signrpc.SignerOuterClass.VerifyMessageResp buildPartial() {
+        signrpc.SignerOuterClass.VerifyMessageResp result = new signrpc.SignerOuterClass.VerifyMessageResp(this);
+        result.valid_ = valid_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof signrpc.SignerOuterClass.VerifyMessageResp) {
+          return mergeFrom((signrpc.SignerOuterClass.VerifyMessageResp)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(signrpc.SignerOuterClass.VerifyMessageResp other) {
+        if (other == signrpc.SignerOuterClass.VerifyMessageResp.getDefaultInstance()) return this;
+        if (other.getValid() != false) {
+          setValid(other.getValid());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        signrpc.SignerOuterClass.VerifyMessageResp parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (signrpc.SignerOuterClass.VerifyMessageResp) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private boolean valid_ ;
+      /**
+       * <pre>
+       *&#47; Whether the signature was valid over the given message.
+       * </pre>
+       *
+       * <code>bool valid = 1;</code>
+       */
+      public boolean getValid() {
+        return valid_;
+      }
+      /**
+       * <pre>
+       *&#47; Whether the signature was valid over the given message.
+       * </pre>
+       *
+       * <code>bool valid = 1;</code>
+       */
+      public Builder setValid(boolean value) {
+        
+        valid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; Whether the signature was valid over the given message.
+       * </pre>
+       *
+       * <code>bool valid = 1;</code>
+       */
+      public Builder clearValid() {
+        
+        valid_ = false;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:signrpc.VerifyMessageResp)
+    }
+
+    // @@protoc_insertion_point(class_scope:signrpc.VerifyMessageResp)
+    private static final signrpc.SignerOuterClass.VerifyMessageResp DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new signrpc.SignerOuterClass.VerifyMessageResp();
+    }
+
+    public static signrpc.SignerOuterClass.VerifyMessageResp getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<VerifyMessageResp>
+        PARSER = new com.google.protobuf.AbstractParser<VerifyMessageResp>() {
+      public VerifyMessageResp parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new VerifyMessageResp(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<VerifyMessageResp> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<VerifyMessageResp> getParserForType() {
+      return PARSER;
+    }
+
+    public signrpc.SignerOuterClass.VerifyMessageResp getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface SharedKeyRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:signrpc.SharedKeyRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * The ephemeral public key to use for the DH key derivation.
+     * </pre>
+     *
+     * <code>bytes ephemeral_pubkey = 1;</code>
+     */
+    com.google.protobuf.ByteString getEphemeralPubkey();
+
+    /**
+     * <pre>
+     **
+     *The optional key locator of the local key that should be used. If this
+     *parameter is not set then the node's identity private key will be used.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    boolean hasKeyLoc();
+    /**
+     * <pre>
+     **
+     *The optional key locator of the local key that should be used. If this
+     *parameter is not set then the node's identity private key will be used.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    signrpc.SignerOuterClass.KeyLocator getKeyLoc();
+    /**
+     * <pre>
+     **
+     *The optional key locator of the local key that should be used. If this
+     *parameter is not set then the node's identity private key will be used.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    signrpc.SignerOuterClass.KeyLocatorOrBuilder getKeyLocOrBuilder();
+  }
+  /**
+   * Protobuf type {@code signrpc.SharedKeyRequest}
+   */
+  public  static final class SharedKeyRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:signrpc.SharedKeyRequest)
+      SharedKeyRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SharedKeyRequest.newBuilder() to construct.
+    private SharedKeyRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SharedKeyRequest() {
+      ephemeralPubkey_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SharedKeyRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+
+              ephemeralPubkey_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              signrpc.SignerOuterClass.KeyLocator.Builder subBuilder = null;
+              if (keyLoc_ != null) {
+                subBuilder = keyLoc_.toBuilder();
+              }
+              keyLoc_ = input.readMessage(signrpc.SignerOuterClass.KeyLocator.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(keyLoc_);
+                keyLoc_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              signrpc.SignerOuterClass.SharedKeyRequest.class, signrpc.SignerOuterClass.SharedKeyRequest.Builder.class);
+    }
+
+    public static final int EPHEMERAL_PUBKEY_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString ephemeralPubkey_;
+    /**
+     * <pre>
+     * The ephemeral public key to use for the DH key derivation.
+     * </pre>
+     *
+     * <code>bytes ephemeral_pubkey = 1;</code>
+     */
+    public com.google.protobuf.ByteString getEphemeralPubkey() {
+      return ephemeralPubkey_;
+    }
+
+    public static final int KEY_LOC_FIELD_NUMBER = 2;
+    private signrpc.SignerOuterClass.KeyLocator keyLoc_;
+    /**
+     * <pre>
+     **
+     *The optional key locator of the local key that should be used. If this
+     *parameter is not set then the node's identity private key will be used.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    public boolean hasKeyLoc() {
+      return keyLoc_ != null;
+    }
+    /**
+     * <pre>
+     **
+     *The optional key locator of the local key that should be used. If this
+     *parameter is not set then the node's identity private key will be used.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    public signrpc.SignerOuterClass.KeyLocator getKeyLoc() {
+      return keyLoc_ == null ? signrpc.SignerOuterClass.KeyLocator.getDefaultInstance() : keyLoc_;
+    }
+    /**
+     * <pre>
+     **
+     *The optional key locator of the local key that should be used. If this
+     *parameter is not set then the node's identity private key will be used.
+     * </pre>
+     *
+     * <code>.signrpc.KeyLocator key_loc = 2;</code>
+     */
+    public signrpc.SignerOuterClass.KeyLocatorOrBuilder getKeyLocOrBuilder() {
+      return getKeyLoc();
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!ephemeralPubkey_.isEmpty()) {
+        output.writeBytes(1, ephemeralPubkey_);
+      }
+      if (keyLoc_ != null) {
+        output.writeMessage(2, getKeyLoc());
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!ephemeralPubkey_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, ephemeralPubkey_);
+      }
+      if (keyLoc_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, getKeyLoc());
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof signrpc.SignerOuterClass.SharedKeyRequest)) {
+        return super.equals(obj);
+      }
+      signrpc.SignerOuterClass.SharedKeyRequest other = (signrpc.SignerOuterClass.SharedKeyRequest) obj;
+
+      boolean result = true;
+      result = result && getEphemeralPubkey()
+          .equals(other.getEphemeralPubkey());
+      result = result && (hasKeyLoc() == other.hasKeyLoc());
+      if (hasKeyLoc()) {
+        result = result && getKeyLoc()
+            .equals(other.getKeyLoc());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + EPHEMERAL_PUBKEY_FIELD_NUMBER;
+      hash = (53 * hash) + getEphemeralPubkey().hashCode();
+      if (hasKeyLoc()) {
+        hash = (37 * hash) + KEY_LOC_FIELD_NUMBER;
+        hash = (53 * hash) + getKeyLoc().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(signrpc.SignerOuterClass.SharedKeyRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code signrpc.SharedKeyRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:signrpc.SharedKeyRequest)
+        signrpc.SignerOuterClass.SharedKeyRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                signrpc.SignerOuterClass.SharedKeyRequest.class, signrpc.SignerOuterClass.SharedKeyRequest.Builder.class);
+      }
+
+      // Construct using signrpc.SignerOuterClass.SharedKeyRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        ephemeralPubkey_ = com.google.protobuf.ByteString.EMPTY;
+
+        if (keyLocBuilder_ == null) {
+          keyLoc_ = null;
+        } else {
+          keyLoc_ = null;
+          keyLocBuilder_ = null;
+        }
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyRequest_descriptor;
+      }
+
+      public signrpc.SignerOuterClass.SharedKeyRequest getDefaultInstanceForType() {
+        return signrpc.SignerOuterClass.SharedKeyRequest.getDefaultInstance();
+      }
+
+      public signrpc.SignerOuterClass.SharedKeyRequest build() {
+        signrpc.SignerOuterClass.SharedKeyRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public signrpc.SignerOuterClass.SharedKeyRequest buildPartial() {
+        signrpc.SignerOuterClass.SharedKeyRequest result = new signrpc.SignerOuterClass.SharedKeyRequest(this);
+        result.ephemeralPubkey_ = ephemeralPubkey_;
+        if (keyLocBuilder_ == null) {
+          result.keyLoc_ = keyLoc_;
+        } else {
+          result.keyLoc_ = keyLocBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof signrpc.SignerOuterClass.SharedKeyRequest) {
+          return mergeFrom((signrpc.SignerOuterClass.SharedKeyRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(signrpc.SignerOuterClass.SharedKeyRequest other) {
+        if (other == signrpc.SignerOuterClass.SharedKeyRequest.getDefaultInstance()) return this;
+        if (other.getEphemeralPubkey() != com.google.protobuf.ByteString.EMPTY) {
+          setEphemeralPubkey(other.getEphemeralPubkey());
+        }
+        if (other.hasKeyLoc()) {
+          mergeKeyLoc(other.getKeyLoc());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        signrpc.SignerOuterClass.SharedKeyRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (signrpc.SignerOuterClass.SharedKeyRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString ephemeralPubkey_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       * The ephemeral public key to use for the DH key derivation.
+       * </pre>
+       *
+       * <code>bytes ephemeral_pubkey = 1;</code>
+       */
+      public com.google.protobuf.ByteString getEphemeralPubkey() {
+        return ephemeralPubkey_;
+      }
+      /**
+       * <pre>
+       * The ephemeral public key to use for the DH key derivation.
+       * </pre>
+       *
+       * <code>bytes ephemeral_pubkey = 1;</code>
+       */
+      public Builder setEphemeralPubkey(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ephemeralPubkey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The ephemeral public key to use for the DH key derivation.
+       * </pre>
+       *
+       * <code>bytes ephemeral_pubkey = 1;</code>
+       */
+      public Builder clearEphemeralPubkey() {
+        
+        ephemeralPubkey_ = getDefaultInstance().getEphemeralPubkey();
+        onChanged();
+        return this;
+      }
+
+      private signrpc.SignerOuterClass.KeyLocator keyLoc_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          signrpc.SignerOuterClass.KeyLocator, signrpc.SignerOuterClass.KeyLocator.Builder, signrpc.SignerOuterClass.KeyLocatorOrBuilder> keyLocBuilder_;
+      /**
+       * <pre>
+       **
+       *The optional key locator of the local key that should be used. If this
+       *parameter is not set then the node's identity private key will be used.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public boolean hasKeyLoc() {
+        return keyLocBuilder_ != null || keyLoc_ != null;
+      }
+      /**
+       * <pre>
+       **
+       *The optional key locator of the local key that should be used. If this
+       *parameter is not set then the node's identity private key will be used.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public signrpc.SignerOuterClass.KeyLocator getKeyLoc() {
+        if (keyLocBuilder_ == null) {
+          return keyLoc_ == null ? signrpc.SignerOuterClass.KeyLocator.getDefaultInstance() : keyLoc_;
+        } else {
+          return keyLocBuilder_.getMessage();
+        }
+      }
+      /**
+       * <pre>
+       **
+       *The optional key locator of the local key that should be used. If this
+       *parameter is not set then the node's identity private key will be used.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public Builder setKeyLoc(signrpc.SignerOuterClass.KeyLocator value) {
+        if (keyLocBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          keyLoc_ = value;
+          onChanged();
+        } else {
+          keyLocBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The optional key locator of the local key that should be used. If this
+       *parameter is not set then the node's identity private key will be used.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public Builder setKeyLoc(
+          signrpc.SignerOuterClass.KeyLocator.Builder builderForValue) {
+        if (keyLocBuilder_ == null) {
+          keyLoc_ = builderForValue.build();
+          onChanged();
+        } else {
+          keyLocBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The optional key locator of the local key that should be used. If this
+       *parameter is not set then the node's identity private key will be used.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public Builder mergeKeyLoc(signrpc.SignerOuterClass.KeyLocator value) {
+        if (keyLocBuilder_ == null) {
+          if (keyLoc_ != null) {
+            keyLoc_ =
+              signrpc.SignerOuterClass.KeyLocator.newBuilder(keyLoc_).mergeFrom(value).buildPartial();
+          } else {
+            keyLoc_ = value;
+          }
+          onChanged();
+        } else {
+          keyLocBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The optional key locator of the local key that should be used. If this
+       *parameter is not set then the node's identity private key will be used.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public Builder clearKeyLoc() {
+        if (keyLocBuilder_ == null) {
+          keyLoc_ = null;
+          onChanged();
+        } else {
+          keyLoc_ = null;
+          keyLocBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The optional key locator of the local key that should be used. If this
+       *parameter is not set then the node's identity private key will be used.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public signrpc.SignerOuterClass.KeyLocator.Builder getKeyLocBuilder() {
+        
+        onChanged();
+        return getKeyLocFieldBuilder().getBuilder();
+      }
+      /**
+       * <pre>
+       **
+       *The optional key locator of the local key that should be used. If this
+       *parameter is not set then the node's identity private key will be used.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      public signrpc.SignerOuterClass.KeyLocatorOrBuilder getKeyLocOrBuilder() {
+        if (keyLocBuilder_ != null) {
+          return keyLocBuilder_.getMessageOrBuilder();
+        } else {
+          return keyLoc_ == null ?
+              signrpc.SignerOuterClass.KeyLocator.getDefaultInstance() : keyLoc_;
+        }
+      }
+      /**
+       * <pre>
+       **
+       *The optional key locator of the local key that should be used. If this
+       *parameter is not set then the node's identity private key will be used.
+       * </pre>
+       *
+       * <code>.signrpc.KeyLocator key_loc = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          signrpc.SignerOuterClass.KeyLocator, signrpc.SignerOuterClass.KeyLocator.Builder, signrpc.SignerOuterClass.KeyLocatorOrBuilder> 
+          getKeyLocFieldBuilder() {
+        if (keyLocBuilder_ == null) {
+          keyLocBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              signrpc.SignerOuterClass.KeyLocator, signrpc.SignerOuterClass.KeyLocator.Builder, signrpc.SignerOuterClass.KeyLocatorOrBuilder>(
+                  getKeyLoc(),
+                  getParentForChildren(),
+                  isClean());
+          keyLoc_ = null;
+        }
+        return keyLocBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:signrpc.SharedKeyRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:signrpc.SharedKeyRequest)
+    private static final signrpc.SignerOuterClass.SharedKeyRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new signrpc.SignerOuterClass.SharedKeyRequest();
+    }
+
+    public static signrpc.SignerOuterClass.SharedKeyRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SharedKeyRequest>
+        PARSER = new com.google.protobuf.AbstractParser<SharedKeyRequest>() {
+      public SharedKeyRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new SharedKeyRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SharedKeyRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SharedKeyRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public signrpc.SignerOuterClass.SharedKeyRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface SharedKeyResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:signrpc.SharedKeyResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * The shared public key, hashed with sha256.
+     * </pre>
+     *
+     * <code>bytes shared_key = 1;</code>
+     */
+    com.google.protobuf.ByteString getSharedKey();
+  }
+  /**
+   * Protobuf type {@code signrpc.SharedKeyResponse}
+   */
+  public  static final class SharedKeyResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:signrpc.SharedKeyResponse)
+      SharedKeyResponseOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SharedKeyResponse.newBuilder() to construct.
+    private SharedKeyResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SharedKeyResponse() {
+      sharedKey_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SharedKeyResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+
+              sharedKey_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyResponse_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              signrpc.SignerOuterClass.SharedKeyResponse.class, signrpc.SignerOuterClass.SharedKeyResponse.Builder.class);
+    }
+
+    public static final int SHARED_KEY_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString sharedKey_;
+    /**
+     * <pre>
+     * The shared public key, hashed with sha256.
+     * </pre>
+     *
+     * <code>bytes shared_key = 1;</code>
+     */
+    public com.google.protobuf.ByteString getSharedKey() {
+      return sharedKey_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!sharedKey_.isEmpty()) {
+        output.writeBytes(1, sharedKey_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!sharedKey_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, sharedKey_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof signrpc.SignerOuterClass.SharedKeyResponse)) {
+        return super.equals(obj);
+      }
+      signrpc.SignerOuterClass.SharedKeyResponse other = (signrpc.SignerOuterClass.SharedKeyResponse) obj;
+
+      boolean result = true;
+      result = result && getSharedKey()
+          .equals(other.getSharedKey());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SHARED_KEY_FIELD_NUMBER;
+      hash = (53 * hash) + getSharedKey().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static signrpc.SignerOuterClass.SharedKeyResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(signrpc.SignerOuterClass.SharedKeyResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code signrpc.SharedKeyResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:signrpc.SharedKeyResponse)
+        signrpc.SignerOuterClass.SharedKeyResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyResponse_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                signrpc.SignerOuterClass.SharedKeyResponse.class, signrpc.SignerOuterClass.SharedKeyResponse.Builder.class);
+      }
+
+      // Construct using signrpc.SignerOuterClass.SharedKeyResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        sharedKey_ = com.google.protobuf.ByteString.EMPTY;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return signrpc.SignerOuterClass.internal_static_signrpc_SharedKeyResponse_descriptor;
+      }
+
+      public signrpc.SignerOuterClass.SharedKeyResponse getDefaultInstanceForType() {
+        return signrpc.SignerOuterClass.SharedKeyResponse.getDefaultInstance();
+      }
+
+      public signrpc.SignerOuterClass.SharedKeyResponse build() {
+        signrpc.SignerOuterClass.SharedKeyResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public signrpc.SignerOuterClass.SharedKeyResponse buildPartial() {
+        signrpc.SignerOuterClass.SharedKeyResponse result = new signrpc.SignerOuterClass.SharedKeyResponse(this);
+        result.sharedKey_ = sharedKey_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof signrpc.SignerOuterClass.SharedKeyResponse) {
+          return mergeFrom((signrpc.SignerOuterClass.SharedKeyResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(signrpc.SignerOuterClass.SharedKeyResponse other) {
+        if (other == signrpc.SignerOuterClass.SharedKeyResponse.getDefaultInstance()) return this;
+        if (other.getSharedKey() != com.google.protobuf.ByteString.EMPTY) {
+          setSharedKey(other.getSharedKey());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        signrpc.SignerOuterClass.SharedKeyResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (signrpc.SignerOuterClass.SharedKeyResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString sharedKey_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       * The shared public key, hashed with sha256.
+       * </pre>
+       *
+       * <code>bytes shared_key = 1;</code>
+       */
+      public com.google.protobuf.ByteString getSharedKey() {
+        return sharedKey_;
+      }
+      /**
+       * <pre>
+       * The shared public key, hashed with sha256.
+       * </pre>
+       *
+       * <code>bytes shared_key = 1;</code>
+       */
+      public Builder setSharedKey(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        sharedKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The shared public key, hashed with sha256.
+       * </pre>
+       *
+       * <code>bytes shared_key = 1;</code>
+       */
+      public Builder clearSharedKey() {
+        
+        sharedKey_ = getDefaultInstance().getSharedKey();
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:signrpc.SharedKeyResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:signrpc.SharedKeyResponse)
+    private static final signrpc.SignerOuterClass.SharedKeyResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new signrpc.SignerOuterClass.SharedKeyResponse();
+    }
+
+    public static signrpc.SignerOuterClass.SharedKeyResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SharedKeyResponse>
+        PARSER = new com.google.protobuf.AbstractParser<SharedKeyResponse>() {
+      public SharedKeyResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new SharedKeyResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SharedKeyResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SharedKeyResponse> getParserForType() {
+      return PARSER;
+    }
+
+    public signrpc.SignerOuterClass.SharedKeyResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_signrpc_KeyLocator_descriptor;
   private static final 
@@ -6519,6 +10068,36 @@ public final class SignerOuterClass {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_signrpc_InputScriptResp_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_signrpc_SignMessageReq_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_signrpc_SignMessageReq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_signrpc_SignMessageResp_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_signrpc_SignMessageResp_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_signrpc_VerifyMessageReq_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_signrpc_VerifyMessageReq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_signrpc_VerifyMessageResp_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_signrpc_VerifyMessageResp_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_signrpc_SharedKeyRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_signrpc_SharedKeyRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_signrpc_SharedKeyResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_signrpc_SharedKeyResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -6543,12 +10122,26 @@ public final class SignerOuterClass {
       "or\"\034\n\010SignResp\022\020\n\010raw_sigs\030\001 \003(\014\"2\n\013Inpu" +
       "tScript\022\017\n\007witness\030\001 \003(\014\022\022\n\nsig_script\030\002" +
       " \001(\014\">\n\017InputScriptResp\022+\n\rinput_scripts" +
-      "\030\001 \003(\0132\024.signrpc.InputScript2\200\001\n\006Signer\022" +
-      "4\n\rSignOutputRaw\022\020.signrpc.SignReq\032\021.sig" +
-      "nrpc.SignResp\022@\n\022ComputeInputScript\022\020.si" +
-      "gnrpc.SignReq\032\030.signrpc.InputScriptRespB" +
-      "/Z-github.com/lightningnetwork/lnd/lnrpc",
-      "/signrpcb\006proto3"
+      "\030\001 \003(\0132\024.signrpc.InputScript\"C\n\016SignMess" +
+      "ageReq\022\013\n\003msg\030\001 \001(\014\022$\n\007key_loc\030\002 \001(\0132\023.s" +
+      "ignrpc.KeyLocator\"$\n\017SignMessageResp\022\021\n\t" +
+      "signature\030\001 \001(\014\"B\n\020VerifyMessageReq\022\013\n\003m" +
+      "sg\030\001 \001(\014\022\021\n\tsignature\030\002 \001(\014\022\016\n\006pubkey\030\003 ",
+      "\001(\014\"\"\n\021VerifyMessageResp\022\r\n\005valid\030\001 \001(\010\"" +
+      "R\n\020SharedKeyRequest\022\030\n\020ephemeral_pubkey\030" +
+      "\001 \001(\014\022$\n\007key_loc\030\002 \001(\0132\023.signrpc.KeyLoca" +
+      "tor\"\'\n\021SharedKeyResponse\022\022\n\nshared_key\030\001" +
+      " \001(\0142\324\002\n\006Signer\0224\n\rSignOutputRaw\022\020.signr" +
+      "pc.SignReq\032\021.signrpc.SignResp\022@\n\022Compute" +
+      "InputScript\022\020.signrpc.SignReq\032\030.signrpc." +
+      "InputScriptResp\022@\n\013SignMessage\022\027.signrpc" +
+      ".SignMessageReq\032\030.signrpc.SignMessageRes" +
+      "p\022F\n\rVerifyMessage\022\031.signrpc.VerifyMessa",
+      "geReq\032\032.signrpc.VerifyMessageResp\022H\n\017Der" +
+      "iveSharedKey\022\031.signrpc.SharedKeyRequest\032" +
+      "\032.signrpc.SharedKeyResponseB/Z-github.co" +
+      "m/lightningnetwork/lnd/lnrpc/signrpcb\006pr" +
+      "oto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -6610,6 +10203,42 @@ public final class SignerOuterClass {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_signrpc_InputScriptResp_descriptor,
         new java.lang.String[] { "InputScripts", });
+    internal_static_signrpc_SignMessageReq_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_signrpc_SignMessageReq_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_signrpc_SignMessageReq_descriptor,
+        new java.lang.String[] { "Msg", "KeyLoc", });
+    internal_static_signrpc_SignMessageResp_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_signrpc_SignMessageResp_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_signrpc_SignMessageResp_descriptor,
+        new java.lang.String[] { "Signature", });
+    internal_static_signrpc_VerifyMessageReq_descriptor =
+      getDescriptor().getMessageTypes().get(10);
+    internal_static_signrpc_VerifyMessageReq_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_signrpc_VerifyMessageReq_descriptor,
+        new java.lang.String[] { "Msg", "Signature", "Pubkey", });
+    internal_static_signrpc_VerifyMessageResp_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_signrpc_VerifyMessageResp_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_signrpc_VerifyMessageResp_descriptor,
+        new java.lang.String[] { "Valid", });
+    internal_static_signrpc_SharedKeyRequest_descriptor =
+      getDescriptor().getMessageTypes().get(12);
+    internal_static_signrpc_SharedKeyRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_signrpc_SharedKeyRequest_descriptor,
+        new java.lang.String[] { "EphemeralPubkey", "KeyLoc", });
+    internal_static_signrpc_SharedKeyResponse_descriptor =
+      getDescriptor().getMessageTypes().get(13);
+    internal_static_signrpc_SharedKeyResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_signrpc_SharedKeyResponse_descriptor,
+        new java.lang.String[] { "SharedKey", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

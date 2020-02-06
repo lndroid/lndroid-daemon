@@ -75,6 +75,15 @@ public final class RouterOuterClass {
      * <code>FAILED_INCORRECT_PAYMENT_DETAILS = 5;</code>
      */
     FAILED_INCORRECT_PAYMENT_DETAILS(5),
+    /**
+     * <pre>
+     **
+     *Insufficient local balance.
+     * </pre>
+     *
+     * <code>FAILED_INSUFFICIENT_BALANCE = 6;</code>
+     */
+    FAILED_INSUFFICIENT_BALANCE(6),
     UNRECOGNIZED(-1),
     ;
 
@@ -134,6 +143,15 @@ public final class RouterOuterClass {
      * <code>FAILED_INCORRECT_PAYMENT_DETAILS = 5;</code>
      */
     public static final int FAILED_INCORRECT_PAYMENT_DETAILS_VALUE = 5;
+    /**
+     * <pre>
+     **
+     *Insufficient local balance.
+     * </pre>
+     *
+     * <code>FAILED_INSUFFICIENT_BALANCE = 6;</code>
+     */
+    public static final int FAILED_INSUFFICIENT_BALANCE_VALUE = 6;
 
 
     public final int getNumber() {
@@ -160,6 +178,7 @@ public final class RouterOuterClass {
         case 3: return FAILED_NO_ROUTE;
         case 4: return FAILED_ERROR;
         case 5: return FAILED_INCORRECT_PAYMENT_DETAILS;
+        case 6: return FAILED_INSUFFICIENT_BALANCE;
         default: return null;
       }
     }
@@ -227,12 +246,25 @@ public final class RouterOuterClass {
 
     /**
      * <pre>
-     *&#47; Number of satoshis to send.
+     **
+     *Number of satoshis to send.
+     *The fields amt and amt_msat are mutually exclusive.
      * </pre>
      *
      * <code>int64 amt = 2;</code>
      */
     long getAmt();
+
+    /**
+     * <pre>
+     **
+     *Number of millisatoshis to send.
+     *The fields amt and amt_msat are mutually exclusive.
+     * </pre>
+     *
+     * <code>int64 amt_msat = 12;</code>
+     */
+    long getAmtMsat();
 
     /**
      * <pre>
@@ -302,11 +334,27 @@ public final class RouterOuterClass {
      *If this field is left to the default value of 0, only zero-fee routes will
      *be considered. This usually means single hop routes connecting directly to
      *the destination. To send the payment without a fee limit, use max int here.
+     *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
      * </pre>
      *
      * <code>int64 fee_limit_sat = 7;</code>
      */
     long getFeeLimitSat();
+
+    /**
+     * <pre>
+     **
+     *The maximum number of millisatoshis that will be paid as a fee of the
+     *payment. If this field is left to the default value of 0, only zero-fee
+     *routes will be considered. This usually means single hop routes connecting
+     *directly to the destination. To send the payment without a fee limit, use
+     *max int here.
+     *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
+     * </pre>
+     *
+     * <code>int64 fee_limit_msat = 13;</code>
+     */
+    long getFeeLimitMsat();
 
     /**
      * <pre>
@@ -318,6 +366,16 @@ public final class RouterOuterClass {
      * <code>uint64 outgoing_chan_id = 8 [jstype = JS_STRING];</code>
      */
     long getOutgoingChanId();
+
+    /**
+     * <pre>
+     **
+     *The pubkey of the last hop of the route. If empty, any hop may be used.
+     * </pre>
+     *
+     * <code>bytes last_hop_pubkey = 14;</code>
+     */
+    com.google.protobuf.ByteString getLastHopPubkey();
 
     /**
      * <pre>
@@ -385,54 +443,62 @@ public final class RouterOuterClass {
      ** 
      *An optional field that can be used to pass an arbitrary set of TLV records
      *to a peer which understands the new records. This can be used to pass
-     *application specific data during the payment attempt.
+     *application specific data during the payment attempt. Record types are
+     *required to be in the custom range &gt;= 65536. When using REST, the values
+     *must be encoded as base64.
      * </pre>
      *
-     * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+     * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
      */
-    int getDestTlvCount();
+    int getDestCustomRecordsCount();
     /**
      * <pre>
      ** 
      *An optional field that can be used to pass an arbitrary set of TLV records
      *to a peer which understands the new records. This can be used to pass
-     *application specific data during the payment attempt.
+     *application specific data during the payment attempt. Record types are
+     *required to be in the custom range &gt;= 65536. When using REST, the values
+     *must be encoded as base64.
      * </pre>
      *
-     * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+     * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
      */
-    boolean containsDestTlv(
+    boolean containsDestCustomRecords(
         long key);
     /**
-     * Use {@link #getDestTlvMap()} instead.
+     * Use {@link #getDestCustomRecordsMap()} instead.
      */
     @java.lang.Deprecated
     java.util.Map<java.lang.Long, com.google.protobuf.ByteString>
-    getDestTlv();
+    getDestCustomRecords();
     /**
      * <pre>
      ** 
      *An optional field that can be used to pass an arbitrary set of TLV records
      *to a peer which understands the new records. This can be used to pass
-     *application specific data during the payment attempt.
+     *application specific data during the payment attempt. Record types are
+     *required to be in the custom range &gt;= 65536. When using REST, the values
+     *must be encoded as base64.
      * </pre>
      *
-     * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+     * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
      */
     java.util.Map<java.lang.Long, com.google.protobuf.ByteString>
-    getDestTlvMap();
+    getDestCustomRecordsMap();
     /**
      * <pre>
      ** 
      *An optional field that can be used to pass an arbitrary set of TLV records
      *to a peer which understands the new records. This can be used to pass
-     *application specific data during the payment attempt.
+     *application specific data during the payment attempt. Record types are
+     *required to be in the custom range &gt;= 65536. When using REST, the values
+     *must be encoded as base64.
      * </pre>
      *
-     * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+     * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
      */
 
-    com.google.protobuf.ByteString getDestTlvOrDefault(
+    com.google.protobuf.ByteString getDestCustomRecordsOrDefault(
         long key,
         com.google.protobuf.ByteString defaultValue);
     /**
@@ -440,14 +506,92 @@ public final class RouterOuterClass {
      ** 
      *An optional field that can be used to pass an arbitrary set of TLV records
      *to a peer which understands the new records. This can be used to pass
-     *application specific data during the payment attempt.
+     *application specific data during the payment attempt. Record types are
+     *required to be in the custom range &gt;= 65536. When using REST, the values
+     *must be encoded as base64.
      * </pre>
      *
-     * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+     * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
      */
 
-    com.google.protobuf.ByteString getDestTlvOrThrow(
+    com.google.protobuf.ByteString getDestCustomRecordsOrThrow(
         long key);
+
+    /**
+     * <pre>
+     *&#47; If set, circular payments to self are permitted.
+     * </pre>
+     *
+     * <code>bool allow_self_payment = 15;</code>
+     */
+    boolean getAllowSelfPayment();
+
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    java.util.List<lnrpc.Rpc.FeatureBit> getDestFeaturesList();
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    int getDestFeaturesCount();
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    lnrpc.Rpc.FeatureBit getDestFeatures(int index);
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    java.util.List<java.lang.Integer>
+    getDestFeaturesValueList();
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    int getDestFeaturesValue(int index);
   }
   /**
    * Protobuf type {@code routerrpc.SendPaymentRequest}
@@ -464,14 +608,19 @@ public final class RouterOuterClass {
     private SendPaymentRequest() {
       dest_ = com.google.protobuf.ByteString.EMPTY;
       amt_ = 0L;
+      amtMsat_ = 0L;
       paymentHash_ = com.google.protobuf.ByteString.EMPTY;
       finalCltvDelta_ = 0;
       paymentRequest_ = "";
       timeoutSeconds_ = 0;
       feeLimitSat_ = 0L;
+      feeLimitMsat_ = 0L;
       outgoingChanId_ = 0L;
+      lastHopPubkey_ = com.google.protobuf.ByteString.EMPTY;
       cltvLimit_ = 0;
       routeHints_ = java.util.Collections.emptyList();
+      allowSelfPayment_ = false;
+      destFeatures_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
@@ -549,25 +698,68 @@ public final class RouterOuterClass {
               break;
             }
             case 82: {
-              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+              if (!((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
                 routeHints_ = new java.util.ArrayList<lnrpc.Rpc.RouteHint>();
-                mutable_bitField0_ |= 0x00000200;
+                mutable_bitField0_ |= 0x00001000;
               }
               routeHints_.add(
                   input.readMessage(lnrpc.Rpc.RouteHint.parser(), extensionRegistry));
               break;
             }
             case 90: {
-              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
-                destTlv_ = com.google.protobuf.MapField.newMapField(
-                    DestTlvDefaultEntryHolder.defaultEntry);
-                mutable_bitField0_ |= 0x00000400;
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
+                destCustomRecords_ = com.google.protobuf.MapField.newMapField(
+                    DestCustomRecordsDefaultEntryHolder.defaultEntry);
+                mutable_bitField0_ |= 0x00002000;
               }
               com.google.protobuf.MapEntry<java.lang.Long, com.google.protobuf.ByteString>
-              destTlv__ = input.readMessage(
-                  DestTlvDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
-              destTlv_.getMutableMap().put(
-                  destTlv__.getKey(), destTlv__.getValue());
+              destCustomRecords__ = input.readMessage(
+                  DestCustomRecordsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+              destCustomRecords_.getMutableMap().put(
+                  destCustomRecords__.getKey(), destCustomRecords__.getValue());
+              break;
+            }
+            case 96: {
+
+              amtMsat_ = input.readInt64();
+              break;
+            }
+            case 104: {
+
+              feeLimitMsat_ = input.readInt64();
+              break;
+            }
+            case 114: {
+
+              lastHopPubkey_ = input.readBytes();
+              break;
+            }
+            case 120: {
+
+              allowSelfPayment_ = input.readBool();
+              break;
+            }
+            case 128: {
+              int rawValue = input.readEnum();
+              if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
+                destFeatures_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00008000;
+              }
+              destFeatures_.add(rawValue);
+              break;
+            }
+            case 130: {
+              int length = input.readRawVarint32();
+              int oldLimit = input.pushLimit(length);
+              while(input.getBytesUntilLimit() > 0) {
+                int rawValue = input.readEnum();
+                if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
+                  destFeatures_ = new java.util.ArrayList<java.lang.Integer>();
+                  mutable_bitField0_ |= 0x00008000;
+                }
+                destFeatures_.add(rawValue);
+              }
+              input.popLimit(oldLimit);
               break;
             }
           }
@@ -578,8 +770,11 @@ public final class RouterOuterClass {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+        if (((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
           routeHints_ = java.util.Collections.unmodifiableList(routeHints_);
+        }
+        if (((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
+          destFeatures_ = java.util.Collections.unmodifiableList(destFeatures_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -595,7 +790,7 @@ public final class RouterOuterClass {
         int number) {
       switch (number) {
         case 11:
-          return internalGetDestTlv();
+          return internalGetDestCustomRecords();
         default:
           throw new RuntimeException(
               "Invalid map field number: " + number);
@@ -626,13 +821,30 @@ public final class RouterOuterClass {
     private long amt_;
     /**
      * <pre>
-     *&#47; Number of satoshis to send.
+     **
+     *Number of satoshis to send.
+     *The fields amt and amt_msat are mutually exclusive.
      * </pre>
      *
      * <code>int64 amt = 2;</code>
      */
     public long getAmt() {
       return amt_;
+    }
+
+    public static final int AMT_MSAT_FIELD_NUMBER = 12;
+    private long amtMsat_;
+    /**
+     * <pre>
+     **
+     *Number of millisatoshis to send.
+     *The fields amt and amt_msat are mutually exclusive.
+     * </pre>
+     *
+     * <code>int64 amt_msat = 12;</code>
+     */
+    public long getAmtMsat() {
+      return amtMsat_;
     }
 
     public static final int PAYMENT_HASH_FIELD_NUMBER = 3;
@@ -741,12 +953,32 @@ public final class RouterOuterClass {
      *If this field is left to the default value of 0, only zero-fee routes will
      *be considered. This usually means single hop routes connecting directly to
      *the destination. To send the payment without a fee limit, use max int here.
+     *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
      * </pre>
      *
      * <code>int64 fee_limit_sat = 7;</code>
      */
     public long getFeeLimitSat() {
       return feeLimitSat_;
+    }
+
+    public static final int FEE_LIMIT_MSAT_FIELD_NUMBER = 13;
+    private long feeLimitMsat_;
+    /**
+     * <pre>
+     **
+     *The maximum number of millisatoshis that will be paid as a fee of the
+     *payment. If this field is left to the default value of 0, only zero-fee
+     *routes will be considered. This usually means single hop routes connecting
+     *directly to the destination. To send the payment without a fee limit, use
+     *max int here.
+     *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
+     * </pre>
+     *
+     * <code>int64 fee_limit_msat = 13;</code>
+     */
+    public long getFeeLimitMsat() {
+      return feeLimitMsat_;
     }
 
     public static final int OUTGOING_CHAN_ID_FIELD_NUMBER = 8;
@@ -762,6 +994,20 @@ public final class RouterOuterClass {
      */
     public long getOutgoingChanId() {
       return outgoingChanId_;
+    }
+
+    public static final int LAST_HOP_PUBKEY_FIELD_NUMBER = 14;
+    private com.google.protobuf.ByteString lastHopPubkey_;
+    /**
+     * <pre>
+     **
+     *The pubkey of the last hop of the route. If empty, any hop may be used.
+     * </pre>
+     *
+     * <code>bytes last_hop_pubkey = 14;</code>
+     */
+    public com.google.protobuf.ByteString getLastHopPubkey() {
+      return lastHopPubkey_;
     }
 
     public static final int CLTV_LIMIT_FIELD_NUMBER = 9;
@@ -840,86 +1086,92 @@ public final class RouterOuterClass {
       return routeHints_.get(index);
     }
 
-    public static final int DEST_TLV_FIELD_NUMBER = 11;
-    private static final class DestTlvDefaultEntryHolder {
+    public static final int DEST_CUSTOM_RECORDS_FIELD_NUMBER = 11;
+    private static final class DestCustomRecordsDefaultEntryHolder {
       static final com.google.protobuf.MapEntry<
           java.lang.Long, com.google.protobuf.ByteString> defaultEntry =
               com.google.protobuf.MapEntry
               .<java.lang.Long, com.google.protobuf.ByteString>newDefaultInstance(
-                  routerrpc.RouterOuterClass.internal_static_routerrpc_SendPaymentRequest_DestTlvEntry_descriptor, 
+                  routerrpc.RouterOuterClass.internal_static_routerrpc_SendPaymentRequest_DestCustomRecordsEntry_descriptor, 
                   com.google.protobuf.WireFormat.FieldType.UINT64,
                   0L,
                   com.google.protobuf.WireFormat.FieldType.BYTES,
                   com.google.protobuf.ByteString.EMPTY);
     }
     private com.google.protobuf.MapField<
-        java.lang.Long, com.google.protobuf.ByteString> destTlv_;
+        java.lang.Long, com.google.protobuf.ByteString> destCustomRecords_;
     private com.google.protobuf.MapField<java.lang.Long, com.google.protobuf.ByteString>
-    internalGetDestTlv() {
-      if (destTlv_ == null) {
+    internalGetDestCustomRecords() {
+      if (destCustomRecords_ == null) {
         return com.google.protobuf.MapField.emptyMapField(
-            DestTlvDefaultEntryHolder.defaultEntry);
+            DestCustomRecordsDefaultEntryHolder.defaultEntry);
       }
-      return destTlv_;
+      return destCustomRecords_;
     }
 
-    public int getDestTlvCount() {
-      return internalGetDestTlv().getMap().size();
+    public int getDestCustomRecordsCount() {
+      return internalGetDestCustomRecords().getMap().size();
     }
     /**
      * <pre>
      ** 
      *An optional field that can be used to pass an arbitrary set of TLV records
      *to a peer which understands the new records. This can be used to pass
-     *application specific data during the payment attempt.
+     *application specific data during the payment attempt. Record types are
+     *required to be in the custom range &gt;= 65536. When using REST, the values
+     *must be encoded as base64.
      * </pre>
      *
-     * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+     * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
      */
 
-    public boolean containsDestTlv(
+    public boolean containsDestCustomRecords(
         long key) {
       
-      return internalGetDestTlv().getMap().containsKey(key);
+      return internalGetDestCustomRecords().getMap().containsKey(key);
     }
     /**
-     * Use {@link #getDestTlvMap()} instead.
+     * Use {@link #getDestCustomRecordsMap()} instead.
      */
     @java.lang.Deprecated
-    public java.util.Map<java.lang.Long, com.google.protobuf.ByteString> getDestTlv() {
-      return getDestTlvMap();
+    public java.util.Map<java.lang.Long, com.google.protobuf.ByteString> getDestCustomRecords() {
+      return getDestCustomRecordsMap();
     }
     /**
      * <pre>
      ** 
      *An optional field that can be used to pass an arbitrary set of TLV records
      *to a peer which understands the new records. This can be used to pass
-     *application specific data during the payment attempt.
+     *application specific data during the payment attempt. Record types are
+     *required to be in the custom range &gt;= 65536. When using REST, the values
+     *must be encoded as base64.
      * </pre>
      *
-     * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+     * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
      */
 
-    public java.util.Map<java.lang.Long, com.google.protobuf.ByteString> getDestTlvMap() {
-      return internalGetDestTlv().getMap();
+    public java.util.Map<java.lang.Long, com.google.protobuf.ByteString> getDestCustomRecordsMap() {
+      return internalGetDestCustomRecords().getMap();
     }
     /**
      * <pre>
      ** 
      *An optional field that can be used to pass an arbitrary set of TLV records
      *to a peer which understands the new records. This can be used to pass
-     *application specific data during the payment attempt.
+     *application specific data during the payment attempt. Record types are
+     *required to be in the custom range &gt;= 65536. When using REST, the values
+     *must be encoded as base64.
      * </pre>
      *
-     * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+     * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
      */
 
-    public com.google.protobuf.ByteString getDestTlvOrDefault(
+    public com.google.protobuf.ByteString getDestCustomRecordsOrDefault(
         long key,
         com.google.protobuf.ByteString defaultValue) {
       
       java.util.Map<java.lang.Long, com.google.protobuf.ByteString> map =
-          internalGetDestTlv().getMap();
+          internalGetDestCustomRecords().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
@@ -927,22 +1179,127 @@ public final class RouterOuterClass {
      ** 
      *An optional field that can be used to pass an arbitrary set of TLV records
      *to a peer which understands the new records. This can be used to pass
-     *application specific data during the payment attempt.
+     *application specific data during the payment attempt. Record types are
+     *required to be in the custom range &gt;= 65536. When using REST, the values
+     *must be encoded as base64.
      * </pre>
      *
-     * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+     * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
      */
 
-    public com.google.protobuf.ByteString getDestTlvOrThrow(
+    public com.google.protobuf.ByteString getDestCustomRecordsOrThrow(
         long key) {
       
       java.util.Map<java.lang.Long, com.google.protobuf.ByteString> map =
-          internalGetDestTlv().getMap();
+          internalGetDestCustomRecords().getMap();
       if (!map.containsKey(key)) {
         throw new java.lang.IllegalArgumentException();
       }
       return map.get(key);
     }
+
+    public static final int ALLOW_SELF_PAYMENT_FIELD_NUMBER = 15;
+    private boolean allowSelfPayment_;
+    /**
+     * <pre>
+     *&#47; If set, circular payments to self are permitted.
+     * </pre>
+     *
+     * <code>bool allow_self_payment = 15;</code>
+     */
+    public boolean getAllowSelfPayment() {
+      return allowSelfPayment_;
+    }
+
+    public static final int DEST_FEATURES_FIELD_NUMBER = 16;
+    private java.util.List<java.lang.Integer> destFeatures_;
+    private static final com.google.protobuf.Internal.ListAdapter.Converter<
+        java.lang.Integer, lnrpc.Rpc.FeatureBit> destFeatures_converter_ =
+            new com.google.protobuf.Internal.ListAdapter.Converter<
+                java.lang.Integer, lnrpc.Rpc.FeatureBit>() {
+              public lnrpc.Rpc.FeatureBit convert(java.lang.Integer from) {
+                lnrpc.Rpc.FeatureBit result = lnrpc.Rpc.FeatureBit.valueOf(from);
+                return result == null ? lnrpc.Rpc.FeatureBit.UNRECOGNIZED : result;
+              }
+            };
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    public java.util.List<lnrpc.Rpc.FeatureBit> getDestFeaturesList() {
+      return new com.google.protobuf.Internal.ListAdapter<
+          java.lang.Integer, lnrpc.Rpc.FeatureBit>(destFeatures_, destFeatures_converter_);
+    }
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    public int getDestFeaturesCount() {
+      return destFeatures_.size();
+    }
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    public lnrpc.Rpc.FeatureBit getDestFeatures(int index) {
+      return destFeatures_converter_.convert(destFeatures_.get(index));
+    }
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    public java.util.List<java.lang.Integer>
+    getDestFeaturesValueList() {
+      return destFeatures_;
+    }
+    /**
+     * <pre>
+     **
+     *Features assumed to be supported by the final node. All transitive feature
+     *depdencies must also be set properly. For a given feature bit pair, either
+     *optional or remote may be set, but not both. If this field is nil or empty,
+     *the router will try to load destination features from the graph as a
+     *fallback.
+     * </pre>
+     *
+     * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+     */
+    public int getDestFeaturesValue(int index) {
+      return destFeatures_.get(index);
+    }
+    private int destFeaturesMemoizedSerializedSize;
 
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -956,6 +1313,7 @@ public final class RouterOuterClass {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      getSerializedSize();
       if (!dest_.isEmpty()) {
         output.writeBytes(1, dest_);
       }
@@ -989,9 +1347,28 @@ public final class RouterOuterClass {
       com.google.protobuf.GeneratedMessageV3
         .serializeLongMapTo(
           output,
-          internalGetDestTlv(),
-          DestTlvDefaultEntryHolder.defaultEntry,
+          internalGetDestCustomRecords(),
+          DestCustomRecordsDefaultEntryHolder.defaultEntry,
           11);
+      if (amtMsat_ != 0L) {
+        output.writeInt64(12, amtMsat_);
+      }
+      if (feeLimitMsat_ != 0L) {
+        output.writeInt64(13, feeLimitMsat_);
+      }
+      if (!lastHopPubkey_.isEmpty()) {
+        output.writeBytes(14, lastHopPubkey_);
+      }
+      if (allowSelfPayment_ != false) {
+        output.writeBool(15, allowSelfPayment_);
+      }
+      if (getDestFeaturesList().size() > 0) {
+        output.writeUInt32NoTag(130);
+        output.writeUInt32NoTag(destFeaturesMemoizedSerializedSize);
+      }
+      for (int i = 0; i < destFeatures_.size(); i++) {
+        output.writeEnumNoTag(destFeatures_.get(i));
+      }
       unknownFields.writeTo(output);
     }
 
@@ -1040,14 +1417,42 @@ public final class RouterOuterClass {
           .computeMessageSize(10, routeHints_.get(i));
       }
       for (java.util.Map.Entry<java.lang.Long, com.google.protobuf.ByteString> entry
-           : internalGetDestTlv().getMap().entrySet()) {
+           : internalGetDestCustomRecords().getMap().entrySet()) {
         com.google.protobuf.MapEntry<java.lang.Long, com.google.protobuf.ByteString>
-        destTlv__ = DestTlvDefaultEntryHolder.defaultEntry.newBuilderForType()
+        destCustomRecords__ = DestCustomRecordsDefaultEntryHolder.defaultEntry.newBuilderForType()
             .setKey(entry.getKey())
             .setValue(entry.getValue())
             .build();
         size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(11, destTlv__);
+            .computeMessageSize(11, destCustomRecords__);
+      }
+      if (amtMsat_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(12, amtMsat_);
+      }
+      if (feeLimitMsat_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(13, feeLimitMsat_);
+      }
+      if (!lastHopPubkey_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(14, lastHopPubkey_);
+      }
+      if (allowSelfPayment_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(15, allowSelfPayment_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < destFeatures_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeEnumSizeNoTag(destFeatures_.get(i));
+        }
+        size += dataSize;
+        if (!getDestFeaturesList().isEmpty()) {  size += 2;
+          size += com.google.protobuf.CodedOutputStream
+            .computeUInt32SizeNoTag(dataSize);
+        }destFeaturesMemoizedSerializedSize = dataSize;
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1069,6 +1474,8 @@ public final class RouterOuterClass {
           .equals(other.getDest());
       result = result && (getAmt()
           == other.getAmt());
+      result = result && (getAmtMsat()
+          == other.getAmtMsat());
       result = result && getPaymentHash()
           .equals(other.getPaymentHash());
       result = result && (getFinalCltvDelta()
@@ -1079,14 +1486,21 @@ public final class RouterOuterClass {
           == other.getTimeoutSeconds());
       result = result && (getFeeLimitSat()
           == other.getFeeLimitSat());
+      result = result && (getFeeLimitMsat()
+          == other.getFeeLimitMsat());
       result = result && (getOutgoingChanId()
           == other.getOutgoingChanId());
+      result = result && getLastHopPubkey()
+          .equals(other.getLastHopPubkey());
       result = result && (getCltvLimit()
           == other.getCltvLimit());
       result = result && getRouteHintsList()
           .equals(other.getRouteHintsList());
-      result = result && internalGetDestTlv().equals(
-          other.internalGetDestTlv());
+      result = result && internalGetDestCustomRecords().equals(
+          other.internalGetDestCustomRecords());
+      result = result && (getAllowSelfPayment()
+          == other.getAllowSelfPayment());
+      result = result && destFeatures_.equals(other.destFeatures_);
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1103,6 +1517,9 @@ public final class RouterOuterClass {
       hash = (37 * hash) + AMT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getAmt());
+      hash = (37 * hash) + AMT_MSAT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getAmtMsat());
       hash = (37 * hash) + PAYMENT_HASH_FIELD_NUMBER;
       hash = (53 * hash) + getPaymentHash().hashCode();
       hash = (37 * hash) + FINAL_CLTV_DELTA_FIELD_NUMBER;
@@ -1114,18 +1531,30 @@ public final class RouterOuterClass {
       hash = (37 * hash) + FEE_LIMIT_SAT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getFeeLimitSat());
+      hash = (37 * hash) + FEE_LIMIT_MSAT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getFeeLimitMsat());
       hash = (37 * hash) + OUTGOING_CHAN_ID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getOutgoingChanId());
+      hash = (37 * hash) + LAST_HOP_PUBKEY_FIELD_NUMBER;
+      hash = (53 * hash) + getLastHopPubkey().hashCode();
       hash = (37 * hash) + CLTV_LIMIT_FIELD_NUMBER;
       hash = (53 * hash) + getCltvLimit();
       if (getRouteHintsCount() > 0) {
         hash = (37 * hash) + ROUTE_HINTS_FIELD_NUMBER;
         hash = (53 * hash) + getRouteHintsList().hashCode();
       }
-      if (!internalGetDestTlv().getMap().isEmpty()) {
-        hash = (37 * hash) + DEST_TLV_FIELD_NUMBER;
-        hash = (53 * hash) + internalGetDestTlv().hashCode();
+      if (!internalGetDestCustomRecords().getMap().isEmpty()) {
+        hash = (37 * hash) + DEST_CUSTOM_RECORDS_FIELD_NUMBER;
+        hash = (53 * hash) + internalGetDestCustomRecords().hashCode();
+      }
+      hash = (37 * hash) + ALLOW_SELF_PAYMENT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getAllowSelfPayment());
+      if (getDestFeaturesCount() > 0) {
+        hash = (37 * hash) + DEST_FEATURES_FIELD_NUMBER;
+        hash = (53 * hash) + destFeatures_.hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -1237,7 +1666,7 @@ public final class RouterOuterClass {
           int number) {
         switch (number) {
           case 11:
-            return internalGetDestTlv();
+            return internalGetDestCustomRecords();
           default:
             throw new RuntimeException(
                 "Invalid map field number: " + number);
@@ -1248,7 +1677,7 @@ public final class RouterOuterClass {
           int number) {
         switch (number) {
           case 11:
-            return internalGetMutableDestTlv();
+            return internalGetMutableDestCustomRecords();
           default:
             throw new RuntimeException(
                 "Invalid map field number: " + number);
@@ -1283,6 +1712,8 @@ public final class RouterOuterClass {
 
         amt_ = 0L;
 
+        amtMsat_ = 0L;
+
         paymentHash_ = com.google.protobuf.ByteString.EMPTY;
 
         finalCltvDelta_ = 0;
@@ -1293,17 +1724,25 @@ public final class RouterOuterClass {
 
         feeLimitSat_ = 0L;
 
+        feeLimitMsat_ = 0L;
+
         outgoingChanId_ = 0L;
+
+        lastHopPubkey_ = com.google.protobuf.ByteString.EMPTY;
 
         cltvLimit_ = 0;
 
         if (routeHintsBuilder_ == null) {
           routeHints_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000200);
+          bitField0_ = (bitField0_ & ~0x00001000);
         } else {
           routeHintsBuilder_.clear();
         }
-        internalGetMutableDestTlv().clear();
+        internalGetMutableDestCustomRecords().clear();
+        allowSelfPayment_ = false;
+
+        destFeatures_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00008000);
         return this;
       }
 
@@ -1330,24 +1769,33 @@ public final class RouterOuterClass {
         int to_bitField0_ = 0;
         result.dest_ = dest_;
         result.amt_ = amt_;
+        result.amtMsat_ = amtMsat_;
         result.paymentHash_ = paymentHash_;
         result.finalCltvDelta_ = finalCltvDelta_;
         result.paymentRequest_ = paymentRequest_;
         result.timeoutSeconds_ = timeoutSeconds_;
         result.feeLimitSat_ = feeLimitSat_;
+        result.feeLimitMsat_ = feeLimitMsat_;
         result.outgoingChanId_ = outgoingChanId_;
+        result.lastHopPubkey_ = lastHopPubkey_;
         result.cltvLimit_ = cltvLimit_;
         if (routeHintsBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200)) {
+          if (((bitField0_ & 0x00001000) == 0x00001000)) {
             routeHints_ = java.util.Collections.unmodifiableList(routeHints_);
-            bitField0_ = (bitField0_ & ~0x00000200);
+            bitField0_ = (bitField0_ & ~0x00001000);
           }
           result.routeHints_ = routeHints_;
         } else {
           result.routeHints_ = routeHintsBuilder_.build();
         }
-        result.destTlv_ = internalGetDestTlv();
-        result.destTlv_.makeImmutable();
+        result.destCustomRecords_ = internalGetDestCustomRecords();
+        result.destCustomRecords_.makeImmutable();
+        result.allowSelfPayment_ = allowSelfPayment_;
+        if (((bitField0_ & 0x00008000) == 0x00008000)) {
+          destFeatures_ = java.util.Collections.unmodifiableList(destFeatures_);
+          bitField0_ = (bitField0_ & ~0x00008000);
+        }
+        result.destFeatures_ = destFeatures_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1396,6 +1844,9 @@ public final class RouterOuterClass {
         if (other.getAmt() != 0L) {
           setAmt(other.getAmt());
         }
+        if (other.getAmtMsat() != 0L) {
+          setAmtMsat(other.getAmtMsat());
+        }
         if (other.getPaymentHash() != com.google.protobuf.ByteString.EMPTY) {
           setPaymentHash(other.getPaymentHash());
         }
@@ -1412,8 +1863,14 @@ public final class RouterOuterClass {
         if (other.getFeeLimitSat() != 0L) {
           setFeeLimitSat(other.getFeeLimitSat());
         }
+        if (other.getFeeLimitMsat() != 0L) {
+          setFeeLimitMsat(other.getFeeLimitMsat());
+        }
         if (other.getOutgoingChanId() != 0L) {
           setOutgoingChanId(other.getOutgoingChanId());
+        }
+        if (other.getLastHopPubkey() != com.google.protobuf.ByteString.EMPTY) {
+          setLastHopPubkey(other.getLastHopPubkey());
         }
         if (other.getCltvLimit() != 0) {
           setCltvLimit(other.getCltvLimit());
@@ -1422,7 +1879,7 @@ public final class RouterOuterClass {
           if (!other.routeHints_.isEmpty()) {
             if (routeHints_.isEmpty()) {
               routeHints_ = other.routeHints_;
-              bitField0_ = (bitField0_ & ~0x00000200);
+              bitField0_ = (bitField0_ & ~0x00001000);
             } else {
               ensureRouteHintsIsMutable();
               routeHints_.addAll(other.routeHints_);
@@ -1435,7 +1892,7 @@ public final class RouterOuterClass {
               routeHintsBuilder_.dispose();
               routeHintsBuilder_ = null;
               routeHints_ = other.routeHints_;
-              bitField0_ = (bitField0_ & ~0x00000200);
+              bitField0_ = (bitField0_ & ~0x00001000);
               routeHintsBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getRouteHintsFieldBuilder() : null;
@@ -1444,8 +1901,21 @@ public final class RouterOuterClass {
             }
           }
         }
-        internalGetMutableDestTlv().mergeFrom(
-            other.internalGetDestTlv());
+        internalGetMutableDestCustomRecords().mergeFrom(
+            other.internalGetDestCustomRecords());
+        if (other.getAllowSelfPayment() != false) {
+          setAllowSelfPayment(other.getAllowSelfPayment());
+        }
+        if (!other.destFeatures_.isEmpty()) {
+          if (destFeatures_.isEmpty()) {
+            destFeatures_ = other.destFeatures_;
+            bitField0_ = (bitField0_ & ~0x00008000);
+          } else {
+            ensureDestFeaturesIsMutable();
+            destFeatures_.addAll(other.destFeatures_);
+          }
+          onChanged();
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1518,7 +1988,9 @@ public final class RouterOuterClass {
       private long amt_ ;
       /**
        * <pre>
-       *&#47; Number of satoshis to send.
+       **
+       *Number of satoshis to send.
+       *The fields amt and amt_msat are mutually exclusive.
        * </pre>
        *
        * <code>int64 amt = 2;</code>
@@ -1528,7 +2000,9 @@ public final class RouterOuterClass {
       }
       /**
        * <pre>
-       *&#47; Number of satoshis to send.
+       **
+       *Number of satoshis to send.
+       *The fields amt and amt_msat are mutually exclusive.
        * </pre>
        *
        * <code>int64 amt = 2;</code>
@@ -1541,7 +2015,9 @@ public final class RouterOuterClass {
       }
       /**
        * <pre>
-       *&#47; Number of satoshis to send.
+       **
+       *Number of satoshis to send.
+       *The fields amt and amt_msat are mutually exclusive.
        * </pre>
        *
        * <code>int64 amt = 2;</code>
@@ -1549,6 +2025,50 @@ public final class RouterOuterClass {
       public Builder clearAmt() {
         
         amt_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long amtMsat_ ;
+      /**
+       * <pre>
+       **
+       *Number of millisatoshis to send.
+       *The fields amt and amt_msat are mutually exclusive.
+       * </pre>
+       *
+       * <code>int64 amt_msat = 12;</code>
+       */
+      public long getAmtMsat() {
+        return amtMsat_;
+      }
+      /**
+       * <pre>
+       **
+       *Number of millisatoshis to send.
+       *The fields amt and amt_msat are mutually exclusive.
+       * </pre>
+       *
+       * <code>int64 amt_msat = 12;</code>
+       */
+      public Builder setAmtMsat(long value) {
+        
+        amtMsat_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *Number of millisatoshis to send.
+       *The fields amt and amt_msat are mutually exclusive.
+       * </pre>
+       *
+       * <code>int64 amt_msat = 12;</code>
+       */
+      public Builder clearAmtMsat() {
+        
+        amtMsat_ = 0L;
         onChanged();
         return this;
       }
@@ -1810,6 +2330,7 @@ public final class RouterOuterClass {
        *If this field is left to the default value of 0, only zero-fee routes will
        *be considered. This usually means single hop routes connecting directly to
        *the destination. To send the payment without a fee limit, use max int here.
+       *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
        * </pre>
        *
        * <code>int64 fee_limit_sat = 7;</code>
@@ -1824,6 +2345,7 @@ public final class RouterOuterClass {
        *If this field is left to the default value of 0, only zero-fee routes will
        *be considered. This usually means single hop routes connecting directly to
        *the destination. To send the payment without a fee limit, use max int here.
+       *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
        * </pre>
        *
        * <code>int64 fee_limit_sat = 7;</code>
@@ -1841,6 +2363,7 @@ public final class RouterOuterClass {
        *If this field is left to the default value of 0, only zero-fee routes will
        *be considered. This usually means single hop routes connecting directly to
        *the destination. To send the payment without a fee limit, use max int here.
+       *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
        * </pre>
        *
        * <code>int64 fee_limit_sat = 7;</code>
@@ -1848,6 +2371,62 @@ public final class RouterOuterClass {
       public Builder clearFeeLimitSat() {
         
         feeLimitSat_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long feeLimitMsat_ ;
+      /**
+       * <pre>
+       **
+       *The maximum number of millisatoshis that will be paid as a fee of the
+       *payment. If this field is left to the default value of 0, only zero-fee
+       *routes will be considered. This usually means single hop routes connecting
+       *directly to the destination. To send the payment without a fee limit, use
+       *max int here.
+       *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
+       * </pre>
+       *
+       * <code>int64 fee_limit_msat = 13;</code>
+       */
+      public long getFeeLimitMsat() {
+        return feeLimitMsat_;
+      }
+      /**
+       * <pre>
+       **
+       *The maximum number of millisatoshis that will be paid as a fee of the
+       *payment. If this field is left to the default value of 0, only zero-fee
+       *routes will be considered. This usually means single hop routes connecting
+       *directly to the destination. To send the payment without a fee limit, use
+       *max int here.
+       *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
+       * </pre>
+       *
+       * <code>int64 fee_limit_msat = 13;</code>
+       */
+      public Builder setFeeLimitMsat(long value) {
+        
+        feeLimitMsat_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The maximum number of millisatoshis that will be paid as a fee of the
+       *payment. If this field is left to the default value of 0, only zero-fee
+       *routes will be considered. This usually means single hop routes connecting
+       *directly to the destination. To send the payment without a fee limit, use
+       *max int here.
+       *The fields fee_limit_sat and fee_limit_msat are mutually exclusive.
+       * </pre>
+       *
+       * <code>int64 fee_limit_msat = 13;</code>
+       */
+      public Builder clearFeeLimitMsat() {
+        
+        feeLimitMsat_ = 0L;
         onChanged();
         return this;
       }
@@ -1892,6 +2471,50 @@ public final class RouterOuterClass {
       public Builder clearOutgoingChanId() {
         
         outgoingChanId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString lastHopPubkey_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       **
+       *The pubkey of the last hop of the route. If empty, any hop may be used.
+       * </pre>
+       *
+       * <code>bytes last_hop_pubkey = 14;</code>
+       */
+      public com.google.protobuf.ByteString getLastHopPubkey() {
+        return lastHopPubkey_;
+      }
+      /**
+       * <pre>
+       **
+       *The pubkey of the last hop of the route. If empty, any hop may be used.
+       * </pre>
+       *
+       * <code>bytes last_hop_pubkey = 14;</code>
+       */
+      public Builder setLastHopPubkey(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        lastHopPubkey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The pubkey of the last hop of the route. If empty, any hop may be used.
+       * </pre>
+       *
+       * <code>bytes last_hop_pubkey = 14;</code>
+       */
+      public Builder clearLastHopPubkey() {
+        
+        lastHopPubkey_ = getDefaultInstance().getLastHopPubkey();
         onChanged();
         return this;
       }
@@ -1946,9 +2569,9 @@ public final class RouterOuterClass {
       private java.util.List<lnrpc.Rpc.RouteHint> routeHints_ =
         java.util.Collections.emptyList();
       private void ensureRouteHintsIsMutable() {
-        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+        if (!((bitField0_ & 0x00001000) == 0x00001000)) {
           routeHints_ = new java.util.ArrayList<lnrpc.Rpc.RouteHint>(routeHints_);
-          bitField0_ |= 0x00000200;
+          bitField0_ |= 0x00001000;
          }
       }
 
@@ -2153,7 +2776,7 @@ public final class RouterOuterClass {
       public Builder clearRouteHints() {
         if (routeHintsBuilder_ == null) {
           routeHints_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000200);
+          bitField0_ = (bitField0_ & ~0x00001000);
           onChanged();
         } else {
           routeHintsBuilder_.clear();
@@ -2265,7 +2888,7 @@ public final class RouterOuterClass {
           routeHintsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               lnrpc.Rpc.RouteHint, lnrpc.Rpc.RouteHint.Builder, lnrpc.Rpc.RouteHintOrBuilder>(
                   routeHints_,
-                  ((bitField0_ & 0x00000200) == 0x00000200),
+                  ((bitField0_ & 0x00001000) == 0x00001000),
                   getParentForChildren(),
                   isClean());
           routeHints_ = null;
@@ -2274,85 +2897,91 @@ public final class RouterOuterClass {
       }
 
       private com.google.protobuf.MapField<
-          java.lang.Long, com.google.protobuf.ByteString> destTlv_;
+          java.lang.Long, com.google.protobuf.ByteString> destCustomRecords_;
       private com.google.protobuf.MapField<java.lang.Long, com.google.protobuf.ByteString>
-      internalGetDestTlv() {
-        if (destTlv_ == null) {
+      internalGetDestCustomRecords() {
+        if (destCustomRecords_ == null) {
           return com.google.protobuf.MapField.emptyMapField(
-              DestTlvDefaultEntryHolder.defaultEntry);
+              DestCustomRecordsDefaultEntryHolder.defaultEntry);
         }
-        return destTlv_;
+        return destCustomRecords_;
       }
       private com.google.protobuf.MapField<java.lang.Long, com.google.protobuf.ByteString>
-      internalGetMutableDestTlv() {
+      internalGetMutableDestCustomRecords() {
         onChanged();;
-        if (destTlv_ == null) {
-          destTlv_ = com.google.protobuf.MapField.newMapField(
-              DestTlvDefaultEntryHolder.defaultEntry);
+        if (destCustomRecords_ == null) {
+          destCustomRecords_ = com.google.protobuf.MapField.newMapField(
+              DestCustomRecordsDefaultEntryHolder.defaultEntry);
         }
-        if (!destTlv_.isMutable()) {
-          destTlv_ = destTlv_.copy();
+        if (!destCustomRecords_.isMutable()) {
+          destCustomRecords_ = destCustomRecords_.copy();
         }
-        return destTlv_;
+        return destCustomRecords_;
       }
 
-      public int getDestTlvCount() {
-        return internalGetDestTlv().getMap().size();
+      public int getDestCustomRecordsCount() {
+        return internalGetDestCustomRecords().getMap().size();
       }
       /**
        * <pre>
        ** 
        *An optional field that can be used to pass an arbitrary set of TLV records
        *to a peer which understands the new records. This can be used to pass
-       *application specific data during the payment attempt.
+       *application specific data during the payment attempt. Record types are
+       *required to be in the custom range &gt;= 65536. When using REST, the values
+       *must be encoded as base64.
        * </pre>
        *
-       * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+       * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
        */
 
-      public boolean containsDestTlv(
+      public boolean containsDestCustomRecords(
           long key) {
         
-        return internalGetDestTlv().getMap().containsKey(key);
+        return internalGetDestCustomRecords().getMap().containsKey(key);
       }
       /**
-       * Use {@link #getDestTlvMap()} instead.
+       * Use {@link #getDestCustomRecordsMap()} instead.
        */
       @java.lang.Deprecated
-      public java.util.Map<java.lang.Long, com.google.protobuf.ByteString> getDestTlv() {
-        return getDestTlvMap();
+      public java.util.Map<java.lang.Long, com.google.protobuf.ByteString> getDestCustomRecords() {
+        return getDestCustomRecordsMap();
       }
       /**
        * <pre>
        ** 
        *An optional field that can be used to pass an arbitrary set of TLV records
        *to a peer which understands the new records. This can be used to pass
-       *application specific data during the payment attempt.
+       *application specific data during the payment attempt. Record types are
+       *required to be in the custom range &gt;= 65536. When using REST, the values
+       *must be encoded as base64.
        * </pre>
        *
-       * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+       * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
        */
 
-      public java.util.Map<java.lang.Long, com.google.protobuf.ByteString> getDestTlvMap() {
-        return internalGetDestTlv().getMap();
+      public java.util.Map<java.lang.Long, com.google.protobuf.ByteString> getDestCustomRecordsMap() {
+        return internalGetDestCustomRecords().getMap();
       }
       /**
        * <pre>
        ** 
        *An optional field that can be used to pass an arbitrary set of TLV records
        *to a peer which understands the new records. This can be used to pass
-       *application specific data during the payment attempt.
+       *application specific data during the payment attempt. Record types are
+       *required to be in the custom range &gt;= 65536. When using REST, the values
+       *must be encoded as base64.
        * </pre>
        *
-       * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+       * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
        */
 
-      public com.google.protobuf.ByteString getDestTlvOrDefault(
+      public com.google.protobuf.ByteString getDestCustomRecordsOrDefault(
           long key,
           com.google.protobuf.ByteString defaultValue) {
         
         java.util.Map<java.lang.Long, com.google.protobuf.ByteString> map =
-            internalGetDestTlv().getMap();
+            internalGetDestCustomRecords().getMap();
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
@@ -2360,25 +2989,27 @@ public final class RouterOuterClass {
        ** 
        *An optional field that can be used to pass an arbitrary set of TLV records
        *to a peer which understands the new records. This can be used to pass
-       *application specific data during the payment attempt.
+       *application specific data during the payment attempt. Record types are
+       *required to be in the custom range &gt;= 65536. When using REST, the values
+       *must be encoded as base64.
        * </pre>
        *
-       * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+       * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
        */
 
-      public com.google.protobuf.ByteString getDestTlvOrThrow(
+      public com.google.protobuf.ByteString getDestCustomRecordsOrThrow(
           long key) {
         
         java.util.Map<java.lang.Long, com.google.protobuf.ByteString> map =
-            internalGetDestTlv().getMap();
+            internalGetDestCustomRecords().getMap();
         if (!map.containsKey(key)) {
           throw new java.lang.IllegalArgumentException();
         }
         return map.get(key);
       }
 
-      public Builder clearDestTlv() {
-        internalGetMutableDestTlv().getMutableMap()
+      public Builder clearDestCustomRecords() {
+        internalGetMutableDestCustomRecords().getMutableMap()
             .clear();
         return this;
       }
@@ -2387,16 +3018,18 @@ public final class RouterOuterClass {
        ** 
        *An optional field that can be used to pass an arbitrary set of TLV records
        *to a peer which understands the new records. This can be used to pass
-       *application specific data during the payment attempt.
+       *application specific data during the payment attempt. Record types are
+       *required to be in the custom range &gt;= 65536. When using REST, the values
+       *must be encoded as base64.
        * </pre>
        *
-       * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+       * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
        */
 
-      public Builder removeDestTlv(
+      public Builder removeDestCustomRecords(
           long key) {
         
-        internalGetMutableDestTlv().getMutableMap()
+        internalGetMutableDestCustomRecords().getMutableMap()
             .remove(key);
         return this;
       }
@@ -2405,25 +3038,27 @@ public final class RouterOuterClass {
        */
       @java.lang.Deprecated
       public java.util.Map<java.lang.Long, com.google.protobuf.ByteString>
-      getMutableDestTlv() {
-        return internalGetMutableDestTlv().getMutableMap();
+      getMutableDestCustomRecords() {
+        return internalGetMutableDestCustomRecords().getMutableMap();
       }
       /**
        * <pre>
        ** 
        *An optional field that can be used to pass an arbitrary set of TLV records
        *to a peer which understands the new records. This can be used to pass
-       *application specific data during the payment attempt.
+       *application specific data during the payment attempt. Record types are
+       *required to be in the custom range &gt;= 65536. When using REST, the values
+       *must be encoded as base64.
        * </pre>
        *
-       * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+       * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
        */
-      public Builder putDestTlv(
+      public Builder putDestCustomRecords(
           long key,
           com.google.protobuf.ByteString value) {
         
         if (value == null) { throw new java.lang.NullPointerException(); }
-        internalGetMutableDestTlv().getMutableMap()
+        internalGetMutableDestCustomRecords().getMutableMap()
             .put(key, value);
         return this;
       }
@@ -2432,16 +3067,282 @@ public final class RouterOuterClass {
        ** 
        *An optional field that can be used to pass an arbitrary set of TLV records
        *to a peer which understands the new records. This can be used to pass
-       *application specific data during the payment attempt.
+       *application specific data during the payment attempt. Record types are
+       *required to be in the custom range &gt;= 65536. When using REST, the values
+       *must be encoded as base64.
        * </pre>
        *
-       * <code>map&lt;uint64, bytes&gt; dest_tlv = 11;</code>
+       * <code>map&lt;uint64, bytes&gt; dest_custom_records = 11;</code>
        */
 
-      public Builder putAllDestTlv(
+      public Builder putAllDestCustomRecords(
           java.util.Map<java.lang.Long, com.google.protobuf.ByteString> values) {
-        internalGetMutableDestTlv().getMutableMap()
+        internalGetMutableDestCustomRecords().getMutableMap()
             .putAll(values);
+        return this;
+      }
+
+      private boolean allowSelfPayment_ ;
+      /**
+       * <pre>
+       *&#47; If set, circular payments to self are permitted.
+       * </pre>
+       *
+       * <code>bool allow_self_payment = 15;</code>
+       */
+      public boolean getAllowSelfPayment() {
+        return allowSelfPayment_;
+      }
+      /**
+       * <pre>
+       *&#47; If set, circular payments to self are permitted.
+       * </pre>
+       *
+       * <code>bool allow_self_payment = 15;</code>
+       */
+      public Builder setAllowSelfPayment(boolean value) {
+        
+        allowSelfPayment_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; If set, circular payments to self are permitted.
+       * </pre>
+       *
+       * <code>bool allow_self_payment = 15;</code>
+       */
+      public Builder clearAllowSelfPayment() {
+        
+        allowSelfPayment_ = false;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<java.lang.Integer> destFeatures_ =
+        java.util.Collections.emptyList();
+      private void ensureDestFeaturesIsMutable() {
+        if (!((bitField0_ & 0x00008000) == 0x00008000)) {
+          destFeatures_ = new java.util.ArrayList<java.lang.Integer>(destFeatures_);
+          bitField0_ |= 0x00008000;
+        }
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public java.util.List<lnrpc.Rpc.FeatureBit> getDestFeaturesList() {
+        return new com.google.protobuf.Internal.ListAdapter<
+            java.lang.Integer, lnrpc.Rpc.FeatureBit>(destFeatures_, destFeatures_converter_);
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public int getDestFeaturesCount() {
+        return destFeatures_.size();
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public lnrpc.Rpc.FeatureBit getDestFeatures(int index) {
+        return destFeatures_converter_.convert(destFeatures_.get(index));
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public Builder setDestFeatures(
+          int index, lnrpc.Rpc.FeatureBit value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureDestFeaturesIsMutable();
+        destFeatures_.set(index, value.getNumber());
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public Builder addDestFeatures(lnrpc.Rpc.FeatureBit value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureDestFeaturesIsMutable();
+        destFeatures_.add(value.getNumber());
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public Builder addAllDestFeatures(
+          java.lang.Iterable<? extends lnrpc.Rpc.FeatureBit> values) {
+        ensureDestFeaturesIsMutable();
+        for (lnrpc.Rpc.FeatureBit value : values) {
+          destFeatures_.add(value.getNumber());
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public Builder clearDestFeatures() {
+        destFeatures_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00008000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public java.util.List<java.lang.Integer>
+      getDestFeaturesValueList() {
+        return java.util.Collections.unmodifiableList(destFeatures_);
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public int getDestFeaturesValue(int index) {
+        return destFeatures_.get(index);
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public Builder setDestFeaturesValue(
+          int index, int value) {
+        ensureDestFeaturesIsMutable();
+        destFeatures_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public Builder addDestFeaturesValue(int value) {
+        ensureDestFeaturesIsMutable();
+        destFeatures_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *Features assumed to be supported by the final node. All transitive feature
+       *depdencies must also be set properly. For a given feature bit pair, either
+       *optional or remote may be set, but not both. If this field is nil or empty,
+       *the router will try to load destination features from the graph as a
+       *fallback.
+       * </pre>
+       *
+       * <code>repeated .lnrpc.FeatureBit dest_features = 16;</code>
+       */
+      public Builder addAllDestFeaturesValue(
+          java.lang.Iterable<java.lang.Integer> values) {
+        ensureDestFeaturesIsMutable();
+        for (int value : values) {
+          destFeatures_.add(value);
+        }
+        onChanged();
         return this;
       }
       public final Builder setUnknownFields(
@@ -3022,6 +3923,55 @@ public final class RouterOuterClass {
      * <code>.lnrpc.Route route = 3;</code>
      */
     lnrpc.Rpc.RouteOrBuilder getRouteOrBuilder();
+
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    java.util.List<lnrpc.Rpc.HTLCAttempt> 
+        getHtlcsList();
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    lnrpc.Rpc.HTLCAttempt getHtlcs(int index);
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    int getHtlcsCount();
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    java.util.List<? extends lnrpc.Rpc.HTLCAttemptOrBuilder> 
+        getHtlcsOrBuilderList();
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    lnrpc.Rpc.HTLCAttemptOrBuilder getHtlcsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code routerrpc.PaymentStatus}
@@ -3038,6 +3988,7 @@ public final class RouterOuterClass {
     private PaymentStatus() {
       state_ = 0;
       preimage_ = com.google.protobuf.ByteString.EMPTY;
+      htlcs_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
@@ -3092,6 +4043,15 @@ public final class RouterOuterClass {
 
               break;
             }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                htlcs_ = new java.util.ArrayList<lnrpc.Rpc.HTLCAttempt>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              htlcs_.add(
+                  input.readMessage(lnrpc.Rpc.HTLCAttempt.parser(), extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -3100,6 +4060,9 @@ public final class RouterOuterClass {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          htlcs_ = java.util.Collections.unmodifiableList(htlcs_);
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -3116,6 +4079,7 @@ public final class RouterOuterClass {
               routerrpc.RouterOuterClass.PaymentStatus.class, routerrpc.RouterOuterClass.PaymentStatus.Builder.class);
     }
 
+    private int bitField0_;
     public static final int STATE_FIELD_NUMBER = 1;
     private int state_;
     /**
@@ -3190,6 +4154,66 @@ public final class RouterOuterClass {
       return getRoute();
     }
 
+    public static final int HTLCS_FIELD_NUMBER = 4;
+    private java.util.List<lnrpc.Rpc.HTLCAttempt> htlcs_;
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    public java.util.List<lnrpc.Rpc.HTLCAttempt> getHtlcsList() {
+      return htlcs_;
+    }
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    public java.util.List<? extends lnrpc.Rpc.HTLCAttemptOrBuilder> 
+        getHtlcsOrBuilderList() {
+      return htlcs_;
+    }
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    public int getHtlcsCount() {
+      return htlcs_.size();
+    }
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    public lnrpc.Rpc.HTLCAttempt getHtlcs(int index) {
+      return htlcs_.get(index);
+    }
+    /**
+     * <pre>
+     **
+     *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+     * </pre>
+     *
+     * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+     */
+    public lnrpc.Rpc.HTLCAttemptOrBuilder getHtlcsOrBuilder(
+        int index) {
+      return htlcs_.get(index);
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -3211,6 +4235,9 @@ public final class RouterOuterClass {
       if (route_ != null) {
         output.writeMessage(3, getRoute());
       }
+      for (int i = 0; i < htlcs_.size(); i++) {
+        output.writeMessage(4, htlcs_.get(i));
+      }
       unknownFields.writeTo(output);
     }
 
@@ -3230,6 +4257,10 @@ public final class RouterOuterClass {
       if (route_ != null) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getRoute());
+      }
+      for (int i = 0; i < htlcs_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, htlcs_.get(i));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -3255,6 +4286,8 @@ public final class RouterOuterClass {
         result = result && getRoute()
             .equals(other.getRoute());
       }
+      result = result && getHtlcsList()
+          .equals(other.getHtlcsList());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -3273,6 +4306,10 @@ public final class RouterOuterClass {
       if (hasRoute()) {
         hash = (37 * hash) + ROUTE_FIELD_NUMBER;
         hash = (53 * hash) + getRoute().hashCode();
+      }
+      if (getHtlcsCount() > 0) {
+        hash = (37 * hash) + HTLCS_FIELD_NUMBER;
+        hash = (53 * hash) + getHtlcsList().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -3399,6 +4436,7 @@ public final class RouterOuterClass {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
+          getHtlcsFieldBuilder();
         }
       }
       public Builder clear() {
@@ -3412,6 +4450,12 @@ public final class RouterOuterClass {
         } else {
           route_ = null;
           routeBuilder_ = null;
+        }
+        if (htlcsBuilder_ == null) {
+          htlcs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          htlcsBuilder_.clear();
         }
         return this;
       }
@@ -3435,6 +4479,8 @@ public final class RouterOuterClass {
 
       public routerrpc.RouterOuterClass.PaymentStatus buildPartial() {
         routerrpc.RouterOuterClass.PaymentStatus result = new routerrpc.RouterOuterClass.PaymentStatus(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
         result.state_ = state_;
         result.preimage_ = preimage_;
         if (routeBuilder_ == null) {
@@ -3442,6 +4488,16 @@ public final class RouterOuterClass {
         } else {
           result.route_ = routeBuilder_.build();
         }
+        if (htlcsBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            htlcs_ = java.util.Collections.unmodifiableList(htlcs_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.htlcs_ = htlcs_;
+        } else {
+          result.htlcs_ = htlcsBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -3492,6 +4548,32 @@ public final class RouterOuterClass {
         if (other.hasRoute()) {
           mergeRoute(other.getRoute());
         }
+        if (htlcsBuilder_ == null) {
+          if (!other.htlcs_.isEmpty()) {
+            if (htlcs_.isEmpty()) {
+              htlcs_ = other.htlcs_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureHtlcsIsMutable();
+              htlcs_.addAll(other.htlcs_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.htlcs_.isEmpty()) {
+            if (htlcsBuilder_.isEmpty()) {
+              htlcsBuilder_.dispose();
+              htlcsBuilder_ = null;
+              htlcs_ = other.htlcs_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              htlcsBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getHtlcsFieldBuilder() : null;
+            } else {
+              htlcsBuilder_.addAllMessages(other.htlcs_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -3518,6 +4600,7 @@ public final class RouterOuterClass {
         }
         return this;
       }
+      private int bitField0_;
 
       private int state_ = 0;
       /**
@@ -3787,6 +4870,336 @@ public final class RouterOuterClass {
           route_ = null;
         }
         return routeBuilder_;
+      }
+
+      private java.util.List<lnrpc.Rpc.HTLCAttempt> htlcs_ =
+        java.util.Collections.emptyList();
+      private void ensureHtlcsIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          htlcs_ = new java.util.ArrayList<lnrpc.Rpc.HTLCAttempt>(htlcs_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          lnrpc.Rpc.HTLCAttempt, lnrpc.Rpc.HTLCAttempt.Builder, lnrpc.Rpc.HTLCAttemptOrBuilder> htlcsBuilder_;
+
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public java.util.List<lnrpc.Rpc.HTLCAttempt> getHtlcsList() {
+        if (htlcsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(htlcs_);
+        } else {
+          return htlcsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public int getHtlcsCount() {
+        if (htlcsBuilder_ == null) {
+          return htlcs_.size();
+        } else {
+          return htlcsBuilder_.getCount();
+        }
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public lnrpc.Rpc.HTLCAttempt getHtlcs(int index) {
+        if (htlcsBuilder_ == null) {
+          return htlcs_.get(index);
+        } else {
+          return htlcsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public Builder setHtlcs(
+          int index, lnrpc.Rpc.HTLCAttempt value) {
+        if (htlcsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureHtlcsIsMutable();
+          htlcs_.set(index, value);
+          onChanged();
+        } else {
+          htlcsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public Builder setHtlcs(
+          int index, lnrpc.Rpc.HTLCAttempt.Builder builderForValue) {
+        if (htlcsBuilder_ == null) {
+          ensureHtlcsIsMutable();
+          htlcs_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          htlcsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public Builder addHtlcs(lnrpc.Rpc.HTLCAttempt value) {
+        if (htlcsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureHtlcsIsMutable();
+          htlcs_.add(value);
+          onChanged();
+        } else {
+          htlcsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public Builder addHtlcs(
+          int index, lnrpc.Rpc.HTLCAttempt value) {
+        if (htlcsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureHtlcsIsMutable();
+          htlcs_.add(index, value);
+          onChanged();
+        } else {
+          htlcsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public Builder addHtlcs(
+          lnrpc.Rpc.HTLCAttempt.Builder builderForValue) {
+        if (htlcsBuilder_ == null) {
+          ensureHtlcsIsMutable();
+          htlcs_.add(builderForValue.build());
+          onChanged();
+        } else {
+          htlcsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public Builder addHtlcs(
+          int index, lnrpc.Rpc.HTLCAttempt.Builder builderForValue) {
+        if (htlcsBuilder_ == null) {
+          ensureHtlcsIsMutable();
+          htlcs_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          htlcsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public Builder addAllHtlcs(
+          java.lang.Iterable<? extends lnrpc.Rpc.HTLCAttempt> values) {
+        if (htlcsBuilder_ == null) {
+          ensureHtlcsIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, htlcs_);
+          onChanged();
+        } else {
+          htlcsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public Builder clearHtlcs() {
+        if (htlcsBuilder_ == null) {
+          htlcs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          htlcsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public Builder removeHtlcs(int index) {
+        if (htlcsBuilder_ == null) {
+          ensureHtlcsIsMutable();
+          htlcs_.remove(index);
+          onChanged();
+        } else {
+          htlcsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public lnrpc.Rpc.HTLCAttempt.Builder getHtlcsBuilder(
+          int index) {
+        return getHtlcsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public lnrpc.Rpc.HTLCAttemptOrBuilder getHtlcsOrBuilder(
+          int index) {
+        if (htlcsBuilder_ == null) {
+          return htlcs_.get(index);  } else {
+          return htlcsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public java.util.List<? extends lnrpc.Rpc.HTLCAttemptOrBuilder> 
+           getHtlcsOrBuilderList() {
+        if (htlcsBuilder_ != null) {
+          return htlcsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(htlcs_);
+        }
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public lnrpc.Rpc.HTLCAttempt.Builder addHtlcsBuilder() {
+        return getHtlcsFieldBuilder().addBuilder(
+            lnrpc.Rpc.HTLCAttempt.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public lnrpc.Rpc.HTLCAttempt.Builder addHtlcsBuilder(
+          int index) {
+        return getHtlcsFieldBuilder().addBuilder(
+            index, lnrpc.Rpc.HTLCAttempt.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       **
+       *The HTLCs made in attempt to settle the payment [EXPERIMENTAL].
+       * </pre>
+       *
+       * <code>repeated .lnrpc.HTLCAttempt htlcs = 4;</code>
+       */
+      public java.util.List<lnrpc.Rpc.HTLCAttempt.Builder> 
+           getHtlcsBuilderList() {
+        return getHtlcsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          lnrpc.Rpc.HTLCAttempt, lnrpc.Rpc.HTLCAttempt.Builder, lnrpc.Rpc.HTLCAttemptOrBuilder> 
+          getHtlcsFieldBuilder() {
+        if (htlcsBuilder_ == null) {
+          htlcsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              lnrpc.Rpc.HTLCAttempt, lnrpc.Rpc.HTLCAttempt.Builder, lnrpc.Rpc.HTLCAttemptOrBuilder>(
+                  htlcs_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          htlcs_ = null;
+        }
+        return htlcsBuilder_;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -6760,6 +8173,10 @@ public final class RouterOuterClass {
        */
       EXPIRY_TOO_FAR(22),
       /**
+       * <code>MPP_TIMEOUT = 23;</code>
+       */
+      MPP_TIMEOUT(23),
+      /**
        * <pre>
        **
        *The error source is known, but the failure itself couldn't be decoded.
@@ -6881,6 +8298,10 @@ public final class RouterOuterClass {
        */
       public static final int EXPIRY_TOO_FAR_VALUE = 22;
       /**
+       * <code>MPP_TIMEOUT = 23;</code>
+       */
+      public static final int MPP_TIMEOUT_VALUE = 23;
+      /**
        * <pre>
        **
        *The error source is known, but the failure itself couldn't be decoded.
@@ -6942,6 +8363,7 @@ public final class RouterOuterClass {
           case 20: return PERMANENT_NODE_FAILURE;
           case 21: return PERMANENT_CHANNEL_FAILURE;
           case 22: return EXPIRY_TOO_FAR;
+          case 23: return MPP_TIMEOUT;
           case 998: return UNKNOWN_FAILURE;
           case 999: return UNREADABLE_FAILURE;
           default: return null;
@@ -12399,30 +13821,61 @@ public final class RouterOuterClass {
 
     /**
      * <pre>
-     *&#47; Time stamp of last result.
+     *&#47; Time of last failure.
      * </pre>
      *
-     * <code>int64 timestamp = 1[json_name = "timestamp"];</code>
+     * <code>int64 fail_time = 1[json_name = "fail_time"];</code>
      */
-    long getTimestamp();
+    long getFailTime();
 
     /**
      * <pre>
-     *&#47; Minimum penalization amount (only applies to failed attempts).
+     **
+     *Lowest amount that failed to forward rounded to whole sats. This may be
+     *set to zero if the failure is independent of amount.
      * </pre>
      *
-     * <code>int64 min_penalize_amt_sat = 2[json_name = "min_penalize_amt_sat"];</code>
+     * <code>int64 fail_amt_sat = 2[json_name = "fail_amt_sat"];</code>
      */
-    long getMinPenalizeAmtSat();
+    long getFailAmtSat();
 
     /**
      * <pre>
-     *&#47; Whether the last payment attempt through this pair was successful.
+     **
+     *Lowest amount that failed to forward in millisats. This may be
+     *set to zero if the failure is independent of amount.
      * </pre>
      *
-     * <code>bool last_attempt_successful = 3[json_name = "last_attempt_successful"];</code>
+     * <code>int64 fail_amt_msat = 4[json_name = "fail_amt_msat"];</code>
      */
-    boolean getLastAttemptSuccessful();
+    long getFailAmtMsat();
+
+    /**
+     * <pre>
+     *&#47; Time of last success.
+     * </pre>
+     *
+     * <code>int64 success_time = 5[json_name = "success_time"];</code>
+     */
+    long getSuccessTime();
+
+    /**
+     * <pre>
+     *&#47; Highest amount that we could successfully forward rounded to whole sats.
+     * </pre>
+     *
+     * <code>int64 success_amt_sat = 6[json_name = "success_amt_sat"];</code>
+     */
+    long getSuccessAmtSat();
+
+    /**
+     * <pre>
+     *&#47; Highest amount that we could successfully forward in millisats.
+     * </pre>
+     *
+     * <code>int64 success_amt_msat = 7[json_name = "success_amt_msat"];</code>
+     */
+    long getSuccessAmtMsat();
   }
   /**
    * Protobuf type {@code routerrpc.PairData}
@@ -12437,9 +13890,12 @@ public final class RouterOuterClass {
       super(builder);
     }
     private PairData() {
-      timestamp_ = 0L;
-      minPenalizeAmtSat_ = 0L;
-      lastAttemptSuccessful_ = false;
+      failTime_ = 0L;
+      failAmtSat_ = 0L;
+      failAmtMsat_ = 0L;
+      successTime_ = 0L;
+      successAmtSat_ = 0L;
+      successAmtMsat_ = 0L;
     }
 
     @java.lang.Override
@@ -12472,17 +13928,32 @@ public final class RouterOuterClass {
             }
             case 8: {
 
-              timestamp_ = input.readInt64();
+              failTime_ = input.readInt64();
               break;
             }
             case 16: {
 
-              minPenalizeAmtSat_ = input.readInt64();
+              failAmtSat_ = input.readInt64();
               break;
             }
-            case 24: {
+            case 32: {
 
-              lastAttemptSuccessful_ = input.readBool();
+              failAmtMsat_ = input.readInt64();
+              break;
+            }
+            case 40: {
+
+              successTime_ = input.readInt64();
+              break;
+            }
+            case 48: {
+
+              successAmtSat_ = input.readInt64();
+              break;
+            }
+            case 56: {
+
+              successAmtMsat_ = input.readInt64();
               break;
             }
           }
@@ -12509,43 +13980,86 @@ public final class RouterOuterClass {
               routerrpc.RouterOuterClass.PairData.class, routerrpc.RouterOuterClass.PairData.Builder.class);
     }
 
-    public static final int TIMESTAMP_FIELD_NUMBER = 1;
-    private long timestamp_;
+    public static final int FAIL_TIME_FIELD_NUMBER = 1;
+    private long failTime_;
     /**
      * <pre>
-     *&#47; Time stamp of last result.
+     *&#47; Time of last failure.
      * </pre>
      *
-     * <code>int64 timestamp = 1[json_name = "timestamp"];</code>
+     * <code>int64 fail_time = 1[json_name = "fail_time"];</code>
      */
-    public long getTimestamp() {
-      return timestamp_;
+    public long getFailTime() {
+      return failTime_;
     }
 
-    public static final int MIN_PENALIZE_AMT_SAT_FIELD_NUMBER = 2;
-    private long minPenalizeAmtSat_;
+    public static final int FAIL_AMT_SAT_FIELD_NUMBER = 2;
+    private long failAmtSat_;
     /**
      * <pre>
-     *&#47; Minimum penalization amount (only applies to failed attempts).
+     **
+     *Lowest amount that failed to forward rounded to whole sats. This may be
+     *set to zero if the failure is independent of amount.
      * </pre>
      *
-     * <code>int64 min_penalize_amt_sat = 2[json_name = "min_penalize_amt_sat"];</code>
+     * <code>int64 fail_amt_sat = 2[json_name = "fail_amt_sat"];</code>
      */
-    public long getMinPenalizeAmtSat() {
-      return minPenalizeAmtSat_;
+    public long getFailAmtSat() {
+      return failAmtSat_;
     }
 
-    public static final int LAST_ATTEMPT_SUCCESSFUL_FIELD_NUMBER = 3;
-    private boolean lastAttemptSuccessful_;
+    public static final int FAIL_AMT_MSAT_FIELD_NUMBER = 4;
+    private long failAmtMsat_;
     /**
      * <pre>
-     *&#47; Whether the last payment attempt through this pair was successful.
+     **
+     *Lowest amount that failed to forward in millisats. This may be
+     *set to zero if the failure is independent of amount.
      * </pre>
      *
-     * <code>bool last_attempt_successful = 3[json_name = "last_attempt_successful"];</code>
+     * <code>int64 fail_amt_msat = 4[json_name = "fail_amt_msat"];</code>
      */
-    public boolean getLastAttemptSuccessful() {
-      return lastAttemptSuccessful_;
+    public long getFailAmtMsat() {
+      return failAmtMsat_;
+    }
+
+    public static final int SUCCESS_TIME_FIELD_NUMBER = 5;
+    private long successTime_;
+    /**
+     * <pre>
+     *&#47; Time of last success.
+     * </pre>
+     *
+     * <code>int64 success_time = 5[json_name = "success_time"];</code>
+     */
+    public long getSuccessTime() {
+      return successTime_;
+    }
+
+    public static final int SUCCESS_AMT_SAT_FIELD_NUMBER = 6;
+    private long successAmtSat_;
+    /**
+     * <pre>
+     *&#47; Highest amount that we could successfully forward rounded to whole sats.
+     * </pre>
+     *
+     * <code>int64 success_amt_sat = 6[json_name = "success_amt_sat"];</code>
+     */
+    public long getSuccessAmtSat() {
+      return successAmtSat_;
+    }
+
+    public static final int SUCCESS_AMT_MSAT_FIELD_NUMBER = 7;
+    private long successAmtMsat_;
+    /**
+     * <pre>
+     *&#47; Highest amount that we could successfully forward in millisats.
+     * </pre>
+     *
+     * <code>int64 success_amt_msat = 7[json_name = "success_amt_msat"];</code>
+     */
+    public long getSuccessAmtMsat() {
+      return successAmtMsat_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -12560,14 +14074,23 @@ public final class RouterOuterClass {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (timestamp_ != 0L) {
-        output.writeInt64(1, timestamp_);
+      if (failTime_ != 0L) {
+        output.writeInt64(1, failTime_);
       }
-      if (minPenalizeAmtSat_ != 0L) {
-        output.writeInt64(2, minPenalizeAmtSat_);
+      if (failAmtSat_ != 0L) {
+        output.writeInt64(2, failAmtSat_);
       }
-      if (lastAttemptSuccessful_ != false) {
-        output.writeBool(3, lastAttemptSuccessful_);
+      if (failAmtMsat_ != 0L) {
+        output.writeInt64(4, failAmtMsat_);
+      }
+      if (successTime_ != 0L) {
+        output.writeInt64(5, successTime_);
+      }
+      if (successAmtSat_ != 0L) {
+        output.writeInt64(6, successAmtSat_);
+      }
+      if (successAmtMsat_ != 0L) {
+        output.writeInt64(7, successAmtMsat_);
       }
       unknownFields.writeTo(output);
     }
@@ -12577,17 +14100,29 @@ public final class RouterOuterClass {
       if (size != -1) return size;
 
       size = 0;
-      if (timestamp_ != 0L) {
+      if (failTime_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, timestamp_);
+          .computeInt64Size(1, failTime_);
       }
-      if (minPenalizeAmtSat_ != 0L) {
+      if (failAmtSat_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(2, minPenalizeAmtSat_);
+          .computeInt64Size(2, failAmtSat_);
       }
-      if (lastAttemptSuccessful_ != false) {
+      if (failAmtMsat_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(3, lastAttemptSuccessful_);
+          .computeInt64Size(4, failAmtMsat_);
+      }
+      if (successTime_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(5, successTime_);
+      }
+      if (successAmtSat_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(6, successAmtSat_);
+      }
+      if (successAmtMsat_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(7, successAmtMsat_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -12605,12 +14140,18 @@ public final class RouterOuterClass {
       routerrpc.RouterOuterClass.PairData other = (routerrpc.RouterOuterClass.PairData) obj;
 
       boolean result = true;
-      result = result && (getTimestamp()
-          == other.getTimestamp());
-      result = result && (getMinPenalizeAmtSat()
-          == other.getMinPenalizeAmtSat());
-      result = result && (getLastAttemptSuccessful()
-          == other.getLastAttemptSuccessful());
+      result = result && (getFailTime()
+          == other.getFailTime());
+      result = result && (getFailAmtSat()
+          == other.getFailAmtSat());
+      result = result && (getFailAmtMsat()
+          == other.getFailAmtMsat());
+      result = result && (getSuccessTime()
+          == other.getSuccessTime());
+      result = result && (getSuccessAmtSat()
+          == other.getSuccessAmtSat());
+      result = result && (getSuccessAmtMsat()
+          == other.getSuccessAmtMsat());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -12622,15 +14163,24 @@ public final class RouterOuterClass {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+      hash = (37 * hash) + FAIL_TIME_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getTimestamp());
-      hash = (37 * hash) + MIN_PENALIZE_AMT_SAT_FIELD_NUMBER;
+          getFailTime());
+      hash = (37 * hash) + FAIL_AMT_SAT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getMinPenalizeAmtSat());
-      hash = (37 * hash) + LAST_ATTEMPT_SUCCESSFUL_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-          getLastAttemptSuccessful());
+          getFailAmtSat());
+      hash = (37 * hash) + FAIL_AMT_MSAT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getFailAmtMsat());
+      hash = (37 * hash) + SUCCESS_TIME_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getSuccessTime());
+      hash = (37 * hash) + SUCCESS_AMT_SAT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getSuccessAmtSat());
+      hash = (37 * hash) + SUCCESS_AMT_MSAT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getSuccessAmtMsat());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -12760,11 +14310,17 @@ public final class RouterOuterClass {
       }
       public Builder clear() {
         super.clear();
-        timestamp_ = 0L;
+        failTime_ = 0L;
 
-        minPenalizeAmtSat_ = 0L;
+        failAmtSat_ = 0L;
 
-        lastAttemptSuccessful_ = false;
+        failAmtMsat_ = 0L;
+
+        successTime_ = 0L;
+
+        successAmtSat_ = 0L;
+
+        successAmtMsat_ = 0L;
 
         return this;
       }
@@ -12788,9 +14344,12 @@ public final class RouterOuterClass {
 
       public routerrpc.RouterOuterClass.PairData buildPartial() {
         routerrpc.RouterOuterClass.PairData result = new routerrpc.RouterOuterClass.PairData(this);
-        result.timestamp_ = timestamp_;
-        result.minPenalizeAmtSat_ = minPenalizeAmtSat_;
-        result.lastAttemptSuccessful_ = lastAttemptSuccessful_;
+        result.failTime_ = failTime_;
+        result.failAmtSat_ = failAmtSat_;
+        result.failAmtMsat_ = failAmtMsat_;
+        result.successTime_ = successTime_;
+        result.successAmtSat_ = successAmtSat_;
+        result.successAmtMsat_ = successAmtMsat_;
         onBuilt();
         return result;
       }
@@ -12832,14 +14391,23 @@ public final class RouterOuterClass {
 
       public Builder mergeFrom(routerrpc.RouterOuterClass.PairData other) {
         if (other == routerrpc.RouterOuterClass.PairData.getDefaultInstance()) return this;
-        if (other.getTimestamp() != 0L) {
-          setTimestamp(other.getTimestamp());
+        if (other.getFailTime() != 0L) {
+          setFailTime(other.getFailTime());
         }
-        if (other.getMinPenalizeAmtSat() != 0L) {
-          setMinPenalizeAmtSat(other.getMinPenalizeAmtSat());
+        if (other.getFailAmtSat() != 0L) {
+          setFailAmtSat(other.getFailAmtSat());
         }
-        if (other.getLastAttemptSuccessful() != false) {
-          setLastAttemptSuccessful(other.getLastAttemptSuccessful());
+        if (other.getFailAmtMsat() != 0L) {
+          setFailAmtMsat(other.getFailAmtMsat());
+        }
+        if (other.getSuccessTime() != 0L) {
+          setSuccessTime(other.getSuccessTime());
+        }
+        if (other.getSuccessAmtSat() != 0L) {
+          setSuccessAmtSat(other.getSuccessAmtSat());
+        }
+        if (other.getSuccessAmtMsat() != 0L) {
+          setSuccessAmtMsat(other.getSuccessAmtMsat());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -12868,116 +14436,242 @@ public final class RouterOuterClass {
         return this;
       }
 
-      private long timestamp_ ;
+      private long failTime_ ;
       /**
        * <pre>
-       *&#47; Time stamp of last result.
+       *&#47; Time of last failure.
        * </pre>
        *
-       * <code>int64 timestamp = 1[json_name = "timestamp"];</code>
+       * <code>int64 fail_time = 1[json_name = "fail_time"];</code>
        */
-      public long getTimestamp() {
-        return timestamp_;
+      public long getFailTime() {
+        return failTime_;
       }
       /**
        * <pre>
-       *&#47; Time stamp of last result.
+       *&#47; Time of last failure.
        * </pre>
        *
-       * <code>int64 timestamp = 1[json_name = "timestamp"];</code>
+       * <code>int64 fail_time = 1[json_name = "fail_time"];</code>
        */
-      public Builder setTimestamp(long value) {
+      public Builder setFailTime(long value) {
         
-        timestamp_ = value;
+        failTime_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       *&#47; Time stamp of last result.
+       *&#47; Time of last failure.
        * </pre>
        *
-       * <code>int64 timestamp = 1[json_name = "timestamp"];</code>
+       * <code>int64 fail_time = 1[json_name = "fail_time"];</code>
        */
-      public Builder clearTimestamp() {
+      public Builder clearFailTime() {
         
-        timestamp_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private long minPenalizeAmtSat_ ;
-      /**
-       * <pre>
-       *&#47; Minimum penalization amount (only applies to failed attempts).
-       * </pre>
-       *
-       * <code>int64 min_penalize_amt_sat = 2[json_name = "min_penalize_amt_sat"];</code>
-       */
-      public long getMinPenalizeAmtSat() {
-        return minPenalizeAmtSat_;
-      }
-      /**
-       * <pre>
-       *&#47; Minimum penalization amount (only applies to failed attempts).
-       * </pre>
-       *
-       * <code>int64 min_penalize_amt_sat = 2[json_name = "min_penalize_amt_sat"];</code>
-       */
-      public Builder setMinPenalizeAmtSat(long value) {
-        
-        minPenalizeAmtSat_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *&#47; Minimum penalization amount (only applies to failed attempts).
-       * </pre>
-       *
-       * <code>int64 min_penalize_amt_sat = 2[json_name = "min_penalize_amt_sat"];</code>
-       */
-      public Builder clearMinPenalizeAmtSat() {
-        
-        minPenalizeAmtSat_ = 0L;
+        failTime_ = 0L;
         onChanged();
         return this;
       }
 
-      private boolean lastAttemptSuccessful_ ;
+      private long failAmtSat_ ;
       /**
        * <pre>
-       *&#47; Whether the last payment attempt through this pair was successful.
+       **
+       *Lowest amount that failed to forward rounded to whole sats. This may be
+       *set to zero if the failure is independent of amount.
        * </pre>
        *
-       * <code>bool last_attempt_successful = 3[json_name = "last_attempt_successful"];</code>
+       * <code>int64 fail_amt_sat = 2[json_name = "fail_amt_sat"];</code>
        */
-      public boolean getLastAttemptSuccessful() {
-        return lastAttemptSuccessful_;
+      public long getFailAmtSat() {
+        return failAmtSat_;
       }
       /**
        * <pre>
-       *&#47; Whether the last payment attempt through this pair was successful.
+       **
+       *Lowest amount that failed to forward rounded to whole sats. This may be
+       *set to zero if the failure is independent of amount.
        * </pre>
        *
-       * <code>bool last_attempt_successful = 3[json_name = "last_attempt_successful"];</code>
+       * <code>int64 fail_amt_sat = 2[json_name = "fail_amt_sat"];</code>
        */
-      public Builder setLastAttemptSuccessful(boolean value) {
+      public Builder setFailAmtSat(long value) {
         
-        lastAttemptSuccessful_ = value;
+        failAmtSat_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       *&#47; Whether the last payment attempt through this pair was successful.
+       **
+       *Lowest amount that failed to forward rounded to whole sats. This may be
+       *set to zero if the failure is independent of amount.
        * </pre>
        *
-       * <code>bool last_attempt_successful = 3[json_name = "last_attempt_successful"];</code>
+       * <code>int64 fail_amt_sat = 2[json_name = "fail_amt_sat"];</code>
        */
-      public Builder clearLastAttemptSuccessful() {
+      public Builder clearFailAmtSat() {
         
-        lastAttemptSuccessful_ = false;
+        failAmtSat_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long failAmtMsat_ ;
+      /**
+       * <pre>
+       **
+       *Lowest amount that failed to forward in millisats. This may be
+       *set to zero if the failure is independent of amount.
+       * </pre>
+       *
+       * <code>int64 fail_amt_msat = 4[json_name = "fail_amt_msat"];</code>
+       */
+      public long getFailAmtMsat() {
+        return failAmtMsat_;
+      }
+      /**
+       * <pre>
+       **
+       *Lowest amount that failed to forward in millisats. This may be
+       *set to zero if the failure is independent of amount.
+       * </pre>
+       *
+       * <code>int64 fail_amt_msat = 4[json_name = "fail_amt_msat"];</code>
+       */
+      public Builder setFailAmtMsat(long value) {
+        
+        failAmtMsat_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       **
+       *Lowest amount that failed to forward in millisats. This may be
+       *set to zero if the failure is independent of amount.
+       * </pre>
+       *
+       * <code>int64 fail_amt_msat = 4[json_name = "fail_amt_msat"];</code>
+       */
+      public Builder clearFailAmtMsat() {
+        
+        failAmtMsat_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long successTime_ ;
+      /**
+       * <pre>
+       *&#47; Time of last success.
+       * </pre>
+       *
+       * <code>int64 success_time = 5[json_name = "success_time"];</code>
+       */
+      public long getSuccessTime() {
+        return successTime_;
+      }
+      /**
+       * <pre>
+       *&#47; Time of last success.
+       * </pre>
+       *
+       * <code>int64 success_time = 5[json_name = "success_time"];</code>
+       */
+      public Builder setSuccessTime(long value) {
+        
+        successTime_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; Time of last success.
+       * </pre>
+       *
+       * <code>int64 success_time = 5[json_name = "success_time"];</code>
+       */
+      public Builder clearSuccessTime() {
+        
+        successTime_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long successAmtSat_ ;
+      /**
+       * <pre>
+       *&#47; Highest amount that we could successfully forward rounded to whole sats.
+       * </pre>
+       *
+       * <code>int64 success_amt_sat = 6[json_name = "success_amt_sat"];</code>
+       */
+      public long getSuccessAmtSat() {
+        return successAmtSat_;
+      }
+      /**
+       * <pre>
+       *&#47; Highest amount that we could successfully forward rounded to whole sats.
+       * </pre>
+       *
+       * <code>int64 success_amt_sat = 6[json_name = "success_amt_sat"];</code>
+       */
+      public Builder setSuccessAmtSat(long value) {
+        
+        successAmtSat_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; Highest amount that we could successfully forward rounded to whole sats.
+       * </pre>
+       *
+       * <code>int64 success_amt_sat = 6[json_name = "success_amt_sat"];</code>
+       */
+      public Builder clearSuccessAmtSat() {
+        
+        successAmtSat_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long successAmtMsat_ ;
+      /**
+       * <pre>
+       *&#47; Highest amount that we could successfully forward in millisats.
+       * </pre>
+       *
+       * <code>int64 success_amt_msat = 7[json_name = "success_amt_msat"];</code>
+       */
+      public long getSuccessAmtMsat() {
+        return successAmtMsat_;
+      }
+      /**
+       * <pre>
+       *&#47; Highest amount that we could successfully forward in millisats.
+       * </pre>
+       *
+       * <code>int64 success_amt_msat = 7[json_name = "success_amt_msat"];</code>
+       */
+      public Builder setSuccessAmtMsat(long value) {
+        
+        successAmtMsat_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *&#47; Highest amount that we could successfully forward in millisats.
+       * </pre>
+       *
+       * <code>int64 success_amt_msat = 7[json_name = "success_amt_msat"];</code>
+       */
+      public Builder clearSuccessAmtMsat() {
+        
+        successAmtMsat_ = 0L;
         onChanged();
         return this;
       }
@@ -15959,10 +17653,10 @@ public final class RouterOuterClass {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_routerrpc_SendPaymentRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_routerrpc_SendPaymentRequest_DestTlvEntry_descriptor;
+    internal_static_routerrpc_SendPaymentRequest_DestCustomRecordsEntry_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_routerrpc_SendPaymentRequest_DestTlvEntry_fieldAccessorTable;
+      internal_static_routerrpc_SendPaymentRequest_DestCustomRecordsEntry_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_routerrpc_TrackPaymentRequest_descriptor;
   private static final 
@@ -16063,101 +17757,110 @@ public final class RouterOuterClass {
   static {
     java.lang.String[] descriptorData = {
       "\n\026routerrpc/router.proto\022\trouterrpc\032\trpc" +
-      ".proto\"\374\002\n\022SendPaymentRequest\022\014\n\004dest\030\001 " +
-      "\001(\014\022\013\n\003amt\030\002 \001(\003\022\024\n\014payment_hash\030\003 \001(\014\022\030" +
-      "\n\020final_cltv_delta\030\004 \001(\005\022\027\n\017payment_requ" +
-      "est\030\005 \001(\t\022\027\n\017timeout_seconds\030\006 \001(\005\022\025\n\rfe" +
-      "e_limit_sat\030\007 \001(\003\022\034\n\020outgoing_chan_id\030\010 " +
-      "\001(\004B\0020\001\022\022\n\ncltv_limit\030\t \001(\005\0222\n\013route_hin" +
-      "ts\030\n \003(\0132\020.lnrpc.RouteHintR\013route_hints\022" +
-      "<\n\010dest_tlv\030\013 \003(\0132*.routerrpc.SendPaymen" +
-      "tRequest.DestTlvEntry\032.\n\014DestTlvEntry\022\013\n",
-      "\003key\030\001 \001(\004\022\r\n\005value\030\002 \001(\014:\0028\001\"+\n\023TrackPa" +
-      "ymentRequest\022\024\n\014payment_hash\030\001 \001(\014\"f\n\rPa" +
-      "ymentStatus\022&\n\005state\030\001 \001(\0162\027.routerrpc.P" +
-      "aymentState\022\020\n\010preimage\030\002 \001(\014\022\033\n\005route\030\003" +
-      " \001(\0132\014.lnrpc.Route\"0\n\017RouteFeeRequest\022\014\n" +
-      "\004dest\030\001 \001(\014\022\017\n\007amt_sat\030\002 \001(\003\"E\n\020RouteFee" +
-      "Response\022\030\n\020routing_fee_msat\030\001 \001(\003\022\027\n\017ti" +
-      "me_lock_delay\030\002 \001(\003\"G\n\022SendToRouteReques" +
-      "t\022\024\n\014payment_hash\030\001 \001(\014\022\033\n\005route\030\002 \001(\0132\014" +
-      ".lnrpc.Route\"L\n\023SendToRouteResponse\022\020\n\010p",
-      "reimage\030\001 \001(\014\022#\n\007failure\030\002 \001(\0132\022.routerr" +
-      "pc.Failure\"\232\007\n\007Failure\022,\n\004code\030\001 \001(\0162\036.r" +
-      "outerrpc.Failure.FailureCode\0220\n\016channel_" +
-      "update\030\003 \001(\0132\030.routerrpc.ChannelUpdate\022\021" +
-      "\n\thtlc_msat\030\004 \001(\004\022\025\n\ronion_sha_256\030\005 \001(\014" +
-      "\022\023\n\013cltv_expiry\030\006 \001(\r\022\r\n\005flags\030\007 \001(\r\022\034\n\024" +
-      "failure_source_index\030\010 \001(\r\022\016\n\006height\030\t \001" +
-      "(\r\"\254\005\n\013FailureCode\022\014\n\010RESERVED\020\000\022(\n$INCO" +
-      "RRECT_OR_UNKNOWN_PAYMENT_DETAILS\020\001\022\034\n\030IN" +
-      "CORRECT_PAYMENT_AMOUNT\020\002\022\037\n\033FINAL_INCORR",
-      "ECT_CLTV_EXPIRY\020\003\022\037\n\033FINAL_INCORRECT_HTL" +
-      "C_AMOUNT\020\004\022\031\n\025FINAL_EXPIRY_TOO_SOON\020\005\022\021\n" +
-      "\rINVALID_REALM\020\006\022\023\n\017EXPIRY_TOO_SOON\020\007\022\031\n" +
-      "\025INVALID_ONION_VERSION\020\010\022\026\n\022INVALID_ONIO" +
-      "N_HMAC\020\t\022\025\n\021INVALID_ONION_KEY\020\n\022\030\n\024AMOUN" +
-      "T_BELOW_MINIMUM\020\013\022\024\n\020FEE_INSUFFICIENT\020\014\022" +
-      "\031\n\025INCORRECT_CLTV_EXPIRY\020\r\022\024\n\020CHANNEL_DI" +
-      "SABLED\020\016\022\035\n\031TEMPORARY_CHANNEL_FAILURE\020\017\022" +
-      "!\n\035REQUIRED_NODE_FEATURE_MISSING\020\020\022$\n RE" +
-      "QUIRED_CHANNEL_FEATURE_MISSING\020\021\022\025\n\021UNKN",
-      "OWN_NEXT_PEER\020\022\022\032\n\026TEMPORARY_NODE_FAILUR" +
-      "E\020\023\022\032\n\026PERMANENT_NODE_FAILURE\020\024\022\035\n\031PERMA" +
-      "NENT_CHANNEL_FAILURE\020\025\022\022\n\016EXPIRY_TOO_FAR" +
-      "\020\026\022\024\n\017UNKNOWN_FAILURE\020\346\007\022\027\n\022UNREADABLE_F" +
-      "AILURE\020\347\007J\004\010\002\020\003\"\232\002\n\rChannelUpdate\022\021\n\tsig" +
-      "nature\030\001 \001(\014\022\022\n\nchain_hash\030\002 \001(\014\022\023\n\007chan" +
-      "_id\030\003 \001(\004B\0020\001\022\021\n\ttimestamp\030\004 \001(\r\022\025\n\rmess" +
-      "age_flags\030\n \001(\r\022\025\n\rchannel_flags\030\005 \001(\r\022\027" +
-      "\n\017time_lock_delta\030\006 \001(\r\022\031\n\021htlc_minimum_" +
-      "msat\030\007 \001(\004\022\020\n\010base_fee\030\010 \001(\r\022\020\n\010fee_rate",
-      "\030\t \001(\r\022\031\n\021htlc_maximum_msat\030\013 \001(\004\022\031\n\021ext" +
-      "ra_opaque_data\030\014 \001(\014\"\034\n\032ResetMissionCont" +
-      "rolRequest\"\035\n\033ResetMissionControlRespons" +
-      "e\"\034\n\032QueryMissionControlRequest\"Q\n\033Query" +
-      "MissionControlResponse\022,\n\005pairs\030\002 \003(\0132\026." +
-      "routerrpc.PairHistoryR\005pairsJ\004\010\001\020\002\"\214\001\n\013P" +
-      "airHistory\022\034\n\tnode_from\030\001 \001(\014R\tnode_from" +
-      "\022\030\n\007node_to\030\002 \001(\014R\007node_to\022-\n\007history\030\007 " +
-      "\001(\0132\023.routerrpc.PairDataR\007historyJ\004\010\003\020\004J" +
-      "\004\010\004\020\005J\004\010\005\020\006J\004\010\006\020\007\"\226\001\n\010PairData\022\034\n\ttimest",
-      "amp\030\001 \001(\003R\ttimestamp\0222\n\024min_penalize_amt" +
-      "_sat\030\002 \001(\003R\024min_penalize_amt_sat\0228\n\027last" +
-      "_attempt_successful\030\003 \001(\010R\027last_attempt_" +
-      "successful\"m\n\027QueryProbabilityRequest\022\034\n" +
-      "\tfrom_node\030\001 \001(\014R\tfrom_node\022\030\n\007to_node\030\002" +
-      " \001(\014R\007to_node\022\032\n\010amt_msat\030\003 \001(\003R\010amt_msa" +
-      "t\"k\n\030QueryProbabilityResponse\022 \n\013probabi" +
-      "lity\030\001 \001(\001R\013probability\022-\n\007history\030\002 \001(\013" +
-      "2\023.routerrpc.PairDataR\007history\"r\n\021BuildR" +
-      "outeRequest\022\020\n\010amt_msat\030\001 \001(\003\022\030\n\020final_c",
-      "ltv_delta\030\002 \001(\005\022\034\n\020outgoing_chan_id\030\003 \001(" +
-      "\004B\0020\001\022\023\n\013hop_pubkeys\030\004 \003(\014\"1\n\022BuildRoute" +
-      "Response\022\033\n\005route\030\001 \001(\0132\014.lnrpc.Route*\215\001" +
-      "\n\014PaymentState\022\r\n\tIN_FLIGHT\020\000\022\r\n\tSUCCEED" +
-      "ED\020\001\022\022\n\016FAILED_TIMEOUT\020\002\022\023\n\017FAILED_NO_RO" +
-      "UTE\020\003\022\020\n\014FAILED_ERROR\020\004\022$\n FAILED_INCORR" +
-      "ECT_PAYMENT_DETAILS\020\0052\255\005\n\006Router\022H\n\013Send" +
-      "Payment\022\035.routerrpc.SendPaymentRequest\032\030" +
-      ".routerrpc.PaymentStatus0\001\022J\n\014TrackPayme" +
-      "nt\022\036.routerrpc.TrackPaymentRequest\032\030.rou",
-      "terrpc.PaymentStatus0\001\022K\n\020EstimateRouteF" +
-      "ee\022\032.routerrpc.RouteFeeRequest\032\033.routerr" +
-      "pc.RouteFeeResponse\022L\n\013SendToRoute\022\035.rou" +
-      "terrpc.SendToRouteRequest\032\036.routerrpc.Se" +
-      "ndToRouteResponse\022d\n\023ResetMissionControl" +
-      "\022%.routerrpc.ResetMissionControlRequest\032" +
-      "&.routerrpc.ResetMissionControlResponse\022" +
-      "d\n\023QueryMissionControl\022%.routerrpc.Query" +
-      "MissionControlRequest\032&.routerrpc.QueryM" +
-      "issionControlResponse\022[\n\020QueryProbabilit",
-      "y\022\".routerrpc.QueryProbabilityRequest\032#." +
-      "routerrpc.QueryProbabilityResponse\022I\n\nBu" +
-      "ildRoute\022\034.routerrpc.BuildRouteRequest\032\035" +
-      ".routerrpc.BuildRouteResponseB1Z/github." +
-      "com/lightningnetwork/lnd/lnrpc/routerrpc" +
-      "b\006proto3"
+      ".proto\"\244\004\n\022SendPaymentRequest\022\014\n\004dest\030\001 " +
+      "\001(\014\022\013\n\003amt\030\002 \001(\003\022\020\n\010amt_msat\030\014 \001(\003\022\024\n\014pa" +
+      "yment_hash\030\003 \001(\014\022\030\n\020final_cltv_delta\030\004 \001" +
+      "(\005\022\027\n\017payment_request\030\005 \001(\t\022\027\n\017timeout_s" +
+      "econds\030\006 \001(\005\022\025\n\rfee_limit_sat\030\007 \001(\003\022\026\n\016f" +
+      "ee_limit_msat\030\r \001(\003\022\034\n\020outgoing_chan_id\030" +
+      "\010 \001(\004B\0020\001\022\027\n\017last_hop_pubkey\030\016 \001(\014\022\022\n\ncl" +
+      "tv_limit\030\t \001(\005\0222\n\013route_hints\030\n \003(\0132\020.ln" +
+      "rpc.RouteHintR\013route_hints\022Q\n\023dest_custo",
+      "m_records\030\013 \003(\01324.routerrpc.SendPaymentR" +
+      "equest.DestCustomRecordsEntry\022\032\n\022allow_s" +
+      "elf_payment\030\017 \001(\010\022(\n\rdest_features\030\020 \003(\016" +
+      "2\021.lnrpc.FeatureBit\0328\n\026DestCustomRecords" +
+      "Entry\022\013\n\003key\030\001 \001(\004\022\r\n\005value\030\002 \001(\014:\0028\001\"+\n" +
+      "\023TrackPaymentRequest\022\024\n\014payment_hash\030\001 \001" +
+      "(\014\"\211\001\n\rPaymentStatus\022&\n\005state\030\001 \001(\0162\027.ro" +
+      "uterrpc.PaymentState\022\020\n\010preimage\030\002 \001(\014\022\033" +
+      "\n\005route\030\003 \001(\0132\014.lnrpc.Route\022!\n\005htlcs\030\004 \003" +
+      "(\0132\022.lnrpc.HTLCAttempt\"0\n\017RouteFeeReques",
+      "t\022\014\n\004dest\030\001 \001(\014\022\017\n\007amt_sat\030\002 \001(\003\"E\n\020Rout" +
+      "eFeeResponse\022\030\n\020routing_fee_msat\030\001 \001(\003\022\027" +
+      "\n\017time_lock_delay\030\002 \001(\003\"G\n\022SendToRouteRe" +
+      "quest\022\024\n\014payment_hash\030\001 \001(\014\022\033\n\005route\030\002 \001" +
+      "(\0132\014.lnrpc.Route\"L\n\023SendToRouteResponse\022" +
+      "\020\n\010preimage\030\001 \001(\014\022#\n\007failure\030\002 \001(\0132\022.rou" +
+      "terrpc.Failure\"\253\007\n\007Failure\022,\n\004code\030\001 \001(\016" +
+      "2\036.routerrpc.Failure.FailureCode\0220\n\016chan" +
+      "nel_update\030\003 \001(\0132\030.routerrpc.ChannelUpda" +
+      "te\022\021\n\thtlc_msat\030\004 \001(\004\022\025\n\ronion_sha_256\030\005",
+      " \001(\014\022\023\n\013cltv_expiry\030\006 \001(\r\022\r\n\005flags\030\007 \001(\r" +
+      "\022\034\n\024failure_source_index\030\010 \001(\r\022\016\n\006height" +
+      "\030\t \001(\r\"\275\005\n\013FailureCode\022\014\n\010RESERVED\020\000\022(\n$" +
+      "INCORRECT_OR_UNKNOWN_PAYMENT_DETAILS\020\001\022\034" +
+      "\n\030INCORRECT_PAYMENT_AMOUNT\020\002\022\037\n\033FINAL_IN" +
+      "CORRECT_CLTV_EXPIRY\020\003\022\037\n\033FINAL_INCORRECT" +
+      "_HTLC_AMOUNT\020\004\022\031\n\025FINAL_EXPIRY_TOO_SOON\020" +
+      "\005\022\021\n\rINVALID_REALM\020\006\022\023\n\017EXPIRY_TOO_SOON\020" +
+      "\007\022\031\n\025INVALID_ONION_VERSION\020\010\022\026\n\022INVALID_" +
+      "ONION_HMAC\020\t\022\025\n\021INVALID_ONION_KEY\020\n\022\030\n\024A",
+      "MOUNT_BELOW_MINIMUM\020\013\022\024\n\020FEE_INSUFFICIEN" +
+      "T\020\014\022\031\n\025INCORRECT_CLTV_EXPIRY\020\r\022\024\n\020CHANNE" +
+      "L_DISABLED\020\016\022\035\n\031TEMPORARY_CHANNEL_FAILUR" +
+      "E\020\017\022!\n\035REQUIRED_NODE_FEATURE_MISSING\020\020\022$" +
+      "\n REQUIRED_CHANNEL_FEATURE_MISSING\020\021\022\025\n\021" +
+      "UNKNOWN_NEXT_PEER\020\022\022\032\n\026TEMPORARY_NODE_FA" +
+      "ILURE\020\023\022\032\n\026PERMANENT_NODE_FAILURE\020\024\022\035\n\031P" +
+      "ERMANENT_CHANNEL_FAILURE\020\025\022\022\n\016EXPIRY_TOO" +
+      "_FAR\020\026\022\017\n\013MPP_TIMEOUT\020\027\022\024\n\017UNKNOWN_FAILU" +
+      "RE\020\346\007\022\027\n\022UNREADABLE_FAILURE\020\347\007J\004\010\002\020\003\"\232\002\n",
+      "\rChannelUpdate\022\021\n\tsignature\030\001 \001(\014\022\022\n\ncha" +
+      "in_hash\030\002 \001(\014\022\023\n\007chan_id\030\003 \001(\004B\0020\001\022\021\n\tti" +
+      "mestamp\030\004 \001(\r\022\025\n\rmessage_flags\030\n \001(\r\022\025\n\r" +
+      "channel_flags\030\005 \001(\r\022\027\n\017time_lock_delta\030\006" +
+      " \001(\r\022\031\n\021htlc_minimum_msat\030\007 \001(\004\022\020\n\010base_" +
+      "fee\030\010 \001(\r\022\020\n\010fee_rate\030\t \001(\r\022\031\n\021htlc_maxi" +
+      "mum_msat\030\013 \001(\004\022\031\n\021extra_opaque_data\030\014 \001(" +
+      "\014\"\034\n\032ResetMissionControlRequest\"\035\n\033Reset" +
+      "MissionControlResponse\"\034\n\032QueryMissionCo" +
+      "ntrolRequest\"Q\n\033QueryMissionControlRespo",
+      "nse\022,\n\005pairs\030\002 \003(\0132\026.routerrpc.PairHisto" +
+      "ryR\005pairsJ\004\010\001\020\002\"\214\001\n\013PairHistory\022\034\n\tnode_" +
+      "from\030\001 \001(\014R\tnode_from\022\030\n\007node_to\030\002 \001(\014R\007" +
+      "node_to\022-\n\007history\030\007 \001(\0132\023.routerrpc.Pai" +
+      "rDataR\007historyJ\004\010\003\020\004J\004\010\004\020\005J\004\010\005\020\006J\004\010\006\020\007\"\362" +
+      "\001\n\010PairData\022\034\n\tfail_time\030\001 \001(\003R\tfail_tim" +
+      "e\022\"\n\014fail_amt_sat\030\002 \001(\003R\014fail_amt_sat\022$\n" +
+      "\rfail_amt_msat\030\004 \001(\003R\rfail_amt_msat\022\"\n\014s" +
+      "uccess_time\030\005 \001(\003R\014success_time\022(\n\017succe" +
+      "ss_amt_sat\030\006 \001(\003R\017success_amt_sat\022*\n\020suc",
+      "cess_amt_msat\030\007 \001(\003R\020success_amt_msatJ\004\010" +
+      "\003\020\004\"m\n\027QueryProbabilityRequest\022\034\n\tfrom_n" +
+      "ode\030\001 \001(\014R\tfrom_node\022\030\n\007to_node\030\002 \001(\014R\007t" +
+      "o_node\022\032\n\010amt_msat\030\003 \001(\003R\010amt_msat\"k\n\030Qu" +
+      "eryProbabilityResponse\022 \n\013probability\030\001 " +
+      "\001(\001R\013probability\022-\n\007history\030\002 \001(\0132\023.rout" +
+      "errpc.PairDataR\007history\"r\n\021BuildRouteReq" +
+      "uest\022\020\n\010amt_msat\030\001 \001(\003\022\030\n\020final_cltv_del" +
+      "ta\030\002 \001(\005\022\034\n\020outgoing_chan_id\030\003 \001(\004B\0020\001\022\023" +
+      "\n\013hop_pubkeys\030\004 \003(\014\"1\n\022BuildRouteRespons",
+      "e\022\033\n\005route\030\001 \001(\0132\014.lnrpc.Route*\256\001\n\014Payme" +
+      "ntState\022\r\n\tIN_FLIGHT\020\000\022\r\n\tSUCCEEDED\020\001\022\022\n" +
+      "\016FAILED_TIMEOUT\020\002\022\023\n\017FAILED_NO_ROUTE\020\003\022\020" +
+      "\n\014FAILED_ERROR\020\004\022$\n FAILED_INCORRECT_PAY" +
+      "MENT_DETAILS\020\005\022\037\n\033FAILED_INSUFFICIENT_BA" +
+      "LANCE\020\0062\271\005\n\006Router\022N\n\021RouterSendPayment\022" +
+      "\035.routerrpc.SendPaymentRequest\032\030.routerr" +
+      "pc.PaymentStatus0\001\022J\n\014TrackPayment\022\036.rou" +
+      "terrpc.TrackPaymentRequest\032\030.routerrpc.P" +
+      "aymentStatus0\001\022K\n\020EstimateRouteFee\022\032.rou",
+      "terrpc.RouteFeeRequest\032\033.routerrpc.Route" +
+      "FeeResponse\022R\n\021RouterSendToRoute\022\035.route" +
+      "rrpc.SendToRouteRequest\032\036.routerrpc.Send" +
+      "ToRouteResponse\022d\n\023ResetMissionControl\022%" +
+      ".routerrpc.ResetMissionControlRequest\032&." +
+      "routerrpc.ResetMissionControlResponse\022d\n" +
+      "\023QueryMissionControl\022%.routerrpc.QueryMi" +
+      "ssionControlRequest\032&.routerrpc.QueryMis" +
+      "sionControlResponse\022[\n\020QueryProbability\022" +
+      "\".routerrpc.QueryProbabilityRequest\032#.ro",
+      "uterrpc.QueryProbabilityResponse\022I\n\nBuil" +
+      "dRoute\022\034.routerrpc.BuildRouteRequest\032\035.r" +
+      "outerrpc.BuildRouteResponseB1Z/github.co" +
+      "m/lightningnetwork/lnd/lnrpc/routerrpcb\006" +
+      "proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -16177,12 +17880,12 @@ public final class RouterOuterClass {
     internal_static_routerrpc_SendPaymentRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_routerrpc_SendPaymentRequest_descriptor,
-        new java.lang.String[] { "Dest", "Amt", "PaymentHash", "FinalCltvDelta", "PaymentRequest", "TimeoutSeconds", "FeeLimitSat", "OutgoingChanId", "CltvLimit", "RouteHints", "DestTlv", });
-    internal_static_routerrpc_SendPaymentRequest_DestTlvEntry_descriptor =
+        new java.lang.String[] { "Dest", "Amt", "AmtMsat", "PaymentHash", "FinalCltvDelta", "PaymentRequest", "TimeoutSeconds", "FeeLimitSat", "FeeLimitMsat", "OutgoingChanId", "LastHopPubkey", "CltvLimit", "RouteHints", "DestCustomRecords", "AllowSelfPayment", "DestFeatures", });
+    internal_static_routerrpc_SendPaymentRequest_DestCustomRecordsEntry_descriptor =
       internal_static_routerrpc_SendPaymentRequest_descriptor.getNestedTypes().get(0);
-    internal_static_routerrpc_SendPaymentRequest_DestTlvEntry_fieldAccessorTable = new
+    internal_static_routerrpc_SendPaymentRequest_DestCustomRecordsEntry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_routerrpc_SendPaymentRequest_DestTlvEntry_descriptor,
+        internal_static_routerrpc_SendPaymentRequest_DestCustomRecordsEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_routerrpc_TrackPaymentRequest_descriptor =
       getDescriptor().getMessageTypes().get(1);
@@ -16195,7 +17898,7 @@ public final class RouterOuterClass {
     internal_static_routerrpc_PaymentStatus_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_routerrpc_PaymentStatus_descriptor,
-        new java.lang.String[] { "State", "Preimage", "Route", });
+        new java.lang.String[] { "State", "Preimage", "Route", "Htlcs", });
     internal_static_routerrpc_RouteFeeRequest_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_routerrpc_RouteFeeRequest_fieldAccessorTable = new
@@ -16267,7 +17970,7 @@ public final class RouterOuterClass {
     internal_static_routerrpc_PairData_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_routerrpc_PairData_descriptor,
-        new java.lang.String[] { "Timestamp", "MinPenalizeAmtSat", "LastAttemptSuccessful", });
+        new java.lang.String[] { "FailTime", "FailAmtSat", "FailAmtMsat", "SuccessTime", "SuccessAmtSat", "SuccessAmtMsat", });
     internal_static_routerrpc_QueryProbabilityRequest_descriptor =
       getDescriptor().getMessageTypes().get(15);
     internal_static_routerrpc_QueryProbabilityRequest_fieldAccessorTable = new

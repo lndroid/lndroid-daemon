@@ -6,6 +6,7 @@ public interface ILightningClient {
     // call when client is supposed to be destroyed
     // to release connections with the daemon
     void onDestroy();
+    ILightningCallbackMT createDaemonCallback(ILightningCallback<Object> cb);
 
     void unlockWallet(Data.UnlockWalletRequest r, ILightningCallback<Data.UnlockWalletResponse> cb);
     void initWallet(Data.InitWalletRequest r, ILightningCallback<Data.InitWalletResponse> cb);
@@ -28,6 +29,7 @@ public interface ILightningClient {
     void estimateFee(Data.EstimateFeeRequest r, ILightningCallback<Data.EstimateFeeResponse> cb);
     void sendCoins(Data.SendCoinsRequest r, ILightningCallback<Data.SendCoinsResponse> cb);
 
+    void decodePayReq(Data.PayReqString r, ILightningCallback<Data.PayReq> cb);
     void addInvoice(Data.Invoice r, ILightningCallback<Data.AddInvoiceResponse> cb);
     ILightningStream<Data.SendRequest, Data.SendResponse> sendPaymentsStream();
     // overloaded variant for simple cases where cb can be defined before stream is created
@@ -35,5 +37,17 @@ public interface ILightningClient {
             ILightningCallback<Data.SendResponse> cb);
     // send single payment
     void sendPayment(Data.SendRequest r, ILightningCallback<Data.SendResponse> cb);
+    void listPayments(Data.ListPaymentsRequest r, ILightningCallback<Data.ListPaymentsResponse> cb);
+    void deleteAllPayments(Data.DeleteAllPaymentsRequest r, ILightningCallback<Data.DeleteAllPaymentsResponse> cb);
+//    void registerBlockEpochNtfnStream(Data.BlockEpoch r, ILightningCallback<Data.BlockEpoch> cb);
+    void subscribeInvoicesStream(Data.InvoiceSubscription r, ILightningCallback<Data.Invoice> cb);
+    void subscribeChannelEventsStream(Data.ChannelEventSubscription r, ILightningCallback<Data.ChannelEventUpdate> cb);
+    void getNodeInfo(Data.NodeInfoRequest r, ILightningCallback<Data.NodeInfo> cb);
+
+    void queryRoutes(Data.QueryRoutesRequest r, ILightningCallback<Data.QueryRoutesResponse> cb);
+    ILightningStream<Data.SendToRouteRequest, Data.SendResponse> sendToRouteStream();
+    ILightningStream<Data.SendToRouteRequest, Data.SendResponse> sendToRouteStream(
+            ILightningCallback<Data.SendResponse> cb);
+    void sendToRoute(Data.SendToRouteRequest r, ILightningCallback<Data.SendResponse> cb);
 
 }

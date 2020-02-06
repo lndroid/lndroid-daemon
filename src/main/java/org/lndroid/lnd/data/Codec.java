@@ -3,35 +3,37 @@ package org.lndroid.lnd.data;
 import com.google.protobuf.ByteString;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import lnrpc.Rpc;
 
 public final class Codec {
-    public static lnrpc.Rpc.UnlockWalletRequest encode (Data.UnlockWalletRequest r){
+    public static lnrpc.Rpc.UnlockWalletRequest encode(Data.UnlockWalletRequest r) {
         lnrpc.Rpc.UnlockWalletRequest.Builder b = lnrpc.Rpc.UnlockWalletRequest.newBuilder();
         if (r.walletPassword != null)
-            b.setWalletPassword(ByteString.copyFromUtf8(r.walletPassword));
+            b.setWalletPassword(ByteString.copyFrom(r.walletPassword));
         b.setRecoveryWindow(0);
 
         return b.build();
     }
-    public static Data.UnlockWalletResponse decode (lnrpc.Rpc.UnlockWalletResponse resp) {
+
+    public static Data.UnlockWalletResponse decode(lnrpc.Rpc.UnlockWalletResponse resp) {
         assert resp != null;
         return new Data.UnlockWalletResponse();
     }
 
-    public static lnrpc.Rpc.GenSeedRequest encode (Data.GenSeedRequest r) {
+    public static lnrpc.Rpc.GenSeedRequest encode(Data.GenSeedRequest r) {
         lnrpc.Rpc.GenSeedRequest.Builder b = lnrpc.Rpc.GenSeedRequest.newBuilder();
         if (r.aezeedPassphrase != null)
-            b.setAezeedPassphrase(ByteString.copyFromUtf8(r.aezeedPassphrase));
+            b.setAezeedPassphrase(ByteString.copyFrom(r.aezeedPassphrase));
         if (r.seedEntropy != null)
             b.setSeedEntropy(ByteString.copyFrom(r.seedEntropy));
         return b.build();
     }
 
-    public static Data.GenSeedResponse decode (lnrpc.Rpc.GenSeedResponse resp) {
+    public static Data.GenSeedResponse decode(lnrpc.Rpc.GenSeedResponse resp) {
         assert resp != null;
 
         // copy results
@@ -44,13 +46,13 @@ public final class Codec {
         return r;
     }
 
-    public static lnrpc.Rpc.InitWalletRequest encode (Data.InitWalletRequest r) {
+    public static lnrpc.Rpc.InitWalletRequest encode(Data.InitWalletRequest r) {
 
         lnrpc.Rpc.InitWalletRequest.Builder b = lnrpc.Rpc.InitWalletRequest.newBuilder();
         if (r.walletPassword != null)
-            b.setWalletPassword(ByteString.copyFromUtf8(r.walletPassword));
+            b.setWalletPassword(ByteString.copyFrom(r.walletPassword));
         if (r.aezeedPassphrase != null)
-            b.setAezeedPassphrase(ByteString.copyFromUtf8(r.aezeedPassphrase));
+            b.setAezeedPassphrase(ByteString.copyFrom(r.aezeedPassphrase));
         if (r.cipherSeedMnemonic != null) {
             for (String m : r.cipherSeedMnemonic)
                 b.addCipherSeedMnemonic(m);
@@ -59,17 +61,17 @@ public final class Codec {
         return b.build();
     }
 
-    public static Data.InitWalletResponse decode (lnrpc.Rpc.InitWalletResponse resp) {
+    public static Data.InitWalletResponse decode(lnrpc.Rpc.InitWalletResponse resp) {
         return new Data.InitWalletResponse();
     }
 
-    public static lnrpc.Rpc.NewAddressRequest encode (Data.NewAddressRequest r) {
+    public static lnrpc.Rpc.NewAddressRequest encode(Data.NewAddressRequest r) {
         lnrpc.Rpc.NewAddressRequest.Builder b = lnrpc.Rpc.NewAddressRequest.newBuilder();
         b.setType(Rpc.AddressType.forNumber(r.type));
         return b.build();
     }
 
-    public static Data.NewAddressResponse decode (lnrpc.Rpc.NewAddressResponse resp) {
+    public static Data.NewAddressResponse decode(lnrpc.Rpc.NewAddressResponse resp) {
         assert resp != null;
 
         // copy results
@@ -78,11 +80,11 @@ public final class Codec {
         return r;
     }
 
-    public static lnrpc.Rpc.GetInfoRequest encode (Data.GetInfoRequest r) {
+    public static lnrpc.Rpc.GetInfoRequest encode(Data.GetInfoRequest r) {
         return lnrpc.Rpc.GetInfoRequest.newBuilder().build();
     }
 
-    public static Data.GetInfoResponse decode (lnrpc.Rpc.GetInfoResponse resp) {
+    public static Data.GetInfoResponse decode(lnrpc.Rpc.GetInfoResponse resp) {
         assert resp != null;
 
         // copy results
@@ -114,11 +116,11 @@ public final class Codec {
         return r;
     }
 
-    public static lnrpc.Rpc.WalletBalanceRequest encode (Data.WalletBalanceRequest r) {
+    public static lnrpc.Rpc.WalletBalanceRequest encode(Data.WalletBalanceRequest r) {
         return lnrpc.Rpc.WalletBalanceRequest.newBuilder().build();
     }
 
-    public static lnrpc.Rpc.WalletBalanceResponse encode (Data.WalletBalanceResponse r) {
+    public static lnrpc.Rpc.WalletBalanceResponse encode(Data.WalletBalanceResponse r) {
         lnrpc.Rpc.WalletBalanceResponse.Builder b = lnrpc.Rpc.WalletBalanceResponse.newBuilder();
         b.setTotalBalance(r.totalBalance);
         b.setConfirmedBalance(r.confirmedBalance);
@@ -126,7 +128,7 @@ public final class Codec {
         return b.build();
     }
 
-    public static Data.WalletBalanceResponse decode (lnrpc.Rpc.WalletBalanceResponse resp) {
+    public static Data.WalletBalanceResponse decode(lnrpc.Rpc.WalletBalanceResponse resp) {
         assert resp != null;
 
         // copy results
@@ -138,18 +140,18 @@ public final class Codec {
         return r;
     }
 
-    public static lnrpc.Rpc.ChannelBalanceRequest encode (Data.ChannelBalanceRequest r) {
+    public static lnrpc.Rpc.ChannelBalanceRequest encode(Data.ChannelBalanceRequest r) {
         return lnrpc.Rpc.ChannelBalanceRequest.newBuilder().build();
     }
 
-    public static lnrpc.Rpc.ChannelBalanceResponse encode (Data.ChannelBalanceResponse r) {
+    public static lnrpc.Rpc.ChannelBalanceResponse encode(Data.ChannelBalanceResponse r) {
         lnrpc.Rpc.ChannelBalanceResponse.Builder b = lnrpc.Rpc.ChannelBalanceResponse.newBuilder();
         b.setBalance(r.balance);
         b.setPendingOpenBalance(r.pendingOpenBalance);
         return b.build();
     }
 
-    public static Data.ChannelBalanceResponse decode (lnrpc.Rpc.ChannelBalanceResponse resp) {
+    public static Data.ChannelBalanceResponse decode(lnrpc.Rpc.ChannelBalanceResponse resp) {
         assert resp != null;
 
         Data.ChannelBalanceResponse r = new Data.ChannelBalanceResponse();
@@ -159,7 +161,7 @@ public final class Codec {
         return r;
     }
 
-    public static lnrpc.Rpc.ConnectPeerRequest encode (Data.ConnectPeerRequest r) {
+    public static lnrpc.Rpc.ConnectPeerRequest encode(Data.ConnectPeerRequest r) {
         lnrpc.Rpc.ConnectPeerRequest.Builder b = lnrpc.Rpc.ConnectPeerRequest.newBuilder();
         if (r.addr != null) {
             lnrpc.Rpc.LightningAddress.Builder ba = lnrpc.Rpc.LightningAddress.newBuilder();
@@ -173,11 +175,11 @@ public final class Codec {
         return b.build();
     }
 
-    public static Data.ConnectPeerResponse decode (lnrpc.Rpc.ConnectPeerResponse resp) {
+    public static Data.ConnectPeerResponse decode(lnrpc.Rpc.ConnectPeerResponse resp) {
         return new Data.ConnectPeerResponse();
     }
 
-    public static lnrpc.Rpc.ListChannelsRequest encode (Data.ListChannelsRequest r) {
+    public static lnrpc.Rpc.ListChannelsRequest encode(Data.ListChannelsRequest r) {
         lnrpc.Rpc.ListChannelsRequest.Builder b = lnrpc.Rpc.ListChannelsRequest.newBuilder();
         b.setActiveOnly(r.activeOnly);
         b.setInactiveOnly(r.inactiveOnly);
@@ -186,53 +188,65 @@ public final class Codec {
         return b.build();
     }
 
-    public static Data.ListChannelsResponse decode (lnrpc.Rpc.ListChannelsResponse resp) {
+    public static Data.HTLC decode(lnrpc.Rpc.HTLC resp) {
         assert resp != null;
 
-        Data.ListChannelsResponse r = new Data.ListChannelsResponse();
-        r.channels = new ArrayList<>();
-        for (lnrpc.Rpc.Channel pbc : resp.getChannelsList()) {
-            Data.Channel c = new Data.Channel();
-            c.active = pbc.getActive();
-            c.remotePubkey = pbc.getRemotePubkey();
-            c.channelPoint = pbc.getChannelPoint();
-            c.chanId = pbc.getChanId();
-            c.capacity = pbc.getCapacity();
-            c.localBalance = pbc.getLocalBalance();
-            c.remoteBalance = pbc.getRemoteBalance();
-            c.commitFee = pbc.getCommitFee();
-            c.commitWeight = pbc.getCommitWeight();
-            c.feePerKw = pbc.getFeePerKw();
-            c.unsettledBalance = pbc.getUnsettledBalance();
-            c.totalSatoshisSent = pbc.getTotalSatoshisSent();
-            c.totalSatoshisReceived = pbc.getTotalSatoshisReceived();
-            c.numUpdates = pbc.getNumUpdates();
-            c.pendingHtlcs = new ArrayList<>();
-            for (lnrpc.Rpc.HTLC pbHtlc : pbc.getPendingHtlcsList()) {
-                Data.HTLC htlc = new Data.HTLC();
-                htlc.amount = pbHtlc.getAmount();
-                htlc.expirationHeight = pbHtlc.getExpirationHeight();
-                htlc.hashLock = pbHtlc.getHashLock().toByteArray();
-                htlc.incoming = pbHtlc.getIncoming();
-                c.pendingHtlcs.add(htlc);
-            }
-            c.csvDelay = pbc.getCsvDelay();
-            c.isPrivate = pbc.getPrivate();
-            c.initiator = pbc.getInitiator();
-            c.chanStatusFlags = pbc.getChanStatusFlags();
-            c.localChanReserveSat = pbc.getLocalChanReserveSat();
-            c.remoteChanReserveSat = pbc.getRemoteChanReserveSat();
-            c.staticRemoteKey = pbc.getStaticRemoteKey();
-            c.lifetime = pbc.getLifetime();
-            c.uptime = pbc.getUptime();
-
-            r.channels.add(c);
-        }
+        Data.HTLC r = new Data.HTLC();
+        r.amount = resp.getAmount();
+        r.expirationHeight = resp.getExpirationHeight();
+        r.hashLock = resp.getHashLock().toByteArray();
+        r.incoming = resp.getIncoming();
 
         return r;
     }
 
-    public static lnrpc.Rpc.HopHint encode (Data.HopHint r) {
+    public static Data.Channel decode(lnrpc.Rpc.Channel resp) {
+        assert resp != null;
+
+        Data.Channel r = new Data.Channel();
+
+        r.active = resp.getActive();
+        r.remotePubkey = resp.getRemotePubkey();
+        r.channelPoint = resp.getChannelPoint();
+        r.chanId = resp.getChanId();
+        r.capacity = resp.getCapacity();
+        r.localBalance = resp.getLocalBalance();
+        r.remoteBalance = resp.getRemoteBalance();
+        r.commitFee = resp.getCommitFee();
+        r.commitWeight = resp.getCommitWeight();
+        r.feePerKw = resp.getFeePerKw();
+        r.unsettledBalance = resp.getUnsettledBalance();
+        r.totalSatoshisSent = resp.getTotalSatoshisSent();
+        r.totalSatoshisReceived = resp.getTotalSatoshisReceived();
+        r.numUpdates = resp.getNumUpdates();
+        r.pendingHtlcs = new ArrayList<>();
+        for (lnrpc.Rpc.HTLC pbHtlc : resp.getPendingHtlcsList())
+            r.pendingHtlcs.add(decode(pbHtlc));
+        r.csvDelay = resp.getCsvDelay();
+        r.isPrivate = resp.getPrivate();
+        r.initiator = resp.getInitiator();
+        r.chanStatusFlags = resp.getChanStatusFlags();
+        r.localChanReserveSat = resp.getLocalChanReserveSat();
+        r.remoteChanReserveSat = resp.getRemoteChanReserveSat();
+        r.staticRemoteKey = resp.getStaticRemoteKey();
+        r.lifetime = resp.getLifetime();
+        r.uptime = resp.getUptime();
+
+        return r;
+    }
+
+    public static Data.ListChannelsResponse decode(lnrpc.Rpc.ListChannelsResponse resp) {
+        assert resp != null;
+
+        Data.ListChannelsResponse r = new Data.ListChannelsResponse();
+        r.channels = new ArrayList<>();
+        for (lnrpc.Rpc.Channel pbc : resp.getChannelsList())
+            r.channels.add(decode(pbc));
+
+        return r;
+    }
+
+    public static lnrpc.Rpc.HopHint encode(Data.HopHint r) {
         lnrpc.Rpc.HopHint.Builder b = lnrpc.Rpc.HopHint.newBuilder();
         b.setNodeId(r.nodeId);
         b.setChanId(r.chanId);
@@ -242,15 +256,15 @@ public final class Codec {
         return b.build();
     }
 
-    public static lnrpc.Rpc.RouteHint encode (Data.RouteHint r) {
+    public static lnrpc.Rpc.RouteHint encode(Data.RouteHint r) {
         lnrpc.Rpc.RouteHint.Builder b = lnrpc.Rpc.RouteHint.newBuilder();
-        for (Data.HopHint hh: r.hopHints) {
+        for (Data.HopHint hh : r.hopHints) {
             b.addHopHints(encode(hh));
         }
         return b.build();
     }
 
-    public static lnrpc.Rpc.InvoiceHTLC encode (Data.InvoiceHTLC r) {
+    public static lnrpc.Rpc.InvoiceHTLC encode(Data.InvoiceHTLC r) {
         lnrpc.Rpc.InvoiceHTLC.Builder b = lnrpc.Rpc.InvoiceHTLC.newBuilder();
         b.setChanId(r.chanId);
         b.setHtlcIndex(r.htlcIndex);
@@ -263,7 +277,7 @@ public final class Codec {
         return b.build();
     }
 
-    public static lnrpc.Rpc.Invoice encode (Data.Invoice r) {
+    public static lnrpc.Rpc.Invoice encode(Data.Invoice r) {
         lnrpc.Rpc.Invoice.Builder b = lnrpc.Rpc.Invoice.newBuilder();
         if (r.memo != null)
             b.setMemo(r.memo);
@@ -284,7 +298,7 @@ public final class Codec {
         b.setCltvExpiry(r.cltvExpiry);
         if (r.routeHints != null) {
             for (Data.RouteHint rh : r.routeHints) {
-                b.addRouteHints(encode (rh));
+                b.addRouteHints(encode(rh));
             }
         }
         b.setPrivate(r.isPrivate);
@@ -299,10 +313,15 @@ public final class Codec {
             }
         }
 
+        if (r.features != null) {
+            for (Integer i : r.features)
+                b.putFeatures(i, lnrpc.Rpc.Feature.newBuilder().build());
+        }
+
         return b.build();
     }
 
-    public static Data.AddInvoiceResponse decode (lnrpc.Rpc.AddInvoiceResponse resp) {
+    public static Data.AddInvoiceResponse decode(lnrpc.Rpc.AddInvoiceResponse resp) {
         assert resp != null;
 
         Data.AddInvoiceResponse r = new Data.AddInvoiceResponse();
@@ -313,11 +332,11 @@ public final class Codec {
         return r;
     }
 
-    public static lnrpc.Rpc.GetTransactionsRequest encode (Data.GetTransactionsRequest r) {
+    public static lnrpc.Rpc.GetTransactionsRequest encode(Data.GetTransactionsRequest r) {
         return lnrpc.Rpc.GetTransactionsRequest.newBuilder().build();
     }
 
-    public static Data.Transaction decode (lnrpc.Rpc.Transaction resp) {
+    public static Data.Transaction decode(lnrpc.Rpc.Transaction resp) {
         assert resp != null;
 
         Data.Transaction r = new Data.Transaction();
@@ -329,24 +348,24 @@ public final class Codec {
         r.timeStamp = resp.getTimeStamp();
         r.totalFees = resp.getTotalFees();
         r.destAddresses = new ArrayList<>();
-        for(String da: resp.getDestAddressesList())
+        for (String da : resp.getDestAddressesList())
             r.destAddresses.add(da);
         r.rawTxHex = resp.getRawTxHex();
         return r;
     }
 
-    public static Data.TransactionDetails decode (lnrpc.Rpc.TransactionDetails resp) {
+    public static Data.TransactionDetails decode(lnrpc.Rpc.TransactionDetails resp) {
         assert resp != null;
 
         Data.TransactionDetails r = new Data.TransactionDetails();
         r.transactions = new ArrayList<>();
-        for(lnrpc.Rpc.Transaction t: resp.getTransactionsList())
+        for (lnrpc.Rpc.Transaction t : resp.getTransactionsList())
             r.transactions.add(decode(t));
 
         return r;
     }
 
-    public static lnrpc.Rpc.OpenChannelRequest encode (Data.OpenChannelRequest r) {
+    public static lnrpc.Rpc.OpenChannelRequest encode(Data.OpenChannelRequest r) {
         lnrpc.Rpc.OpenChannelRequest.Builder b = lnrpc.Rpc.OpenChannelRequest.newBuilder();
 
         if (r.nodePubkey != null)
@@ -365,7 +384,8 @@ public final class Codec {
 
         return b.build();
     }
-    public static lnrpc.Rpc.ChannelPoint encode (Data.ChannelPoint r) {
+
+    public static lnrpc.Rpc.ChannelPoint encode(Data.ChannelPoint r) {
         lnrpc.Rpc.ChannelPoint.Builder b = lnrpc.Rpc.ChannelPoint.newBuilder();
 
         if (r.fundingTxidBytes != null)
@@ -375,7 +395,8 @@ public final class Codec {
         b.setOutputIndex(r.outputIndex);
         return b.build();
     }
-    public static Data.ChannelPoint decode (lnrpc.Rpc.ChannelPoint resp) {
+
+    public static Data.ChannelPoint decode(lnrpc.Rpc.ChannelPoint resp) {
         assert resp != null;
 
         Data.ChannelPoint r = new Data.ChannelPoint();
@@ -384,7 +405,8 @@ public final class Codec {
         r.outputIndex = resp.getOutputIndex();
         return r;
     }
-    public static Data.PendingUpdate decode (lnrpc.Rpc.PendingUpdate resp) {
+
+    public static Data.PendingUpdate decode(lnrpc.Rpc.PendingUpdate resp) {
         assert resp != null;
 
         Data.PendingUpdate r = new Data.PendingUpdate();
@@ -392,14 +414,16 @@ public final class Codec {
         r.outputIndex = resp.getOutputIndex();
         return r;
     }
-    public static Data.ChannelOpenUpdate decode (lnrpc.Rpc.ChannelOpenUpdate resp) {
+
+    public static Data.ChannelOpenUpdate decode(lnrpc.Rpc.ChannelOpenUpdate resp) {
         assert resp != null;
 
         Data.ChannelOpenUpdate r = new Data.ChannelOpenUpdate();
         r.channelPoint = decode(resp.getChannelPoint());
         return r;
     }
-    public static Data.OpenStatusUpdate decode (lnrpc.Rpc.OpenStatusUpdate resp) {
+
+    public static Data.OpenStatusUpdate decode(lnrpc.Rpc.OpenStatusUpdate resp) {
         assert resp != null;
 
         Data.OpenStatusUpdate r = new Data.OpenStatusUpdate();
@@ -408,7 +432,7 @@ public final class Codec {
         return r;
     }
 
-    public static lnrpc.Rpc.CloseChannelRequest encode (Data.CloseChannelRequest r) {
+    public static lnrpc.Rpc.CloseChannelRequest encode(Data.CloseChannelRequest r) {
         lnrpc.Rpc.CloseChannelRequest.Builder b = lnrpc.Rpc.CloseChannelRequest.newBuilder();
         if (r.channelPoint != null) {
             b.setChannelPoint(encode(r.channelPoint));
@@ -419,7 +443,8 @@ public final class Codec {
 
         return b.build();
     }
-    public static Data.ChannelCloseUpdate decode (lnrpc.Rpc.ChannelCloseUpdate resp) {
+
+    public static Data.ChannelCloseUpdate decode(lnrpc.Rpc.ChannelCloseUpdate resp) {
         assert resp != null;
 
         Data.ChannelCloseUpdate r = new Data.ChannelCloseUpdate();
@@ -427,7 +452,8 @@ public final class Codec {
         r.success = resp.getSuccess();
         return r;
     }
-    public static Data.CloseStatusUpdate decode (lnrpc.Rpc.CloseStatusUpdate resp) {
+
+    public static Data.CloseStatusUpdate decode(lnrpc.Rpc.CloseStatusUpdate resp) {
         assert resp != null;
 
         Data.CloseStatusUpdate r = new Data.CloseStatusUpdate();
@@ -437,18 +463,19 @@ public final class Codec {
     }
 
 
-    public static lnrpc.Rpc.EstimateFeeRequest encode (Data.EstimateFeeRequest r) {
+    public static lnrpc.Rpc.EstimateFeeRequest encode(Data.EstimateFeeRequest r) {
         lnrpc.Rpc.EstimateFeeRequest.Builder b = lnrpc.Rpc.EstimateFeeRequest.newBuilder();
 
         if (r.addrToAmount != null) {
-            for(Map.Entry<String,Long> e: r.addrToAmount.entrySet())
+            for (Map.Entry<String, Long> e : r.addrToAmount.entrySet())
                 b.getAddrToAmountMap().put(e.getKey(), e.getValue());
         }
         b.setTargetConf(r.targetConf);
 
         return b.build();
     }
-    public static Data.EstimateFeeResponse decode (lnrpc.Rpc.EstimateFeeResponse resp) {
+
+    public static Data.EstimateFeeResponse decode(lnrpc.Rpc.EstimateFeeResponse resp) {
         assert resp != null;
 
         Data.EstimateFeeResponse r = new Data.EstimateFeeResponse();
@@ -457,7 +484,7 @@ public final class Codec {
         return r;
     }
 
-    public static lnrpc.Rpc.SendCoinsRequest encode (Data.SendCoinsRequest r) {
+    public static lnrpc.Rpc.SendCoinsRequest encode(Data.SendCoinsRequest r) {
         lnrpc.Rpc.SendCoinsRequest.Builder b = lnrpc.Rpc.SendCoinsRequest.newBuilder();
 
         if (r.addr != null)
@@ -469,7 +496,8 @@ public final class Codec {
 
         return b.build();
     }
-    public static Data.SendCoinsResponse decode (lnrpc.Rpc.SendCoinsResponse resp) {
+
+    public static Data.SendCoinsResponse decode(lnrpc.Rpc.SendCoinsResponse resp) {
         assert resp != null;
 
         Data.SendCoinsResponse r = new Data.SendCoinsResponse();
@@ -479,21 +507,19 @@ public final class Codec {
 
     public static lnrpc.Rpc.FeeLimit encode(Data.FeeLimit r) {
         lnrpc.Rpc.FeeLimit.Builder b = lnrpc.Rpc.FeeLimit.newBuilder();
-        b.setFixed(r.fixed);
+        b.setFixedMsat(r.fixedMsat);
+        b.setFixed(r.fixedMsat / 1000);
         b.setPercent(r.percent);
         return b.build();
     }
+
     public static lnrpc.Rpc.SendRequest encode(Data.SendRequest r) {
         lnrpc.Rpc.SendRequest.Builder b = lnrpc.Rpc.SendRequest.newBuilder();
         if (r.dest != null)
             b.setDest(ByteString.copyFrom(r.dest));
-        if (r.destString != null)
-            b.setDestString(r.destString);
-        b.setAmt(r.amt);
+        b.setAmtMsat(r.amtMsat);
         if (r.paymentHash != null)
             b.setPaymentHash(ByteString.copyFrom(r.paymentHash));
-        if (r.paymentHashString != null)
-            b.setPaymentHashString(r.paymentHashString);
         if (r.paymentRequest != null)
             b.setPaymentRequest(r.paymentRequest);
         b.setFinalCltvDelta(r.finalCltvDelta);
@@ -502,17 +528,30 @@ public final class Codec {
         b.setOutgoingChanId(r.outgoingChanId);
         b.setCltvLimit(r.cltvLimit);
         if (r.destTlv != null) {
-            for(Map.Entry<Long, byte[]> e: r.destTlv.entrySet()) {
+            for (Map.Entry<Long, byte[]> e : r.destTlv.entrySet()) {
                 if (e.getValue() != null)
-                    b.getDestTlvMap().put(e.getKey(), ByteString.copyFrom(e.getValue()));
+                    b.putDestCustomRecords(e.getKey(), ByteString.copyFrom(e.getValue()));
                 else
-                    b.getDestTlvMap().put(e.getKey(), null); // FIXME god knows if it works
+                    b.putDestCustomRecords(e.getKey(), null); // FIXME god knows if it works
             }
+        }
+
+        if (r.features != null) {
+            for (Integer i : r.features)
+                b.addDestFeaturesValue(i);
         }
 
         return b.build();
     }
-    public static Data.MPPRecord decode (lnrpc.Rpc.MPPRecord resp) {
+
+    public static lnrpc.Rpc.MPPRecord encode(Data.MPPRecord r) {
+        lnrpc.Rpc.MPPRecord.Builder b = lnrpc.Rpc.MPPRecord.newBuilder();
+        b.setPaymentAddr(ByteString.copyFrom(r.paymentAddr));
+        b.setTotalAmtMsat(r.totalAmtMsat);
+        return b.build();
+    }
+
+    public static Data.MPPRecord decode(lnrpc.Rpc.MPPRecord resp) {
         assert resp != null;
 
         Data.MPPRecord r = new Data.MPPRecord();
@@ -520,7 +559,35 @@ public final class Codec {
         r.totalAmtMsat = resp.getTotalAmtMsat();
         return r;
     }
-    public static Data.Hop decode (lnrpc.Rpc.Hop resp) {
+
+    public static lnrpc.Rpc.Hop encode(Data.Hop r) {
+        lnrpc.Rpc.Hop.Builder b = lnrpc.Rpc.Hop.newBuilder();
+        b.setChanId(r.chanId);
+        b.setChanCapacity(r.chanCapacity);
+        b.setExpiry(r.expiry);
+        b.setAmtToForwardMsat(r.amtToForwardMsat);
+        b.setAmtToForward(r.amtToForwardMsat / 1000);
+        b.setFeeMsat(r.feeMsat);
+        b.setFee(r.feeMsat / 1000);
+        if (r.pubKey != null)
+            b.setPubKey(r.pubKey);
+        b.setTlvPayload(r.tlvPayload || r.mppRecord != null || r.tlv != null);
+        if (r.mppRecord != null)
+            b.setMppRecord(encode(r.mppRecord));
+
+        if (r.tlv != null) {
+            for (Map.Entry<Long, byte[]> e : r.tlv.entrySet()) {
+                if (e.getValue() != null)
+                    b.putCustomRecords(e.getKey(), ByteString.copyFrom(e.getValue()));
+                else
+                    b.putCustomRecords(e.getKey(), null); // FIXME god knows if it works
+            }
+        }
+
+        return b.build();
+    }
+
+    public static Data.Hop decode(lnrpc.Rpc.Hop resp) {
         assert resp != null;
 
         Data.Hop r = new Data.Hop();
@@ -531,22 +598,47 @@ public final class Codec {
         r.feeMsat = resp.getFeeMsat();
         r.pubKey = resp.getPubKey();
         r.tlvPayload = resp.getTlvPayload();
-        r.mppRecord = decode(resp.getMppRecord());
+        if (resp.hasMppRecord())
+            r.mppRecord = decode(resp.getMppRecord());
+
+        if (resp.getCustomRecordsCount() > 0) {
+            r.tlv = new HashMap<>();
+            for (Map.Entry<Long, ByteString> e : resp.getCustomRecordsMap().entrySet()) {
+                r.tlv.put(e.getKey(), e.getValue().toByteArray());
+            }
+        }
         return r;
     }
-    public static Data.Route decode (lnrpc.Rpc.Route resp) {
+
+    public static lnrpc.Rpc.Route encode(Data.Route r) {
+        lnrpc.Rpc.Route.Builder b = lnrpc.Rpc.Route.newBuilder();
+        b.setTotalAmtMsat(r.totalAmtMsat);
+        b.setTotalAmt(r.totalAmtMsat / 1000);
+        b.setTotalFeesMsat(r.totalFeesMsat);
+        b.setTotalFees(r.totalFeesMsat / 1000);
+        b.setTotalTimeLock(r.totalTimeLock);
+        if (r.hops != null) {
+            for (Data.Hop h : r.hops)
+                b.addHops(encode(h));
+        }
+
+        return b.build();
+    }
+
+    public static Data.Route decode(lnrpc.Rpc.Route resp) {
         assert resp != null;
 
         Data.Route r = new Data.Route();
         r.totalTimeLock = resp.getTotalTimeLock();
         r.hops = new ArrayList<>();
-        for(lnrpc.Rpc.Hop h: resp.getHopsList())
+        for (lnrpc.Rpc.Hop h : resp.getHopsList())
             r.hops.add(decode(h));
         r.totalFeesMsat = resp.getTotalFeesMsat();
         r.totalAmtMsat = resp.getTotalAmtMsat();
         return r;
     }
-    public static Data.SendResponse decode (lnrpc.Rpc.SendResponse resp) {
+
+    public static Data.SendResponse decode(lnrpc.Rpc.SendResponse resp) {
         assert resp != null;
 
         Data.SendResponse r = new Data.SendResponse();
@@ -559,14 +651,12 @@ public final class Codec {
 
     public static lnrpc.Rpc.PaymentHash encode(Data.PaymentHash r) {
         lnrpc.Rpc.PaymentHash.Builder b = lnrpc.Rpc.PaymentHash.newBuilder();
-        if (r.rHashStr != null)
-            b.setRHashStr(r.rHashStr);
         if (r.rHash != null)
             b.setRHash(ByteString.copyFrom(r.rHash));
         return b.build();
     }
 
-    public static Data.HopHint decode (lnrpc.Rpc.HopHint resp) {
+    public static Data.HopHint decode(lnrpc.Rpc.HopHint resp) {
         assert resp != null;
 
         Data.HopHint r = new Data.HopHint();
@@ -578,17 +668,17 @@ public final class Codec {
         return r;
     }
 
-    public static Data.RouteHint decode (lnrpc.Rpc.RouteHint resp) {
+    public static Data.RouteHint decode(lnrpc.Rpc.RouteHint resp) {
         assert resp != null;
 
         Data.RouteHint r = new Data.RouteHint();
         r.hopHints = new ArrayList<>();
-        for (lnrpc.Rpc.HopHint hh: resp.getHopHintsList())
+        for (lnrpc.Rpc.HopHint hh : resp.getHopHintsList())
             r.hopHints.add(decode(hh));
         return r;
     }
 
-    public static Data.InvoiceHTLC decode (lnrpc.Rpc.InvoiceHTLC resp) {
+    public static Data.InvoiceHTLC decode(lnrpc.Rpc.InvoiceHTLC resp) {
         assert resp != null;
 
         Data.InvoiceHTLC r = new Data.InvoiceHTLC();
@@ -600,9 +690,15 @@ public final class Codec {
         r.resolveTime = resp.getResolveTime();
         r.expiryHeight = resp.getExpiryHeight();
         r.state = resp.getState().getNumber();
+        if (resp.getCustomRecordsCount() > 0)
+            r.tlv = new HashMap<>();
+        for (Map.Entry<Long, ByteString> e : resp.getCustomRecordsMap().entrySet()) {
+            r.tlv.put(e.getKey(), e.getValue().toByteArray());
+        }
         return r;
     }
-    public static Data.Invoice decode (lnrpc.Rpc.Invoice resp) {
+
+    public static Data.Invoice decode(lnrpc.Rpc.Invoice resp) {
         assert resp != null;
 
         Data.Invoice r = new Data.Invoice();
@@ -626,10 +722,28 @@ public final class Codec {
         r.amtPaidSat = resp.getAmtPaidSat();
         r.amtPaidMsat = resp.getAmtPaidMsat();
         r.state = resp.getState().getNumber();
+        r.isKeysend = resp.getIsKeysend();
+
         r.htlcs = new ArrayList<>();
-        for (lnrpc.Rpc.InvoiceHTLC htlc: resp.getHtlcsList())
+        for (lnrpc.Rpc.InvoiceHTLC htlc : resp.getHtlcsList())
             r.htlcs.add(decode(htlc));
 
+        r.features = new ArrayList<>();
+        for (Map.Entry<Integer, lnrpc.Rpc.Feature> e : resp.getFeaturesMap().entrySet())
+            r.features.add(e.getKey());
+
+        return r;
+    }
+
+    public static lnrpc.Rpc.DeleteAllPaymentsRequest encode(Data.DeleteAllPaymentsRequest r) {
+        lnrpc.Rpc.DeleteAllPaymentsRequest.Builder b = lnrpc.Rpc.DeleteAllPaymentsRequest.newBuilder();
+        return b.build();
+    }
+
+    public static Data.DeleteAllPaymentsResponse decode(lnrpc.Rpc.DeleteAllPaymentsResponse resp) {
+        assert resp != null;
+
+        Data.DeleteAllPaymentsResponse r = new Data.DeleteAllPaymentsResponse();
         return r;
     }
 
@@ -638,15 +752,13 @@ public final class Codec {
         b.setIncludeIncomplete(r.includeIncomplete);
         return b.build();
     }
-    public static Data.Payment decode (lnrpc.Rpc.Payment resp) {
+
+    public static Data.Payment decode(lnrpc.Rpc.Payment resp) {
         assert resp != null;
 
         Data.Payment r = new Data.Payment();
         r.paymentHash = resp.getPaymentHash();
-        r.creationDate = resp.getCreationDate();
-        r.path = new ArrayList<>();
-        for (String p: resp.getPathList())
-            r.path.add(p);
+        r.creationTime = resp.getCreationTimeNs() / 1000;
         r.paymentPreimage = resp.getPaymentPreimage();
         r.valueSat = resp.getValueSat();
         r.valueMsat = resp.getValueMsat();
@@ -657,11 +769,12 @@ public final class Codec {
 
         return r;
     }
-    public static Data.ListPaymentsResponse decode (lnrpc.Rpc.ListPaymentsResponse resp) {
+
+    public static Data.ListPaymentsResponse decode(lnrpc.Rpc.ListPaymentsResponse resp) {
         assert resp != null;
         Data.ListPaymentsResponse r = new Data.ListPaymentsResponse();
         r.payments = new ArrayList<>();
-        for(lnrpc.Rpc.Payment p: resp.getPaymentsList())
+        for (lnrpc.Rpc.Payment p : resp.getPaymentsList())
             r.payments.add(decode(p));
 
         return r;
@@ -673,7 +786,8 @@ public final class Codec {
             b.setPayReq(r.payReq);
         return b.build();
     }
-    public static Data.PayReq decode (lnrpc.Rpc.PayReq resp) {
+
+    public static Data.PayReq decode(lnrpc.Rpc.PayReq resp) {
         assert resp != null;
         Data.PayReq r = new Data.PayReq();
         r.destination = resp.getDestination();
@@ -685,10 +799,206 @@ public final class Codec {
         r.descriptionHash = resp.getDescriptionHash();
         r.fallbackAddr = resp.getFallbackAddr();
         r.cltvExpiry = resp.getCltvExpiry();
+        r.paymentAddr = resp.getPaymentAddr().toByteArray();
         r.routeHints = new ArrayList<>();
-        for(lnrpc.Rpc.RouteHint rh: resp.getRouteHintsList())
+        for (lnrpc.Rpc.RouteHint rh : resp.getRouteHintsList())
             r.routeHints.add(decode(rh));
+
+        r.features = new ArrayList<>();
+        for (Map.Entry<Integer, lnrpc.Rpc.Feature> e : resp.getFeaturesMap().entrySet())
+            r.features.add(e.getKey());
 
         return r;
     }
+
+    public static chainrpc.Chainnotifier.BlockEpoch encode(Data.BlockEpoch r) {
+        chainrpc.Chainnotifier.BlockEpoch.Builder b = chainrpc.Chainnotifier.BlockEpoch.newBuilder();
+        if (r.hash != null)
+            b.setHash(ByteString.copyFrom(r.hash));
+        b.setHeight(r.height);
+        return b.build();
+    }
+
+    public static Data.BlockEpoch decode(chainrpc.Chainnotifier.BlockEpoch resp) {
+        assert resp != null;
+        Data.BlockEpoch r = new Data.BlockEpoch();
+        r.hash = resp.getHash().toByteArray();
+        r.height = resp.getHeight();
+        return r;
+    }
+
+    public static lnrpc.Rpc.InvoiceSubscription encode(Data.InvoiceSubscription r) {
+        lnrpc.Rpc.InvoiceSubscription.Builder b = lnrpc.Rpc.InvoiceSubscription.newBuilder();
+        if (r.addIndex > 0)
+            b.setAddIndex(r.addIndex);
+        if (r.settleIndex > 0)
+            b.setSettleIndex(r.settleIndex);
+        return b.build();
+    }
+
+    public static lnrpc.Rpc.ChannelEventSubscription encode(Data.ChannelEventSubscription r) {
+        lnrpc.Rpc.ChannelEventSubscription.Builder b = lnrpc.Rpc.ChannelEventSubscription.newBuilder();
+        return b.build();
+    }
+
+    public static Data.ChannelCloseSummary decode(lnrpc.Rpc.ChannelCloseSummary resp) {
+        assert resp != null;
+        Data.ChannelCloseSummary r = new Data.ChannelCloseSummary();
+        r.channelPoint = resp.getChannelPoint();
+        r.chanId = resp.getChanId();
+        r.chainHash = resp.getChainHash();
+        r.closingTxHash = resp.getClosingTxHash();
+        r.remotePubkey = resp.getRemotePubkey();
+        r.capacity = resp.getCapacity();
+        r.closeHeight = resp.getCloseHeight();
+        r.settledBalance = resp.getSettledBalance();
+        r.timeLockedBalance = resp.getTimeLockedBalance();
+        r.closeType = resp.getCloseTypeValue();
+        return r;
+    }
+
+    public static Data.ChannelEventUpdate decode(lnrpc.Rpc.ChannelEventUpdate resp) {
+        assert resp != null;
+        Data.ChannelEventUpdate r = new Data.ChannelEventUpdate();
+        r.type = resp.getTypeValue();
+        switch (r.type) {
+            case Data.CHANNEL_EVENT_OPEN_CHANNEL:
+                r.openChannel = decode(resp.getOpenChannel());
+                break;
+            case Data.CHANNEL_EVENT_CLOSED_CHANNEL:
+                r.closedChannel = decode(resp.getClosedChannel());
+                break;
+            case Data.CHANNEL_EVENT_ACTIVE_CHANNEL:
+                r.activeChannel = decode(resp.getActiveChannel());
+                break;
+            case Data.CHANNEL_EVENT_INACTIVE_CHANNEL:
+                r.inactiveChannel = decode(resp.getInactiveChannel());
+                break;
+        }
+        return r;
+    }
+
+    public static lnrpc.Rpc.NodeInfoRequest encode(Data.NodeInfoRequest r) {
+        lnrpc.Rpc.NodeInfoRequest.Builder b = lnrpc.Rpc.NodeInfoRequest.newBuilder();
+        b.setPubKey(r.pubKey);
+        b.setIncludeChannels(r.includeChannels);
+        return b.build();
+    }
+
+    public static Data.LightningNode decode(lnrpc.Rpc.LightningNode resp) {
+        assert resp != null;
+        Data.LightningNode r = new Data.LightningNode();
+        r.alias = resp.getAlias();
+        r.color = resp.getColor();
+        r.lastUpdate = resp.getLastUpdate();
+        r.pubKey = resp.getPubKey();
+        r.features = new ArrayList<>();
+        r.features.addAll(resp.getFeaturesMap().keySet());
+        return r;
+    }
+
+    public static Data.RoutingPolicy decode(lnrpc.Rpc.RoutingPolicy resp) {
+        assert resp != null;
+        Data.RoutingPolicy r = new Data.RoutingPolicy();
+        r.disabled = resp.getDisabled();
+        r.feeBaseMsat = resp.getFeeBaseMsat();
+        r.feeRateMilliMsat = resp.getFeeRateMilliMsat();
+        r.lastUpdate = resp.getLastUpdate();
+        r.maxHtlcMsat = resp.getMaxHtlcMsat();
+        r.minHtlc = resp.getMinHtlc();
+        r.timeLockDelta = resp.getTimeLockDelta();
+        return r;
+    }
+
+    public static Data.ChannelEdge decode(lnrpc.Rpc.ChannelEdge resp) {
+        assert resp != null;
+        Data.ChannelEdge r = new Data.ChannelEdge();
+        r.capacity = resp.getCapacity();
+        r.channelId = resp.getChannelId();
+        r.chanPoint = resp.getChanPoint();
+        r.node1Policy = decode(resp.getNode1Policy());
+        r.node2Policy = decode(resp.getNode2Policy());
+        r.node1Pubkey = resp.getNode1Pub();
+        r.node2Pubkey = resp.getNode2Pub();
+        return r;
+    }
+
+    public static Data.NodeInfo decode(lnrpc.Rpc.NodeInfo resp) {
+        assert resp != null;
+        Data.NodeInfo r = new Data.NodeInfo();
+        r.numChannels = resp.getNumChannels();
+        r.totalCapacity = resp.getTotalCapacity();
+        r.node = decode(resp.getNode());
+
+        r.channels = new ArrayList<>();
+        for (lnrpc.Rpc.ChannelEdge ce : resp.getChannelsList()) {
+            r.channels.add(decode(ce));
+        }
+        return r;
+    }
+
+    public static lnrpc.Rpc.QueryRoutesRequest encode(Data.QueryRoutesRequest r) {
+        lnrpc.Rpc.QueryRoutesRequest.Builder b = lnrpc.Rpc.QueryRoutesRequest.newBuilder();
+        if (r.pubKey != null)
+            b.setPubKey(r.pubKey);
+        b.setAmtMsat(r.amtMsat);
+        b.setFinalCltvDelta(r.finalCltvDelta);
+        if (r.feeLimit != null) {
+            b.setFeeLimit(encode(r.feeLimit));
+        }
+        if (r.ignoredNodes != null) {
+            for (byte[] in : r.ignoredNodes)
+                b.addIgnoredNodes(ByteString.copyFrom(in));
+        }
+        if (r.sourcePubKey != null)
+            b.setSourcePubKey(r.sourcePubKey);
+        b.setUseMissionControl(r.useMissionControl);
+        // FIXME add later repeated NodePair ignored_pairs =10;
+        b.setCltvLimit(r.cltvLimit);
+        b.setOutgoingChanId(r.outgoingChanId);
+        if (r.lastHopPubkey != null)
+            b.setLastHopPubkey(ByteString.copyFrom(r.lastHopPubkey));
+
+        if (r.destCustomRecords != null) {
+            for (Map.Entry<Long, byte[]> e : r.destCustomRecords.entrySet()) {
+                if (e.getValue() != null)
+                    b.putDestCustomRecords(e.getKey(), ByteString.copyFrom(e.getValue()));
+                else
+                    b.putDestCustomRecords(e.getKey(), null); // FIXME god knows if it works
+            }
+        }
+
+        if (r.destFeatures != null) {
+            for (Integer i : r.destFeatures)
+                b.addDestFeaturesValue(i);
+        }
+
+        if (r.routeHints != null) {
+            for (Data.RouteHint rh : r.routeHints) {
+                b.addRouteHints(encode(rh));
+            }
+        }
+
+        return b.build();
+    }
+
+    public static Data.QueryRoutesResponse decode(lnrpc.Rpc.QueryRoutesResponse resp) {
+        assert resp != null;
+
+        Data.QueryRoutesResponse r = new Data.QueryRoutesResponse();
+        r.routes = new ArrayList<>();
+        for(lnrpc.Rpc.Route route: resp.getRoutesList())
+            r.routes.add(decode(route));
+        r.successProb = resp.getSuccessProb();
+        return r;
+    }
+
+    public static lnrpc.Rpc.SendToRouteRequest encode(Data.SendToRouteRequest r) {
+        lnrpc.Rpc.SendToRouteRequest.Builder b = lnrpc.Rpc.SendToRouteRequest.newBuilder();
+        b.setPaymentHash(ByteString.copyFrom(r.paymentHash));
+        b.setRoute(encode(r.route));
+        return b.build ();
+    }
+
+
 }

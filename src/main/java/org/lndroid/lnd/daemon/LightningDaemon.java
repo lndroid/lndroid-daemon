@@ -20,10 +20,16 @@ public final class LightningDaemon {
 
     public static class Init {
         public String dir;
+        public boolean noMacaroons;
         public boolean mainnet;
         public String debugLevel = "";
         public boolean autopilot;
+        public boolean acceptKeysend;
         public List<String> connectPeers;
+        public List<String> onlyPeers;
+        public String banDuration;
+        public String tlsCertPath;
+        public String tlsKeyPath;
     }
 
     private static final String TAG = "LightningDaemon";
@@ -31,6 +37,8 @@ public final class LightningDaemon {
     private static AtomicBoolean starting_ = new AtomicBoolean(false);
     private static AtomicBoolean started_ = new AtomicBoolean(false);
     private static AtomicBoolean unlocked_ = new AtomicBoolean(false);
+    private static AtomicBoolean unlockReady_ = new AtomicBoolean(false);
+    private static AtomicBoolean rpcReady_ = new AtomicBoolean(false);
 
     static class FutureCallback<Response>  extends FutureTask<Response> implements ILightningCallbackMT {
 
@@ -86,12 +94,28 @@ public final class LightningDaemon {
     }
 
     // thread-safe, executed only once per process
-    public static void start(Init init) throws LightningException {
+    public static void start(Init init,
+                             final ILightningCallbackMT unlockReadyCb,
+                             final ILightningCallbackMT rpcReadyCb) throws LightningException {
+
         if (!starting_.compareAndSet(false, true))
             return;
 
-        String cmd = "--lnddir=" + init.dir;
-        cmd += " --bitcoin.active --bitcoin.node=neutrino --nolisten --norest --no-macaroons";
+        String cmd = "--bitcoin.active --bitcoin.node=neutrino --nolisten --norest ";
+
+        if (init.dir != null)
+            cmd += " --lnddir=" + init.dir;
+
+        if (init.acceptKeysend)
+            cmd += " --accept-keysend";
+
+        if (init.noMacaroons)
+            cmd += " --no-macaroons";
+
+        if (init.tlsCertPath != null)
+            cmd += " --tlscertpath="+init.tlsCertPath;
+        if (init.tlsKeyPath != null)
+            cmd += " --tlskeypath="+init.tlsKeyPath;
 
         if (init.mainnet)
             cmd += " --bitcoin.mainnet";
@@ -106,9 +130,18 @@ public final class LightningDaemon {
         if (init.autopilot)
             cmd += " --autopilot.active";
 
+        if (init.banDuration != null)
+            cmd += " --neutrino.banduration="+init.banDuration;
+
         if (init.connectPeers != null) {
             for (String p: init.connectPeers) {
                 cmd += " --neutrino.addpeer="+p;
+            }
+        }
+
+        if (init.onlyPeers != null) {
+            for (String p: init.onlyPeers) {
+                cmd += " --neutrino.connect="+p;
             }
         }
 
@@ -116,35 +149,47 @@ public final class LightningDaemon {
 
         writeConf(init.dir);
 
-        // NOTE: start is the only sync method that calls the callback
-        // in the same thread, so we use a special trivial callback
-
-        class StartCallback implements lndmobile.Callback {
-
-            private Exception error = null;
-            private byte[] reply = null;
-
+        Lndmobile.start(cmd, new lndmobile.Callback() {
             @Override
             public void onError(Exception e) {
-                error = e;
+                Log.e(TAG, "unlock ready error " + e.getMessage()
+                        +" thread "+Thread.currentThread().getId());
+                try {
+                    throw e;
+                } catch (LightningException le) {
+                    unlockReadyCb.onError(le.errorCode(), le.errorMessage());
+                } catch (Exception ee) {
+                    unlockReadyCb.onError(-1, ee.getMessage());
+                }
             }
 
             @Override
             public void onResponse(byte[] bytes) {
-                reply = bytes;
+                unlockReady_.set(true);
+                unlockReadyCb.onResponse(null);
             }
-        }
+        }, new lndmobile.Callback() {
+            @Override
+            public void onError(Exception e) {
+                Log.e(TAG, "rpc ready error " + e.getMessage()
+                        +" thread "+Thread.currentThread().getId());
+                try {
+                    throw e;
+                } catch (LightningException le) {
+                    rpcReadyCb.onError(le.errorCode(), le.errorMessage());
+                } catch (Exception ee) {
+                    rpcReadyCb.onError(-1, ee.getMessage());
+                }
+            }
 
-        StartCallback cb = new StartCallback();
+            @Override
+            public void onResponse(byte[] bytes) {
+                rpcReady_.set(true);
+                rpcReadyCb.onResponse(null);
+            }
+        });
 
-        Lndmobile.start(cmd, cb);
-
-        if (cb.error != null) {
-            Log.e(TAG, "start error " + cb.error.getMessage());
-            throw new LightningException(-1, cb.error.getMessage());
-        }
-
-        Log.i(TAG, "started: " + new String(cb.reply));
+        Log.i(TAG, "start initiated");
         started_.set(true);
     }
 
@@ -154,6 +199,14 @@ public final class LightningDaemon {
 
     public static boolean isUnlocked() {
         return unlocked_.get();
+    }
+
+    public static boolean isUnlockReady() {
+        return unlockReady_.get();
+    }
+
+    public static boolean isRpcReady() {
+        return rpcReady_.get();
     }
 
     // noop at the moment
@@ -228,7 +281,7 @@ public final class LightningDaemon {
             final ILightningCallbackMT mtcb,
             CallImpl impl) {
 
-        Log.i(TAG, "calling " + label+" thread "+Thread.currentThread().getId());
+        Log.i(TAG, "calling " + label+" thread "+Thread.currentThread().getId()+" req "+req);
 
         impl.onCall(req.toByteArray(), new LndmobileCallback<ResponseType>(label, parser, mtcb));
     }
@@ -276,6 +329,11 @@ public final class LightningDaemon {
             public void onError(int code, String message) {
                 if (message.contains("wallet not found"))
                     mtcb.onError(1, message);
+                else if (message.contains("transport is closing")) {
+                    // FIXME remove when this is fixed
+                    unlocked_.set(true);
+                    mtcb.onResponse(new Data.UnlockWalletResponse());
+                }
                 else
                     mtcb.onError(-1, message);
             }
@@ -940,6 +998,8 @@ public final class LightningDaemon {
                 // yeah, I know, this is bullshit
                 if (r.getClass() == Data.SendRequest.class) {
                     stream_.send(Codec.encode((Data.SendRequest) r).toByteArray());
+                } else if (r.getClass() == Data.SendToRouteRequest.class) {
+                        stream_.send(Codec.encode((Data.SendToRouteRequest) r).toByteArray());
                 } else {
                     Log.e(TAG, "sending unknown class "+r);
                     throw new LightningException(-1, "Unknown request type");
@@ -1127,11 +1187,50 @@ public final class LightningDaemon {
     }
 
     // ======================
+    // DeleteAllPayments
+    public static void deleteAllPaymentsMT(Data.DeleteAllPaymentsRequest r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.DeleteAllPaymentsRequest req = Codec.encode(r);
+
+        callMT("deleteAllPayments", req, lnrpc.Rpc.DeleteAllPaymentsResponse.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.DeleteAllPaymentsResponse)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.deleteAllPayments(data, cb);
+            }
+        });
+    }
+    public static Future<Data.DeleteAllPaymentsResponse> deleteAllPaymentsFuture(Data.DeleteAllPaymentsRequest r) {
+        return callFuture(r, new FutureCallImpl<Data.DeleteAllPaymentsRequest, Data.DeleteAllPaymentsResponse>() {
+            @Override
+            public void onCall(Data.DeleteAllPaymentsRequest r, FutureCallback<Data.DeleteAllPaymentsResponse> cb) {
+                deleteAllPaymentsMT(r, cb);
+            }
+        });
+    }
+    public static Data.DeleteAllPaymentsResponse deleteAllPaymentsSync(Data.DeleteAllPaymentsRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<Data.DeleteAllPaymentsRequest, Data.DeleteAllPaymentsResponse> () {
+            @Override
+            public Future<Data.DeleteAllPaymentsResponse> onCall(Data.DeleteAllPaymentsRequest r) {
+                return deleteAllPaymentsFuture(r);
+            }
+        });
+    }
+
+    // ======================
     // DecodePayReq
     public static void decodePayReqMT(Data.PayReqString r, final ILightningCallbackMT mtcb) {
 
         lnrpc.Rpc.PayReqString req = Codec.encode(r);
-
         callMT("decodePayReq", req, lnrpc.Rpc.PayReq.parser(), new ILightningCallbackMT() {
             @Override
             public void onError(int code, String message) {
@@ -1165,4 +1264,208 @@ public final class LightningDaemon {
             }
         });
     }
+
+    // ======================
+    // RegisterBlockEpochNtfn
+/*    public static void registerBlockEpochNtfnMT(Data.BlockEpoch r, final ILightningCallbackMT mtcb) {
+
+        chainrpc.Chainnotifier.BlockEpoch req = Codec.encode(r);
+        callMT("registerBlockEpochNtfn", req, chainrpc.Chainnotifier.BlockEpoch.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((chainrpc.Chainnotifier.BlockEpoch)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.registerBlockEpochNtfn(data, cb);
+            }
+        });
+    }
+*/
+    // ======================
+    // SubscribeInvoices
+    public static void subscribeInvoicesMT(Data.InvoiceSubscription r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.InvoiceSubscription req = Codec.encode(r);
+        callMT("subscribeInvoices", req, lnrpc.Rpc.Invoice.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.Invoice)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.subscribeInvoices(data, cb);
+            }
+        });
+    }
+
+    // ======================
+    // SubscribeChannelEvents
+    public static void subscribeChannelEventsMT(Data.ChannelEventSubscription r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.ChannelEventSubscription req = Codec.encode(r);
+        callMT("subscribeChannelEvents", req, lnrpc.Rpc.ChannelEventUpdate.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.ChannelEventUpdate)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.subscribeChannelEvents(data, cb);
+            }
+        });
+    }
+
+    // ======================
+    // GetNodeInfo
+    public static void getNodeInfoMT(Data.NodeInfoRequest r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.NodeInfoRequest req = Codec.encode(r);
+        callMT("getNodeInfo", req, lnrpc.Rpc.NodeInfo.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.NodeInfo)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.getNodeInfo(data, cb);
+            }
+        });
+    }
+    public static Future<Data.NodeInfo> getNodeInfoFuture(Data.NodeInfoRequest r) {
+        return callFuture(r, new FutureCallImpl<Data.NodeInfoRequest, Data.NodeInfo>() {
+            @Override
+            public void onCall(Data.NodeInfoRequest r, FutureCallback<Data.NodeInfo> cb) {
+                getNodeInfoMT(r, cb);
+            }
+        });
+    }
+    public static Data.NodeInfo getNodeInfoSync(Data.NodeInfoRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<Data.NodeInfoRequest, Data.NodeInfo> () {
+            @Override
+            public Future<Data.NodeInfo> onCall(Data.NodeInfoRequest r) {
+                return getNodeInfoFuture(r);
+            }
+        });
+    }
+
+    // ======================
+    // QueryRoutes
+    public static void queryRoutesMT(Data.QueryRoutesRequest r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.QueryRoutesRequest req = Codec.encode(r);
+        callMT("queryRoutes", req, lnrpc.Rpc.QueryRoutesResponse.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.QueryRoutesResponse)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.queryRoutes(data, cb);
+            }
+        });
+    }
+    public static Future<Data.QueryRoutesResponse> queryRoutesFuture(Data.QueryRoutesRequest r) {
+        return callFuture(r, new FutureCallImpl<Data.QueryRoutesRequest, Data.QueryRoutesResponse>
+                () {
+            @Override
+            public void onCall(Data.QueryRoutesRequest r, FutureCallback<Data.QueryRoutesResponse> cb) {
+                queryRoutesMT(r, cb);
+            }
+        });
+    }
+    public static Data.QueryRoutesResponse queryRoutesSync(Data.QueryRoutesRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<Data.QueryRoutesRequest, Data.QueryRoutesResponse> () {
+            @Override
+            public Future<Data.QueryRoutesResponse> onCall(Data.QueryRoutesRequest r) {
+                return queryRoutesFuture(r);
+            }
+        });
+    }
+
+    // ======================
+    // SendToRoute
+    public static ILightningSendStream<Data.SendToRouteRequest> sendToRouteMT(final ILightningCallbackMT mtcb) {
+
+        return callStreamMT("sendToRoute", lnrpc.Rpc.SendResponse.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.SendResponse)o)); }
+
+        }, new SendImpl() {
+            @Override
+            public lndmobile.SendStream onCall(LndmobileCallback cb) throws Exception {
+                return Lndmobile.sendToRoute(cb);
+            }
+        });
+    }
+    public static void sendToRouteMT(Data.SendToRouteRequest r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.SendToRouteRequest req = Codec.encode(r);
+        callMT("sendToRouteSync", req, lnrpc.Rpc.SendResponse.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.SendResponse)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.sendToRouteSync(data, cb);
+            }
+        });
+    }
+    public static Future<Data.SendResponse> sendToRouteFuture(Data.SendToRouteRequest r) {
+        return callFuture(r, new FutureCallImpl<Data.SendToRouteRequest, Data.SendResponse>() {
+            @Override
+            public void onCall(Data.SendToRouteRequest r, FutureCallback<Data.SendResponse> cb) {
+                sendToRouteMT(r, cb);
+            }
+        });
+    }
+    public static Data.SendResponse sendToRouteSync(Data.SendToRouteRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<Data.SendToRouteRequest, Data.SendResponse> () {
+            @Override
+            public Future<Data.SendResponse> onCall(Data.SendToRouteRequest r) {
+                return sendToRouteFuture(r);
+            }
+        });
+    }
+
+
 }

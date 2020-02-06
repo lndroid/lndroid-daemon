@@ -3,4 +3,4 @@
 .gradle
 build
 *~
-Lndmobile/Lndmobile.aar
+*/*.aar
