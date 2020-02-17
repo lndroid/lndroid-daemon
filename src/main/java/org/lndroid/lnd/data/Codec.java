@@ -1000,5 +1000,53 @@ public final class Codec {
         return b.build ();
     }
 
+    public static lnrpc.Rpc.ChanBackupExportRequest encode(Data.ChanBackupExportRequest r) {
+        lnrpc.Rpc.ChanBackupExportRequest.Builder b = lnrpc.Rpc.ChanBackupExportRequest.newBuilder();
+        return b.build ();
+    }
+
+    public static lnrpc.Rpc.ChannelBackupSubscription encode(Data.ChannelBackupSubscription r) {
+        lnrpc.Rpc.ChannelBackupSubscription.Builder b = lnrpc.Rpc.ChannelBackupSubscription.newBuilder();
+        return b.build ();
+    }
+
+    public static Data.ChannelBackup decode(lnrpc.Rpc.ChannelBackup resp) {
+        assert resp != null;
+
+        Data.ChannelBackup r = new Data.ChannelBackup();
+        r.chanBackup = resp.getChanBackup().toByteArray();
+        r.chanPoint = decode(resp.getChanPoint());
+        return r;
+    }
+
+    public static Data.ChannelBackups decode(lnrpc.Rpc.ChannelBackups resp) {
+        assert resp != null;
+
+        Data.ChannelBackups r = new Data.ChannelBackups();
+        r.chanBackups = new ArrayList<>();
+        for(lnrpc.Rpc.ChannelBackup cb: resp.getChanBackupsList())
+            r.chanBackups.add(decode(cb));
+        return r;
+    }
+
+    public static Data.MultiChanBackup decode(lnrpc.Rpc.MultiChanBackup resp) {
+        assert resp != null;
+
+        Data.MultiChanBackup r = new Data.MultiChanBackup();
+        r.chanPoints = new ArrayList<>();
+        for (lnrpc.Rpc.ChannelPoint cp: resp.getChanPointsList())
+            r.chanPoints.add(decode(cp));
+        r.multiChanBackup = resp.getMultiChanBackup().toByteArray();
+        return r;
+    }
+
+    public static Data.ChanBackupSnapshot decode(lnrpc.Rpc.ChanBackupSnapshot resp) {
+        assert resp != null;
+
+        Data.ChanBackupSnapshot r = new Data.ChanBackupSnapshot();
+        r.multiChanBackup = decode(resp.getMultiChanBackup());
+        r.singleChanBackups = decode(resp.getSingleChanBackups());
+        return r;
+    }
 
 }

@@ -1467,5 +1467,65 @@ public final class LightningDaemon {
         });
     }
 
+    // ======================
+    // SubscribeChannelBackups
+    public static void subscribeChannelBackupsMT(Data.ChannelBackupSubscription r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.ChannelBackupSubscription req = Codec.encode(r);
+        callMT("subscribeChannelBackups", req, lnrpc.Rpc.ChanBackupSnapshot.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.ChanBackupSnapshot)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.subscribeChannelBackups(data, cb);
+            }
+        });
+    }
+
+    // ======================
+    // ExportAllChannelBackups
+    public static void exportAllChannelBackupsMT(Data.ChanBackupExportRequest r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.ChanBackupExportRequest req = Codec.encode(r);
+        callMT("exportAllChannelBackups", req, lnrpc.Rpc.ChanBackupSnapshot.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.ChanBackupSnapshot)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.exportAllChannelBackups(data, cb);
+            }
+        });
+    }
+    public static Future<Data.ChanBackupSnapshot> exportAllChannelBackupsFuture(Data.ChanBackupExportRequest r) {
+        return callFuture(r, new FutureCallImpl<Data.ChanBackupExportRequest, Data.ChanBackupSnapshot> () {
+            @Override
+            public void onCall(Data.ChanBackupExportRequest r, FutureCallback<Data.ChanBackupSnapshot> cb) {
+                exportAllChannelBackupsMT(r, cb);
+            }
+        });
+    }
+    public static Data.ChanBackupSnapshot exportAllChannelBackupsSync(Data.ChanBackupExportRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<Data.ChanBackupExportRequest, Data.ChanBackupSnapshot> () {
+            @Override
+            public Future<Data.ChanBackupSnapshot> onCall(Data.ChanBackupExportRequest r) {
+                return exportAllChannelBackupsFuture(r);
+            }
+        });
+    }
 
 }

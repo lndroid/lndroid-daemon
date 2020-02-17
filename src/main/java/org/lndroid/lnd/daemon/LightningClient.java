@@ -495,4 +495,16 @@ public class LightningClient implements ILightningClient {
         LightningDaemon.sendToRouteMT(r, new MTCallback(dispatcher_, what));
     }
 
+    @Override
+    public void subscribeChannelBackupsStream(Data.ChannelBackupSubscription r, ILightningCallback<Data.ChanBackupSnapshot> cb) {
+        final int what = dispatcher_.createRecvStream(cb);
+        LightningDaemon.subscribeChannelBackupsMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void exportAllChannelBackups(Data.ChanBackupExportRequest r, ILightningCallback<Data.ChanBackupSnapshot> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.exportAllChannelBackupsMT(r, new MTCallback(dispatcher_, what));
+    }
+
 }

@@ -1144,5 +1144,57 @@ public final class Data
         public Route route;
     }
 
+    public static final class ChanBackupExportRequest {}
+    public static final class ChannelBackupSubscription {}
+    public static final class ChannelBackup {
+        /**
+         * Identifies the channel that this backup belongs to.
+         */
+        public ChannelPoint chanPoint;
+
+        /**
+         * Is an encrypted single-chan backup. this can be passed to
+         * RestoreChannelBackups, or the WalletUnlocker Init and Unlock methods in
+         * order to trigger the recovery protocol. When using REST, this field must be
+         * encoded as base64.
+         */
+        public byte[] chanBackup;
+    }
+    public static final class ChannelBackups {
+        /**
+         * A set of single-chan static channel backups.
+         */
+        public List<ChannelBackup> chanBackups;
+    }
+
+    public static final class MultiChanBackup {
+        /**
+         * Is the set of all channels that are included in this multi-channel backup.
+         */
+        public List<ChannelPoint> chanPoints;
+
+        /**
+         * A single encrypted blob containing all the static channel backups of the
+         * channel listed above. This can be stored as a single file or blob, and
+         * safely be replaced with any prior/future versions. When using REST, this
+         * field must be encoded as base64.
+         */
+        public byte[] multiChanBackup;
+    }
+    public static final class ChanBackupSnapshot {
+        /**
+         * The set of new channels that have been added since the last channel backup
+         * snapshot was requested.
+         */
+        public ChannelBackups singleChanBackups;
+
+        /**
+         * A multi-channel backup that covers all open channels currently known to
+         * lnd.
+         */
+        public MultiChanBackup multiChanBackup;
+    }
+
+
 }
 

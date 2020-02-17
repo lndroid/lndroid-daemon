@@ -50,4 +50,7 @@ public interface ILightningClient {
             ILightningCallback<Data.SendResponse> cb);
     void sendToRoute(Data.SendToRouteRequest r, ILightningCallback<Data.SendResponse> cb);
 
+    void subscribeChannelBackupsStream(Data.ChannelBackupSubscription r, ILightningCallback<Data.ChanBackupSnapshot> cb);
+    void exportAllChannelBackups(Data.ChanBackupExportRequest r, ILightningCallback<Data.ChanBackupSnapshot> cb);
+
 }
