@@ -711,6 +711,85 @@ public final class LightningDaemon {
     }
 
     // ======================
+    // PendingChannels
+    public static void pendingChannelsMT(lnrpc.Rpc.PendingChannelsRequest r, final ILightningCallbackMT mtcb) {
+
+        callMT("pendingChannels", r, lnrpc.Rpc.PendingChannelsResponse.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(o); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.pendingChannels(data, cb);
+            }
+        });
+    }
+
+    public static Future<lnrpc.Rpc.PendingChannelsResponse> pendingChannelsFuture(lnrpc.Rpc.PendingChannelsRequest r) {
+        return callFuture(r, new FutureCallImpl<lnrpc.Rpc.PendingChannelsRequest, lnrpc.Rpc.PendingChannelsResponse> () {
+            @Override
+            public void onCall(lnrpc.Rpc.PendingChannelsRequest r, FutureCallback<lnrpc.Rpc.PendingChannelsResponse> cb) {
+                pendingChannelsMT(r, cb);
+            }
+        });
+    }
+
+    public static lnrpc.Rpc.PendingChannelsResponse pendingChannelsSync(lnrpc.Rpc.PendingChannelsRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<lnrpc.Rpc.PendingChannelsRequest, lnrpc.Rpc.PendingChannelsResponse> () {
+            @Override
+            public Future<lnrpc.Rpc.PendingChannelsResponse> onCall(lnrpc.Rpc.PendingChannelsRequest r) {
+                return pendingChannelsFuture(r);
+            }
+        });
+    }
+
+    // ======================
+    // PendingChannels
+    public static void closedChannelsMT(lnrpc.Rpc.ClosedChannelsRequest r, final ILightningCallbackMT mtcb) {
+
+        callMT("closedChannels", r, lnrpc.Rpc.ClosedChannelsResponse.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(o); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.closedChannels(data, cb);
+            }
+        });
+    }
+    public static Future<lnrpc.Rpc.ClosedChannelsResponse> closedChannelsFuture(lnrpc.Rpc.ClosedChannelsRequest r) {
+        return callFuture(r, new FutureCallImpl<lnrpc.Rpc.ClosedChannelsRequest, lnrpc.Rpc.ClosedChannelsResponse> () {
+            @Override
+            public void onCall(lnrpc.Rpc.ClosedChannelsRequest r, FutureCallback<lnrpc.Rpc.ClosedChannelsResponse> cb) {
+                closedChannelsMT(r, cb);
+            }
+        });
+    }
+    public static lnrpc.Rpc.ClosedChannelsResponse closedChannelsSync(lnrpc.Rpc.ClosedChannelsRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<lnrpc.Rpc.ClosedChannelsRequest, lnrpc.Rpc.ClosedChannelsResponse> () {
+            @Override
+            public Future<lnrpc.Rpc.ClosedChannelsResponse> onCall(lnrpc.Rpc.ClosedChannelsRequest r) {
+                return closedChannelsFuture(r);
+            }
+        });
+    }
+
+
+    // ======================
     // AddInvoice
     public static void addInvoiceMT(Data.Invoice r, final ILightningCallbackMT mtcb) {
 
@@ -977,6 +1056,47 @@ public final class LightningDaemon {
             }
         });
     }
+
+    // ======================
+    // SendMany
+    public static void sendManyMT(Data.SendManyRequest r, final ILightningCallbackMT mtcb) {
+
+        lnrpc.Rpc.SendManyRequest req = Codec.encode(r);
+
+        callMT("sendMany", req, lnrpc.Rpc.SendManyResponse.parser(), new ILightningCallbackMT() {
+            @Override
+            public void onError(int code, String message) {
+                mtcb.onError(code, message);
+            }
+
+            @Override
+            public void onResponse(Object o) { mtcb.onResponse(Codec.decode((lnrpc.Rpc.SendManyResponse)o)); }
+
+        }, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.sendMany(data, cb);
+            }
+        });
+    }
+    public static Future<Data.SendManyResponse> sendManyFuture(Data.SendManyRequest r) {
+        return callFuture(r, new FutureCallImpl<Data.SendManyRequest, Data.SendManyResponse>() {
+            @Override
+            public void onCall(Data.SendManyRequest r, FutureCallback<Data.SendManyResponse> cb) {
+                sendManyMT(r, cb);
+            }
+        });
+    }
+    public static Data.SendManyResponse sendManySync(Data.SendManyRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<Data.SendManyRequest, Data.SendManyResponse> () {
+            @Override
+            public Future<Data.SendManyResponse> onCall(Data.SendManyRequest r) {
+                return sendManyFuture(r);
+            }
+        });
+    }
+
 
     // ======================
     // SendPayment

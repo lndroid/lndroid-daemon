@@ -57,6 +57,8 @@ public final class Codec {
             for (String m : r.cipherSeedMnemonic)
                 b.addCipherSeedMnemonic(m);
         }
+        if (r.chanBackups != null)
+            b.setChannelBackups(encode(r.chanBackups));
 
         return b.build();
     }
@@ -504,6 +506,28 @@ public final class Codec {
         r.txid = resp.getTxid();
         return r;
     }
+
+    public static lnrpc.Rpc.SendManyRequest encode(Data.SendManyRequest r) {
+        lnrpc.Rpc.SendManyRequest.Builder b = lnrpc.Rpc.SendManyRequest.newBuilder();
+
+        if (r.addrToAmount != null) {
+            for(Map.Entry<String, Long> e: r.addrToAmount.entrySet())
+                b.putAddrToAmount(e.getKey(), e.getValue());
+        }
+        b.setTargetConf(r.targetConf);
+        b.setSatPerByte(r.satPerByte);
+
+        return b.build();
+    }
+
+    public static Data.SendManyResponse decode(lnrpc.Rpc.SendManyResponse resp) {
+        assert resp != null;
+
+        Data.SendManyResponse r = new Data.SendManyResponse();
+        r.txid = resp.getTxid();
+        return r;
+    }
+
 
     public static lnrpc.Rpc.FeeLimit encode(Data.FeeLimit r) {
         lnrpc.Rpc.FeeLimit.Builder b = lnrpc.Rpc.FeeLimit.newBuilder();
@@ -1010,6 +1034,12 @@ public final class Codec {
         return b.build ();
     }
 
+    public static lnrpc.Rpc.ChannelBackup encode(Data.ChannelBackup r) {
+        lnrpc.Rpc.ChannelBackup.Builder b = lnrpc.Rpc.ChannelBackup.newBuilder();
+        b.setChanPoint(encode(r.chanPoint));
+        b.setChanBackup(ByteString.copyFrom(r.chanBackup));
+        return b.build ();
+    }
     public static Data.ChannelBackup decode(lnrpc.Rpc.ChannelBackup resp) {
         assert resp != null;
 
@@ -1019,6 +1049,13 @@ public final class Codec {
         return r;
     }
 
+    public static lnrpc.Rpc.ChannelBackups encode(Data.ChannelBackups r) {
+        lnrpc.Rpc.ChannelBackups.Builder b = lnrpc.Rpc.ChannelBackups.newBuilder();
+        for(Data.ChannelBackup cb: r.chanBackups) {
+            b.addChanBackups(encode(cb));
+        }
+        return b.build ();
+    }
     public static Data.ChannelBackups decode(lnrpc.Rpc.ChannelBackups resp) {
         assert resp != null;
 
@@ -1029,6 +1066,15 @@ public final class Codec {
         return r;
     }
 
+    public static lnrpc.Rpc.MultiChanBackup encode(Data.MultiChanBackup r) {
+        lnrpc.Rpc.MultiChanBackup.Builder b = lnrpc.Rpc.MultiChanBackup.newBuilder();
+        b.setMultiChanBackup(ByteString.copyFrom(r.multiChanBackup));
+        if (r.chanPoints != null) {
+            for(Data.ChannelPoint cp: r.chanPoints)
+                b.addChanPoints(encode(cp));
+        }
+        return b.build ();
+    }
     public static Data.MultiChanBackup decode(lnrpc.Rpc.MultiChanBackup resp) {
         assert resp != null;
 
@@ -1040,6 +1086,14 @@ public final class Codec {
         return r;
     }
 
+    public static lnrpc.Rpc.ChanBackupSnapshot encode(Data.ChanBackupSnapshot r) {
+        lnrpc.Rpc.ChanBackupSnapshot.Builder b = lnrpc.Rpc.ChanBackupSnapshot.newBuilder();
+        if (r.singleChanBackups != null)
+            b.setSingleChanBackups(encode(r.singleChanBackups));
+        if (r.multiChanBackup != null)
+            b.setMultiChanBackup(encode(r.multiChanBackup));
+        return b.build ();
+    }
     public static Data.ChanBackupSnapshot decode(lnrpc.Rpc.ChanBackupSnapshot resp) {
         assert resp != null;
 

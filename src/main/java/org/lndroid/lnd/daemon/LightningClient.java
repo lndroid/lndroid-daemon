@@ -325,6 +325,20 @@ public class LightningClient implements ILightningClient {
     }
 
     @Override
+    public void pendingChannels(lnrpc.Rpc.PendingChannelsRequest r,
+                                ILightningCallback<lnrpc.Rpc.PendingChannelsResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.pendingChannelsMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void closedChannels(lnrpc.Rpc.ClosedChannelsRequest r,
+                               ILightningCallback<lnrpc.Rpc.ClosedChannelsResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.closedChannelsMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
     public void addInvoice(Data.Invoice r,
                            ILightningCallback<Data.AddInvoiceResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
@@ -378,6 +392,13 @@ public class LightningClient implements ILightningClient {
                           ILightningCallback<Data.SendCoinsResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.sendCoinsMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void sendMany(Data.SendManyRequest r,
+                         ILightningCallback<Data.SendManyResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.sendManyMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override

@@ -17,6 +17,7 @@ public final class Data
         public byte[] walletPassword;
         public List<String> cipherSeedMnemonic;
         public byte[] aezeedPassphrase;
+        public ChanBackupSnapshot chanBackups;
     }
     public static final class InitWalletResponse {
     }
@@ -624,6 +625,21 @@ public final class Data
     }
     public static final class SendCoinsResponse {
         /// The transaction ID of the transaction
+        public String txid;
+    }
+
+    public static final class SendManyRequest {
+        /// The map from addresses to amounts
+        public Map<String, Long> addrToAmount;
+
+        /// The target number of blocks that this transaction should be confirmed by.
+        public int targetConf;
+
+        /// A manual fee rate set in sat/byte that should be used when crafting the transaction.
+        public long satPerByte;
+    }
+    public static final class SendManyResponse {
+        /// The id of the transaction
         public String txid;
     }
 

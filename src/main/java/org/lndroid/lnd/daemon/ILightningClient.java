@@ -23,11 +23,14 @@ public interface ILightningClient {
     void openChannelStream(Data.OpenChannelRequest r, ILightningCallback<Data.OpenStatusUpdate> cb);
     void openChannel(Data.OpenChannelRequest r, ILightningCallback<Data.ChannelPoint> cb);
     void closeChannelStream(Data.CloseChannelRequest r, ILightningCallback<Data.CloseStatusUpdate> cb);
+    void pendingChannels(lnrpc.Rpc.PendingChannelsRequest r, ILightningCallback<lnrpc.Rpc.PendingChannelsResponse> cb);
+    void closedChannels(lnrpc.Rpc.ClosedChannelsRequest r, ILightningCallback<lnrpc.Rpc.ClosedChannelsResponse> cb);
 
     void subscribeTransactionsStream(Data.GetTransactionsRequest r, ILightningCallback<Data.Transaction> cb);
     void getTransactions(Data.GetTransactionsRequest r, ILightningCallback<Data.TransactionDetails> cb);
     void estimateFee(Data.EstimateFeeRequest r, ILightningCallback<Data.EstimateFeeResponse> cb);
     void sendCoins(Data.SendCoinsRequest r, ILightningCallback<Data.SendCoinsResponse> cb);
+    void sendMany(Data.SendManyRequest r, ILightningCallback<Data.SendManyResponse> cb);
 
     void decodePayReq(Data.PayReqString r, ILightningCallback<Data.PayReq> cb);
     void addInvoice(Data.Invoice r, ILightningCallback<Data.AddInvoiceResponse> cb);
