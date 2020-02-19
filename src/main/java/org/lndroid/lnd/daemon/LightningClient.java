@@ -318,6 +318,24 @@ public class LightningClient implements ILightningClient {
     }
 
     @Override
+    public void disconnectPeer(lnrpc.Rpc.DisconnectPeerRequest r, ILightningCallback<lnrpc.Rpc.DisconnectPeerResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.disconnectPeerMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void listPeers(lnrpc.Rpc.ListPeersRequest r, ILightningCallback<lnrpc.Rpc.ListPeersResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.listPeersMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void subscribePeerEventsStream(lnrpc.Rpc.PeerEventSubscription r, ILightningCallback<lnrpc.Rpc.PeerEvent> cb) {
+        final int what = dispatcher_.createRecvStream(cb);
+        LightningDaemon.subscribePeerEventsMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
     public void listChannels(Data.ListChannelsRequest r,
                              ILightningCallback<Data.ListChannelsResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
@@ -399,6 +417,12 @@ public class LightningClient implements ILightningClient {
                          ILightningCallback<Data.SendManyResponse> cb) {
         final int what = dispatcher_.createCallback(cb);
         LightningDaemon.sendManyMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void listUnspent(lnrpc.Rpc.ListUnspentRequest r, ILightningCallback<lnrpc.Rpc.ListUnspentResponse> cb) {
+     final int what = dispatcher_.createCallback(cb);
+     LightningDaemon.listUnspentMT(r, new MTCallback(dispatcher_, what));
     }
 
     @Override

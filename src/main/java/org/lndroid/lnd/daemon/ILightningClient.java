@@ -18,6 +18,9 @@ public interface ILightningClient {
     void channelBalance(Data.ChannelBalanceRequest r, ILightningCallback<Data.ChannelBalanceResponse> cb);
 
     void connectPeer(Data.ConnectPeerRequest r, ILightningCallback<Data.ConnectPeerResponse> cb);
+    void disconnectPeer(lnrpc.Rpc.DisconnectPeerRequest r, ILightningCallback<lnrpc.Rpc.DisconnectPeerResponse> cb);
+    void listPeers(lnrpc.Rpc.ListPeersRequest r, ILightningCallback<lnrpc.Rpc.ListPeersResponse> cb);
+    void subscribePeerEventsStream(lnrpc.Rpc.PeerEventSubscription r, ILightningCallback<lnrpc.Rpc.PeerEvent> cb);
 
     void listChannels(Data.ListChannelsRequest r, ILightningCallback<Data.ListChannelsResponse> cb);
     void openChannelStream(Data.OpenChannelRequest r, ILightningCallback<Data.OpenStatusUpdate> cb);
@@ -31,6 +34,7 @@ public interface ILightningClient {
     void estimateFee(Data.EstimateFeeRequest r, ILightningCallback<Data.EstimateFeeResponse> cb);
     void sendCoins(Data.SendCoinsRequest r, ILightningCallback<Data.SendCoinsResponse> cb);
     void sendMany(Data.SendManyRequest r, ILightningCallback<Data.SendManyResponse> cb);
+    void listUnspent(lnrpc.Rpc.ListUnspentRequest r, ILightningCallback<lnrpc.Rpc.ListUnspentResponse> cb);
 
     void decodePayReq(Data.PayReqString r, ILightningCallback<Data.PayReq> cb);
     void addInvoice(Data.Invoice r, ILightningCallback<Data.AddInvoiceResponse> cb);

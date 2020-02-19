@@ -15,6 +15,7 @@ import org.lndroid.lnd.data.Data;
 import org.lndroid.lnd.data.Codec;
 
 import lndmobile.Lndmobile;
+import lnrpc.Rpc;
 
 public final class LightningDaemon {
 
@@ -669,6 +670,80 @@ public final class LightningDaemon {
     }
 
     // ======================
+    // DisconnectPeer
+    public static void disconnectPeerMT(lnrpc.Rpc.DisconnectPeerRequest r, final ILightningCallbackMT mtcb) {
+
+        callMT("disconnectPeer", r, lnrpc.Rpc.DisconnectPeerResponse.parser(), mtcb, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.disconnectPeer(data, cb);
+            }
+        });
+    }
+
+    public static Future<lnrpc.Rpc.DisconnectPeerResponse> disconnectPeerFuture(lnrpc.Rpc.DisconnectPeerRequest r) {
+        return callFuture(r, new FutureCallImpl<lnrpc.Rpc.DisconnectPeerRequest, lnrpc.Rpc.DisconnectPeerResponse> () {
+            @Override
+            public void onCall(lnrpc.Rpc.DisconnectPeerRequest r, FutureCallback<lnrpc.Rpc.DisconnectPeerResponse> cb) {
+                disconnectPeerMT(r, cb);
+            }
+        });
+    }
+
+    public static lnrpc.Rpc.DisconnectPeerResponse disconnectPeerSync(lnrpc.Rpc.DisconnectPeerRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<lnrpc.Rpc.DisconnectPeerRequest, lnrpc.Rpc.DisconnectPeerResponse> () {
+            @Override
+            public Future<lnrpc.Rpc.DisconnectPeerResponse> onCall(lnrpc.Rpc.DisconnectPeerRequest r) {
+                return disconnectPeerFuture(r);
+            }
+        });
+    }
+
+    // ======================
+    // ListPeers
+    public static void listPeersMT(lnrpc.Rpc.ListPeersRequest r, final ILightningCallbackMT mtcb) {
+
+        callMT("listPeers", r, lnrpc.Rpc.ListPeersResponse.parser(), mtcb, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.listPeers(data, cb);
+            }
+        });
+    }
+
+    public static Future<lnrpc.Rpc.ListPeersResponse> listPeersFuture(lnrpc.Rpc.ListPeersRequest r) {
+        return callFuture(r, new FutureCallImpl<lnrpc.Rpc.ListPeersRequest, Rpc.ListPeersResponse> () {
+            @Override
+            public void onCall(lnrpc.Rpc.ListPeersRequest r, FutureCallback<lnrpc.Rpc.ListPeersResponse> cb) {
+                listPeersMT(r, cb);
+            }
+        });
+    }
+
+    public static lnrpc.Rpc.ListPeersResponse listPeersSync(lnrpc.Rpc.ListPeersRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<lnrpc.Rpc.ListPeersRequest, lnrpc.Rpc.ListPeersResponse> () {
+            @Override
+            public Future<lnrpc.Rpc.ListPeersResponse> onCall(lnrpc.Rpc.ListPeersRequest r) {
+                return listPeersFuture(r);
+            }
+        });
+    }
+
+    // ======================
+    // SubscribePeerEvents
+    public static void subscribePeerEventsMT(lnrpc.Rpc.PeerEventSubscription r, final ILightningCallbackMT mtcb) {
+
+        callMT("subscribePeerEvents", r, lnrpc.Rpc.PeerEvent.parser(), mtcb, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.subscribePeerEvents(data, cb);
+            }
+        });
+    }
+
+    // ======================
     // ListChannels
     public static void listChannelsMT(Data.ListChannelsRequest r, final ILightningCallbackMT mtcb) {
 
@@ -714,16 +789,7 @@ public final class LightningDaemon {
     // PendingChannels
     public static void pendingChannelsMT(lnrpc.Rpc.PendingChannelsRequest r, final ILightningCallbackMT mtcb) {
 
-        callMT("pendingChannels", r, lnrpc.Rpc.PendingChannelsResponse.parser(), new ILightningCallbackMT() {
-            @Override
-            public void onError(int code, String message) {
-                mtcb.onError(code, message);
-            }
-
-            @Override
-            public void onResponse(Object o) { mtcb.onResponse(o); }
-
-        }, new CallImpl() {
+        callMT("pendingChannels", r, lnrpc.Rpc.PendingChannelsResponse.parser(), mtcb, new CallImpl() {
             @Override
             public void onCall(byte[] data, LndmobileCallback cb) {
                 Lndmobile.pendingChannels(data, cb);
@@ -751,19 +817,10 @@ public final class LightningDaemon {
     }
 
     // ======================
-    // PendingChannels
+    // ClosedChannels
     public static void closedChannelsMT(lnrpc.Rpc.ClosedChannelsRequest r, final ILightningCallbackMT mtcb) {
 
-        callMT("closedChannels", r, lnrpc.Rpc.ClosedChannelsResponse.parser(), new ILightningCallbackMT() {
-            @Override
-            public void onError(int code, String message) {
-                mtcb.onError(code, message);
-            }
-
-            @Override
-            public void onResponse(Object o) { mtcb.onResponse(o); }
-
-        }, new CallImpl() {
+        callMT("closedChannels", r, lnrpc.Rpc.ClosedChannelsResponse.parser(), mtcb, new CallImpl() {
             @Override
             public void onCall(byte[] data, LndmobileCallback cb) {
                 Lndmobile.closedChannels(data, cb);
@@ -890,6 +947,35 @@ public final class LightningDaemon {
             @Override
             public Future<Data.TransactionDetails> onCall(Data.GetTransactionsRequest r) {
                 return getTransactionsFuture(r);
+            }
+        });
+    }
+
+    // ======================
+    // GetTransactions
+    public static void listUnspentMT(lnrpc.Rpc.ListUnspentRequest r, final ILightningCallbackMT mtcb) {
+
+        callMT("listUnspent", r, lnrpc.Rpc.ListUnspentResponse.parser(), mtcb, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.listUnspent(data, cb);
+            }
+        });
+    }
+    public static Future<lnrpc.Rpc.ListUnspentResponse> listUnspentFuture(lnrpc.Rpc.ListUnspentRequest r) {
+        return callFuture(r, new FutureCallImpl<lnrpc.Rpc.ListUnspentRequest, lnrpc.Rpc.ListUnspentResponse>() {
+            @Override
+            public void onCall(lnrpc.Rpc.ListUnspentRequest r, FutureCallback<lnrpc.Rpc.ListUnspentResponse> cb) {
+                listUnspentMT(r, cb);
+            }
+        });
+    }
+    public static lnrpc.Rpc.ListUnspentResponse listUnspentSync(lnrpc.Rpc.ListUnspentRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<lnrpc.Rpc.ListUnspentRequest, lnrpc.Rpc.ListUnspentResponse> () {
+            @Override
+            public Future<lnrpc.Rpc.ListUnspentResponse> onCall(lnrpc.Rpc.ListUnspentRequest r) {
+                return listUnspentFuture(r);
             }
         });
     }
