@@ -552,4 +552,16 @@ public class LightningClient implements ILightningClient {
         LightningDaemon.exportAllChannelBackupsMT(r, new MTCallback(dispatcher_, what));
     }
 
+    @Override
+    public void signMessage(lnrpc.Rpc.SignMessageRequest r, ILightningCallback<lnrpc.Rpc.SignMessageResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.signMessageMT(r, new MTCallback(dispatcher_, what));
+    }
+
+    @Override
+    public void verifyMessage(lnrpc.Rpc.VerifyMessageRequest r, ILightningCallback<lnrpc.Rpc.VerifyMessageResponse> cb) {
+        final int what = dispatcher_.createCallback(cb);
+        LightningDaemon.verifyMessageMT(r, new MTCallback(dispatcher_, what));
+    }
+
 }

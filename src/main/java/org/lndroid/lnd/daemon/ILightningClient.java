@@ -60,4 +60,6 @@ public interface ILightningClient {
     void subscribeChannelBackupsStream(Data.ChannelBackupSubscription r, ILightningCallback<Data.ChanBackupSnapshot> cb);
     void exportAllChannelBackups(Data.ChanBackupExportRequest r, ILightningCallback<Data.ChanBackupSnapshot> cb);
 
+    void signMessage(lnrpc.Rpc.SignMessageRequest r, ILightningCallback<lnrpc.Rpc.SignMessageResponse> cb);
+    void verifyMessage(lnrpc.Rpc.VerifyMessageRequest r, ILightningCallback<lnrpc.Rpc.VerifyMessageResponse> cb);
 }

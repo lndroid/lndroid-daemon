@@ -282,7 +282,11 @@ public final class LightningDaemon {
             final ILightningCallbackMT mtcb,
             CallImpl impl) {
 
-        Log.i(TAG, "calling " + label+" thread "+Thread.currentThread().getId()+" req "+req);
+        // don't log req for these!
+        if ("unlockWallet".equals(label) || "genSeed".equals(label) || "initWallet".equals(label))
+            Log.i(TAG, "calling " + label+" thread "+Thread.currentThread().getId());
+        else
+            Log.i(TAG, "calling " + label+" thread "+Thread.currentThread().getId()+" req "+req);
 
         impl.onCall(req.toByteArray(), new LndmobileCallback<ResponseType>(label, parser, mtcb));
     }
@@ -1069,7 +1073,7 @@ public final class LightningDaemon {
 
         lnrpc.Rpc.EstimateFeeRequest req = Codec.encode(r);
 
-        callMT("estimateFee", req, lnrpc.Rpc.EstimateFeeRequest.parser(), new ILightningCallbackMT() {
+        callMT("estimateFee", req, lnrpc.Rpc.EstimateFeeResponse.parser(), new ILightningCallbackMT() {
             @Override
             public void onError(int code, String message) {
                 mtcb.onError(code, message);
@@ -1730,6 +1734,64 @@ public final class LightningDaemon {
             @Override
             public Future<Data.ChanBackupSnapshot> onCall(Data.ChanBackupExportRequest r) {
                 return exportAllChannelBackupsFuture(r);
+            }
+        });
+    }
+
+    // ======================
+    // SignMessage
+    public static void signMessageMT(Rpc.SignMessageRequest req, final ILightningCallbackMT mtcb) {
+
+        callMT("signMessage", req, Rpc.SignMessageResponse.parser(), mtcb, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.signMessage(data, cb);
+            }
+        });
+    }
+    public static Future<Rpc.SignMessageResponse> signMessageFuture(Rpc.SignMessageRequest r) {
+        return callFuture(r, new FutureCallImpl<Rpc.SignMessageRequest, Rpc.SignMessageResponse> () {
+            @Override
+            public void onCall(Rpc.SignMessageRequest r, FutureCallback<Rpc.SignMessageResponse> cb) {
+                signMessageMT(r, cb);
+            }
+        });
+    }
+    public static Rpc.SignMessageResponse signMessageSync(Rpc.SignMessageRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<Rpc.SignMessageRequest, Rpc.SignMessageResponse> () {
+            @Override
+            public Future<Rpc.SignMessageResponse> onCall(Rpc.SignMessageRequest r) {
+                return signMessageFuture(r);
+            }
+        });
+    }
+
+    // ======================
+    // VerifyMessage
+    public static void verifyMessageMT(Rpc.VerifyMessageRequest req, final ILightningCallbackMT mtcb) {
+
+        callMT("verifyMessage", req, Rpc.VerifyMessageResponse.parser(), mtcb, new CallImpl() {
+            @Override
+            public void onCall(byte[] data, LndmobileCallback cb) {
+                Lndmobile.verifyMessage(data, cb);
+            }
+        });
+    }
+    public static Future<Rpc.VerifyMessageResponse> verifyMessageFuture(Rpc.VerifyMessageRequest r) {
+        return callFuture(r, new FutureCallImpl<Rpc.VerifyMessageRequest, Rpc.VerifyMessageResponse> () {
+            @Override
+            public void onCall(Rpc.VerifyMessageRequest r, FutureCallback<Rpc.VerifyMessageResponse> cb) {
+                verifyMessageMT(r, cb);
+            }
+        });
+    }
+    public static Rpc.VerifyMessageResponse verifyMessageSync(Rpc.VerifyMessageRequest r) throws LightningException {
+
+        return callSync(r, new SyncCallImpl<Rpc.VerifyMessageRequest, Rpc.VerifyMessageResponse> () {
+            @Override
+            public Future<Rpc.VerifyMessageResponse> onCall(Rpc.VerifyMessageRequest r) {
+                return verifyMessageFuture(r);
             }
         });
     }

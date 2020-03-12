@@ -470,7 +470,7 @@ public final class Codec {
 
         if (r.addrToAmount != null) {
             for (Map.Entry<String, Long> e : r.addrToAmount.entrySet())
-                b.getAddrToAmountMap().put(e.getKey(), e.getValue());
+                b.putAddrToAmount(e.getKey(), e.getValue());
         }
         b.setTargetConf(r.targetConf);
 
